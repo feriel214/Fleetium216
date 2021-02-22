@@ -766,15 +766,15 @@ module.exports = {
       //we will use the formula of algorithm 1
       ful=l.replace('FUL1:','');console.log('fuel',ful);
       fuel_value = parseInt(ful);
-      real_fuel_consumption =(fuel_value * ve * ed) / 10 / afr / density;
+      real_fuel_consumption =(((fuel_value * ve * ed) / 10) / afr) / density;
       console.log('fuelConsumption',real_fuel_consumption);
-     // obj.fuelConsumption = real_fuel_consumption;
+     obj.fuelConsumption = real_fuel_consumption;
       
     } //we will use the algorithm 0
     else if (l.indexOf("FUL1") == -1) {
       fuel_value = parseInt(l.replace("FUL:", "")); // to check
       real_fuel_consumption = fuel_value / 10 / afr / density;
-      //obj.fuelConsumption = real_fuel_consumption;
+    obj.fuelConsumption = real_fuel_consumption;
     }
     return obj;
   },

@@ -53,7 +53,7 @@ readInterface.on("line", async (line) => {
       case l[i].indexOf("MGR") > -1:
         console.log("Milleage value ", l[i].replace("MGR:", ""));
         obj.milleage = l[i].replace("MGR:", "");
-        (obj.milleage = parseInt(obj.milleage) * 1), 60934;
+        (obj.milleage = parseInt(obj.milleage) * 1), 60934;break;
       //AD DATA
       case l[i].indexOf("ADC") > -1:
         obj = await Codec.ADConvertData(l[i], obj);
@@ -68,31 +68,31 @@ readInterface.on("line", async (line) => {
         break;
       //Fuel Consumption Data
       case l[i].indexOf("FUL") > -1:
-        obj = await Codec.Fuel(l[i]);
+        obj = await Codec.Fuel(l[i],obj);
         break;
       //OBDII alarm DATA
       case l[i].indexOf("OAL") > -1:
-        obj = await Codec.OAL(l[i]);
+        obj = await Codec.OAL(l[i],obj);
         break;
       //Harsh Driver behavior data
       case l[i].indexOf("HDB") > -1:
-        obj = await Codec.HDB(l[i]);
+        obj = await Codec.HDB(l[i],obj);
         break;
       //CANBUS J1939 data
       case l[i].indexOf("CAN") > -1:
-        obj = await Codec.Canbus(l[i]);
+        obj = await Codec.Canbus(l[i],obj);
         break;
       // J1708 data
       case l[i].indexOf("HVD") > -1:
-        obj = await Codec.HVD(l[i]);
+        obj = await Codec.HVD(l[i],obj);
         break;
       //Vehicle identification number(VIN) data
       case l[i].indexOf("VIN") > -1:
-        obj = await Codec.VIN(l[i]);
+        obj = await Codec.VIN(l[i],obj);
         break;
       // RFID data
       case l[i].indexOf("RFI") > -1:
-        obj = await Codec.Rfid(l[i]);
+        obj = await Codec.Rfid(l[i],obj);
         break;
       //Engine run time data
       case l[i].indexOf("EGT") > -1:
@@ -100,21 +100,22 @@ readInterface.on("line", async (line) => {
         break;
       //EVENT here we will push each event in eventData(AzureStorage)
       case l[i].indexOf("EVT") > -1:
-        obj = await Codec.EventData(l[i]);
+        obj = await Codec.EventData(l[i],obj);
         break;
-      default:
       //here we call storage insert functions
     }
-    console.log("obj", obj);
+    console.log("obj in for ", obj);
+   
   }
   console.log("exit");
   console.log("########################################################");
-  console.log("obj", obj);
+  console.log("obj out for ", obj);
   InsertDataAzure(obj);
+ 
 });
 
 function InsertDataAzure(obj) {
-  console("obj in insert function ",obj)
+  console.log("obj in insert function ",obj)
   //Table Storage
   var azure = require("azure-storage");
   var connectionString =
