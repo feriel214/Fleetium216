@@ -1,0 +1,15 @@
+{
+    "0":"Non event triggered",
+    "1":"Interval triggered:Time uploading event trigger uploads",
+    "2":"Angle triggered:Angle change reaches the set value trigger uploads",
+    "3":"Distance triggered:Distance change reaches the set value trigger uploads",
+    "4":"Request triggered:Command requests trigger uploads",
+    "10":"RFID reader triggered:RFID card swiping trigger uploads ",
+    "11":"iBeacon triggered:Find or lose iBeacon device trigger uploads",
+    "20":"Firmware upgraded:Firmware upgraded trigger uploads ",
+    "28":"OBDII scanner detected:OBDII scanner detected trigger uploads ",
+    "80":"Geo-fence triggered:Geo-fence state change trigger uploads",
+    "90":"driver behavior triggered:Detected bad driver behavior trigger uploads.",
+    "F0":"Status changed triggered:Device state change trigger uploads",
+    "F8":"Alarm triggered :Alarm trigger uploads"
+}

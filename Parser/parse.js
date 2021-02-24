@@ -6,13 +6,14 @@ const readline = require("readline");
 const Codec = require("./router/codec/Codec.js");
 //Object that contain all device data
 let obj = [];
+let evt = [];
 const readInterface = readline.createInterface({
   input: fs.createReadStream("demo1.txt"),
   output: process.stdout,
   console: false,
 });
 readInterface.on("line", async (line) => {
-  console.log(line);
+  line.replace('#','');
   let l = line.split(",");
   for (var i in l) {
     switch (true) {
@@ -27,7 +28,7 @@ readInterface.on("line", async (line) => {
         console.log("mdmid", mdmid);
         obj.mdmid = mdmid;
         obj.PartitionKey = mdmid;
-        console.log('obj.PartitionKey: ',obj.PartitionKey)
+        console.log("obj.PartitionKey: ", obj.PartitionKey);
         break;
       //TimeStamp
       case i == 2:
@@ -45,15 +46,12 @@ readInterface.on("line", async (line) => {
       case l[i].indexOf("GPS") > -1:
         obj = await Codec.GPS(l[i], obj);
         break;
-      //Device Status and Alarms triggered
-      case l[i].indexOf("STT") > -1:
-        obj = await Codec.STT(l[i], obj);
-        break;
       //Millega Data
       case l[i].indexOf("MGR") > -1:
-        console.log("Milleage value ", l[i].replace("MGR:", ""));
-        obj.milleage = l[i].replace("MGR:", "");
-        (obj.milleage = parseInt(obj.milleage) * 1), 60934;break;
+        console.log("*****************MGR***************")
+        console.log("Milleage : ", l[i].replace("MGR:", ""));
+        (obj.milleage = parseInt(l[i].replace("MGR:", "")) * 1), 60934;
+        break;
       //AD DATA
       case l[i].indexOf("ADC") > -1:
         obj = await Codec.ADConvertData(l[i], obj);
@@ -64,65 +62,68 @@ readInterface.on("line", async (line) => {
         break;
       //OBDII DATA
       case l[i].indexOf("OBD") > -1:
-        obj = await Codec.OBD(l[i], obj);
+        obj,evt = await Codec.OBD(l[i],obj,evt);
         break;
       //Fuel Consumption Data
       case l[i].indexOf("FUL") > -1:
-        obj = await Codec.Fuel(l[i],obj);
+        obj = await Codec.Fuel(l[i], obj);
         break;
       //OBDII alarm DATA
       case l[i].indexOf("OAL") > -1:
-        obj = await Codec.OAL(l[i],obj);
+        obj,evt = await Codec.OAL(l[i], obj,evt);
         break;
       //Harsh Driver behavior data
       case l[i].indexOf("HDB") > -1:
-        obj = await Codec.HDB(l[i],obj);
+        obj,evt = await Codec.HDB(l[i], obj,evt);
         break;
       //CANBUS J1939 data
       case l[i].indexOf("CAN") > -1:
-        obj = await Codec.Canbus(l[i],obj);
+        obj = await Codec.Canbus(l[i], obj);
         break;
       // J1708 data
       case l[i].indexOf("HVD") > -1:
-        obj = await Codec.HVD(l[i],obj);
+        obj = await Codec.HVD(l[i], obj);
         break;
       //Vehicle identification number(VIN) data
       case l[i].indexOf("VIN") > -1:
-        obj = await Codec.VIN(l[i],obj);
+        obj = await Codec.VIN(l[i], obj);
         break;
       // RFID data
       case l[i].indexOf("RFI") > -1:
-        obj = await Codec.Rfid(l[i],obj);
+        obj = await Codec.Rfid(l[i], obj);
         break;
       //Engine run time data
       case l[i].indexOf("EGT") > -1:
-        obj = await Codec.EngineRunTime(l[i],obj);
+        obj = await Codec.EngineRunTime(l[i], obj);
         break;
       //EVENT here we will push each event in eventData(AzureStorage)
       case l[i].indexOf("EVT") > -1:
-        obj = await Codec.EventData(l[i],obj);
+        obj,evt = await Codec.EventData(l[i], obj,evt);
         break;
-      //here we call storage insert functions
+      //Device Status and Alarms triggered
+      case l[i].indexOf("STT") > -1:
+        obj, evt= await Codec.STT(l[i], obj,evt);
+        break;
     }
-    console.log("obj in for ", obj);
-   
   }
   console.log("exit");
   console.log("########################################################");
-  console.log("obj out for ", obj);
+  console.log("obj \n", obj);
+  console.log("evt \n", evt);
   InsertDataAzure(obj);
- 
 });
-
+function evtsloop(){
+   /*  PKey = id_car+"_"+((binary_status[i] == 0) ?  params["210"] : params["211"]);
+          RowKey = time; */
+}
 function InsertDataAzure(obj) {
-  console.log("obj in insert function ",obj)
   //Table Storage
   var azure = require("azure-storage");
   var connectionString =
     "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
   var tableService = azure.createTableService(connectionString);
   var entGen = azure.TableUtilities.entityGenerator;
-  var entity = {}; 
+  var entity = {};
   for (var i in obj) {
     entity[i] = entGen.String(obj[i]);
   }
@@ -132,6 +133,30 @@ function InsertDataAzure(obj) {
     function (error, result, response) {
       if (!error) {
         console.log("Adeed succefully in table storage ! ");
+      } else {
+        console.log(error);
+      }
+    }
+  );
+}
+
+function InsertEventData(evt) {
+  //Table Storage
+  var azure = require("azure-storage");
+  var connectionString =
+    "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
+  var tableService = azure.createTableService(connectionString);
+  var entGen = azure.TableUtilities.entityGenerator;
+  var entity = {};
+  for (var i in evt) {
+    entity[i] = entGen.String(evt[i]);
+  }
+  return tableService.insertOrReplaceEntity(
+    "eventsdata",
+    entity,
+    function (error, result, response) {
+      if (!error) {
+        console.log("Adeed succefully in events table  ! ");
       } else {
         console.log(error);
       }

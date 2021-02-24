@@ -1,0 +1,10 @@
+{
+    "0":"rapid_acceleration",
+    "1":"rough_braking",
+    "2":"harsh_course",
+    "3":"no_warm_up",
+    "4":"long_idle",
+    "5":"fatigue_driving",
+    "6":"rough_terrain",
+    "7":"high_rpm"
+}
