@@ -1,0 +1,10 @@
+{
+    // Customer module configs
+    "DB": {
+        "HOST": "localhost",
+        "PORT": 5984,
+        "USERNAME": "customers",
+        "PASSWORD": "customers",
+    },
+    "PORT":3000
+  }

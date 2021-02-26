@@ -192,18 +192,18 @@ module.exports = {
     return obj;
   },
   //EVENT DATA
-  EventData: async (l, obj,evt) => {
-    console.log('*****************EVT***************')
+  EventData: async (l, obj, evt) => {
+    console.log("*****************EVT***************");
 
     const params = require("./params/params.json");
     const evt_params = require("./params/event_code_params.json");
 
-    evt_data = l.replace("EVT:", "").replace("#","").split(";");
-    event_code =evt_data[0];
-    obj.event_code=event_code;
-    obj.event_mask=evt_data[1]; 
-    console.log("EVT code  ",event_code);
-    evt_codes= [];
+    evt_data = l.replace("EVT:", "").replace("#", "").split(";");
+    event_code = evt_data[0];
+    obj.event_code = event_code;
+    obj.event_mask = evt_data[1];
+    console.log("EVT code  ", event_code);
+    evt_codes = [];
     switch (true) {
       case event_code == "1":
         evt_codes.push(evt_params["1"]);
@@ -243,74 +243,73 @@ module.exports = {
         break;
     }
     evt.evt_code = evt_codes;
-    if(!(typeof evt_data[1]== "undefined")){
-      console.log("EVT mask  ",evt_data[1]);
+    if (!(typeof evt_data[1] == "undefined")) {
+      console.log("EVT mask  ", evt_data[1]);
       event_code_mask = parseInt(parseInt(evt_data[1]), 16)
-      .toString(2)
-      .toString();
-    // device status (first array )
-    event_mask = [];
-    i = 0;
-    while (i < event_code_mask.length) {
-      switch (true) {
-        case i == 0 && event_code_mask[i] == "1":
-          event_mask.push(params["211"]);
-          break;
-        case i == 1 && event_code_mask[i] == "1":
-          event_mask.push(params["11010"]);
-          break;
-        case i == 2 && event_code_mask[i] == "1":
-          event_mask.push(params["11400"]);
-          break;
-        case i == 3 && event_code_mask[i] == "1":
-          event_mask.push(params["50001"]);
-          break;
-        case i == 4 && event_code_mask[i] == "1":
-          event_mask.push(params["50002"]);
-          break;
-        case i == 5 && event_code_mask[i] == "1":
-          event_mask.push(params["50004"]);
-          break;
-        case i == 6 && event_code_mask[i] == "1":
-          event_mask.push(params["50007"]);
-          break;
-        case i == 7 && event_code_mask[i] == "1":
-          event_mask.push(params["50009"]);
-          break;
-        case i == 8 && event_code_mask[i] == "1":
-          event_mask.push(params["50011"]);
-          break;
-        case i == 9 && event_code_mask[i] == "1":
-          event_mask.push(params["1110"]);
-          break;
-        case i == 10 && event_code_mask[i] == "1":
-          event_mask.push(params["50013"]);
-          break;
-        case i == 11 && event_code_mask[i] == "1":
-          event_mask.push(params["10710"]);
-          break;
-        case i == 12 && event_code_mask[i] == "1":
-          event_mask.push(params["50015"]);
-          break;
-        case i == 13 && event_code_mask[i] == "1":
-          event_mask.push(params["50017"]);
-          break;
-        case i == 14 && event_code_mask[i] == "1":
-          //Domestic roaming judged by MNC
-          event_mask.push(params["50019"]);
-          break;
-        case i == 15 && event_code_mask[i] == "1":
-          //International Roaming judeg by MCC
-          event_mask.push(params["50021"]);
-          break;
+        .toString(2)
+        .toString();
+      // device status (first array )
+      event_mask = [];
+      i = 0;
+      while (i < event_code_mask.length) {
+        switch (true) {
+          case i == 0 && event_code_mask[i] == "1":
+            event_mask.push(params["211"]);
+            break;
+          case i == 1 && event_code_mask[i] == "1":
+            event_mask.push(params["11010"]);
+            break;
+          case i == 2 && event_code_mask[i] == "1":
+            event_mask.push(params["11400"]);
+            break;
+          case i == 3 && event_code_mask[i] == "1":
+            event_mask.push(params["50001"]);
+            break;
+          case i == 4 && event_code_mask[i] == "1":
+            event_mask.push(params["50002"]);
+            break;
+          case i == 5 && event_code_mask[i] == "1":
+            event_mask.push(params["50004"]);
+            break;
+          case i == 6 && event_code_mask[i] == "1":
+            event_mask.push(params["50007"]);
+            break;
+          case i == 7 && event_code_mask[i] == "1":
+            event_mask.push(params["50009"]);
+            break;
+          case i == 8 && event_code_mask[i] == "1":
+            event_mask.push(params["50011"]);
+            break;
+          case i == 9 && event_code_mask[i] == "1":
+            event_mask.push(params["1110"]);
+            break;
+          case i == 10 && event_code_mask[i] == "1":
+            event_mask.push(params["50013"]);
+            break;
+          case i == 11 && event_code_mask[i] == "1":
+            event_mask.push(params["10710"]);
+            break;
+          case i == 12 && event_code_mask[i] == "1":
+            event_mask.push(params["50015"]);
+            break;
+          case i == 13 && event_code_mask[i] == "1":
+            event_mask.push(params["50017"]);
+            break;
+          case i == 14 && event_code_mask[i] == "1":
+            //Domestic roaming judged by MNC
+            event_mask.push(params["50019"]);
+            break;
+          case i == 15 && event_code_mask[i] == "1":
+            //International Roaming judeg by MCC
+            event_mask.push(params["50021"]);
+            break;
+        }
+        i++;
       }
-      i++;
+      evt.evts_code_mask = event_mask;
     }
-    evt.evts_code_mask = event_mask;
-    }
-  
-   
-    return obj,evt;
+
+    return obj, evt;
   },
   //GFS Geo-fence data
   GFS: async (l, obj) => {
@@ -396,7 +395,7 @@ SS
     oal_evts = [];
     //block 1
     blk1 = obd_alarm_data.substring(0, 6);
-    if (blk1 .length != 0) {
+    if (blk1.length != 0) {
       obj.oal_block1 = blk1;
       console.log("OAL block 1 :", blk1);
       data_blk1 = blk1.match(/.{1,2}/g);
@@ -411,7 +410,7 @@ SS
     }
     //block 2
     blk2 = obd_alarm_data.substring(6, 14);
-    if (blk2 .length != 0) {
+    if (blk2.length != 0) {
       obj.oal_block2 = blk2;
       console.log("OAL block 2 :", blk2);
       //length
@@ -427,7 +426,7 @@ SS
     }
     //block 3
     blk3 = obd_alarm_data.substring(14, 20);
-    if (blk3 .length != 0) {
+    if (blk3.length != 0) {
       obj.oal_block3 = blk3;
       console.log("OAL block 3 :", blk3);
       length_service_blk3 = blk3.substring(0, 2);
@@ -442,22 +441,22 @@ SS
     }
     //block 4
     blk4 = obd_alarm_data.substring(20, 34);
-    if (blk4 .length != 0) {
+    if (blk4.length != 0) {
       length_service_blk4 = blk4.substring(0, 2);
       obj.oal_block4 = blk4;
       console.log("OAL block 4 :", blk4);
       error1 = blk4.substring(2, 6);
-      if (error1 .length != 0) {
+      if (error1.length != 0) {
         //DTC#1 P0100
         oal_evts.push(`P${error1}`);
       }
       error2 = blk4.substring(6, 10);
-      if (error2 .length != 0) {
+      if (error2.length != 0) {
         //DTC#2 P0200
         oal_evts.push(`P${error2}`);
       }
       error3 = blk4.substring(10, 14);
-      if (error3 .length != 0) {
+      if (error3.length != 0) {
         //DTC#3 P0300
         oal_evts.push(`P${error3}`);
       }
@@ -488,25 +487,28 @@ SS
     return obj;
   },
   //OBDII DATA
-  OBD: async (l, obj,evt) => {
+  OBD: async (l, obj, evt) => {
     console.log("*****************OBD***************");
     const params = require("./params/params.json");
-    let obd_data = l.replace("OBD:","");
+    let obd_data = l.replace("OBD:", "");
     obd_evts = [];
     //Block 1
-    blk1 = obd_data.substring(0,6);
-    if ( blk1 .length != 0) {
+    blk1 = obd_data.substring(0, 6);
+    if (blk1.length != 0) {
       console.log("OBD block 1 : ", blk1);
       obj.obd_block1 = blk1;
-      engine_coolant_temperature_value= parseInt(parseInt(blk1.substring(2, 4)), 16)
+      engine_coolant_temperature_value = parseInt(
+        parseInt(blk1.substring(2, 4)),
+        16
+      )
         .toString(2)
         .toString();
-      obj.obd_engine_coolant_temperature =engine_coolant_temperature_value;
+      obj.obd_engine_coolant_temperature = engine_coolant_temperature_value;
       obd_evts.push(params["50022"]);
     }
     //block 2
-    blk2 = obd_data.substring(6,14);
-    if (blk2 .length != 0) {
+    blk2 = obd_data.substring(6, 14);
+    if (blk2.length != 0) {
       obj.obd_block2 = blk2;
       console.log("block 2 : ", blk2);
       engine_rpm = parseInt(parseInt(blk2.substring(2, 4)), 16)
@@ -517,8 +519,8 @@ SS
     }
 
     //block 3
-    blk3 = obd_data.substring(14,20);
-    if (blk3 .length != 0) {
+    blk3 = obd_data.substring(14, 20);
+    if (blk3.length != 0) {
       obj.obd_block3 = blk3;
       console.log("block 3 : ", blk3);
       vehicle_spped = parseInt(parseInt(blk3.substring(2, 4)), 16)
@@ -529,7 +531,7 @@ SS
     }
 
     //block 4
-    blk4 = obd_data.substring(20,28);
+    blk4 = obd_data.substring(20, 28);
     if (blk4.length != 0) {
       obj.obd_block4 = blk4;
       console.log("block 4 : ", blk4);
@@ -544,23 +546,25 @@ SS
   },
   //Harsh Driver behavior data
   HDB: async (l, obj, evt) => {
-    console.log('*****************HDB***************')
+    console.log("*****************HDB***************");
     const hdb_params = require("./params/hdb_params.json");
-    hdb_satus = parseInt(parseInt(l.replace("HDB:","").replace('#','')),16).toString(2).toString();
-      obj.hdb_status=l.replace("HDB:", "");
-      console.log('HDB status : ',l.replace("HDB:","").replace('#',''));
+    hdb_satus = parseInt(parseInt(l.replace("HDB:", "").replace("#", "")), 16)
+      .toString(2)
+      .toString();
+    obj.hdb_status = l.replace("HDB:", "");
+    console.log("HDB status : ", l.replace("HDB:", "").replace("#", ""));
     let i = 0;
     hdb_evts = [];
     while (i < 7) {
       switch (true) {
         case i == 0 && !(typeof hdb_satus[i] == "undefined"):
-         hdb_evts.push(hdb_params["0"]);
+          hdb_evts.push(hdb_params["0"]);
           break;
         case i == 1 && !(typeof hdb_satus[i] == "undefined"):
-           hdb_evts.push(hdb_params["1"]);
+          hdb_evts.push(hdb_params["1"]);
           break;
         case i == 2 && !(typeof hdb_satus[i] == "undefined"):
-           hdb_evts.push(hdb_params["2"]);
+          hdb_evts.push(hdb_params["2"]);
           break;
         case i == 3 && !(typeof hdb_satus[i] == "undefined"):
           hdb_evts.push(hdb_params["3"]);
@@ -580,8 +584,8 @@ SS
       }
       i++;
     }
-    evt.hdb_evt=hdb_evts;
-    return obj,evt;
+    evt.hdb_evt = hdb_evts;
+    return obj, evt;
   },
   //Canbus
   Canbus: async (l, obj) => {

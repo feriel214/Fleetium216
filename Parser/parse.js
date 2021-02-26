@@ -1,9 +1,8 @@
 //read file
 const fs = require("fs");
-var async = require("async");
-var await = require("await");
 const readline = require("readline");
 const Codec = require("./router/codec/Codec.js");
+const { checkServerIdentity } = require("tls");
 //Object that contain all device data
 let obj = [];
 let evt = [];
@@ -13,7 +12,7 @@ const readInterface = readline.createInterface({
   console: false,
 });
 readInterface.on("line", async (line) => {
-  line.replace('#','');
+  line.replace("#", "");
   let l = line.split(",");
   for (var i in l) {
     switch (true) {
@@ -27,14 +26,14 @@ readInterface.on("line", async (line) => {
         let mdmid = l[i];
         console.log("mdmid", mdmid);
         obj.mdmid = mdmid;
-        obj.PartitionKey = mdmid;
-        console.log("obj.PartitionKey: ", obj.PartitionKey);
+        //obj.PartitionKey = mdmid;
+        //console.log("obj.PartitionKey: ", obj.PartitionKey);
         break;
       //TimeStamp
       case i == 2:
         let timestamp = l[i];
         obj.timestamp = timestamp;
-        obj.RowKey = timestamp;
+        //obj.RowKey = timestamp;
         console.log("TimeStamp", timestamp);
         break;
       //Location information LBS or GPS
@@ -48,7 +47,7 @@ readInterface.on("line", async (line) => {
         break;
       //Millega Data
       case l[i].indexOf("MGR") > -1:
-        console.log("*****************MGR***************")
+        console.log("*****************MGR***************");
         console.log("Milleage : ", l[i].replace("MGR:", ""));
         (obj.milleage = parseInt(l[i].replace("MGR:", "")) * 1), 60934;
         break;
@@ -62,7 +61,7 @@ readInterface.on("line", async (line) => {
         break;
       //OBDII DATA
       case l[i].indexOf("OBD") > -1:
-        obj,evt = await Codec.OBD(l[i],obj,evt);
+        obj, (evt = await Codec.OBD(l[i], obj, evt));
         break;
       //Fuel Consumption Data
       case l[i].indexOf("FUL") > -1:
@@ -70,11 +69,11 @@ readInterface.on("line", async (line) => {
         break;
       //OBDII alarm DATA
       case l[i].indexOf("OAL") > -1:
-        obj,evt = await Codec.OAL(l[i], obj,evt);
+        obj, (evt = await Codec.OAL(l[i], obj, evt));
         break;
       //Harsh Driver behavior data
       case l[i].indexOf("HDB") > -1:
-        obj,evt = await Codec.HDB(l[i], obj,evt);
+        obj, (evt = await Codec.HDB(l[i], obj, evt));
         break;
       //CANBUS J1939 data
       case l[i].indexOf("CAN") > -1:
@@ -98,25 +97,29 @@ readInterface.on("line", async (line) => {
         break;
       //EVENT here we will push each event in eventData(AzureStorage)
       case l[i].indexOf("EVT") > -1:
-        obj,evt = await Codec.EventData(l[i], obj,evt);
+        obj, (evt = await Codec.EventData(l[i], obj, evt));
         break;
       //Device Status and Alarms triggered
       case l[i].indexOf("STT") > -1:
-        obj, evt= await Codec.STT(l[i], obj,evt);
+        obj, (evt = await Codec.STT(l[i], obj, evt));
         break;
     }
   }
   console.log("exit");
   console.log("########################################################");
   console.log("obj \n", obj);
-  console.log("evt \n", evt);
-  InsertDataAzure(obj);
+
+  InsertDeviceData(obj);
+  InsertEvt(evt, obj);
+  /*   if(checkCar(obj.mdmid)){
+    //the check car will return an number of car 
+    InsertEvt(evt,obj);
+  }else {
+    console.log("This obd dosen't match any car !!")
+  } */
 });
-function evtsloop(){
-   /*  PKey = id_car+"_"+((binary_status[i] == 0) ?  params["210"] : params["211"]);
-          RowKey = time; */
-}
-function InsertDataAzure(obj) {
+
+function InsertDeviceData(obj) {
   //Table Storage
   var azure = require("azure-storage");
   var connectionString =
@@ -124,6 +127,8 @@ function InsertDataAzure(obj) {
   var tableService = azure.createTableService(connectionString);
   var entGen = azure.TableUtilities.entityGenerator;
   var entity = {};
+  entity.PartitionKey = obj.mdmid;
+  entity.RowKey = obj.timestamp;
   for (var i in obj) {
     entity[i] = entGen.String(obj[i]);
   }
@@ -140,26 +145,44 @@ function InsertDataAzure(obj) {
   );
 }
 
-function InsertEventData(evt) {
-  //Table Storage
+function InsertEvt(evt, obj) {
+  const events = getUniqueEvt(Object.values(evt).flat());
   var azure = require("azure-storage");
   var connectionString =
     "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
   var tableService = azure.createTableService(connectionString);
   var entGen = azure.TableUtilities.entityGenerator;
-  var entity = {};
-  for (var i in evt) {
-    entity[i] = entGen.String(evt[i]);
-  }
-  return tableService.insertOrReplaceEntity(
-    "eventsdata",
-    entity,
-    function (error, result, response) {
-      if (!error) {
-        console.log("Adeed succefully in events table  ! ");
-      } else {
-        console.log(error);
-      }
+  console.log("events", events);
+  var ent = {};
+  //entity.RowKey=obj.timestamp;
+  delete obj.PartitionKey;
+  delete obj.RowKey;
+  // delete obj.timestamp;
+  for (var j in events) {
+    for (var i in obj) {
+      ent.RowKey = obj.timestamp;
+      ent.PartitionKey = `id_car_${events[j]}`;
+      ent[i] = entGen.String(obj[i]);
     }
-  );
+    tableService.insertOrReplaceEntity(
+      "eventsdata",
+      ent,
+      function (error, result, response) {
+        if (!error) {
+          console.log(" Event Adeed succefully in table storage ! ");
+        } else {
+          console.log(error);
+        }
+      }
+    );
+  }
+}
+function getUniqueEvt(array) {
+  let unique = [];
+  array.forEach((element) => {
+    if (!unique.includes(element)) {
+      unique.push(element);
+    }
+  });
+  return unique;
 }
