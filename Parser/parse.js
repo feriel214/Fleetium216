@@ -2,7 +2,15 @@
 const fs = require("fs");
 const readline = require("readline");
 const Codec = require("./router/codec/Codec.js");
+const client=require('./router/SQLDatabase/db')
 const { checkServerIdentity } = require("tls");
+const redis = require("redis");
+require("dotenv").config();
+const redis_client = redis.createClient({
+  host: process.env.host,
+  port: process.env.port,
+  password: process.env.password,
+});
 //Object that contain all device data
 let obj = [];
 let evt = [];
@@ -110,13 +118,19 @@ readInterface.on("line", async (line) => {
   console.log("obj \n", obj);
 
   InsertDeviceData(obj);
-  InsertEvt(evt, obj);
-  /*   if(checkCar(obj.mdmid)){
-    //the check car will return an number of car 
-    InsertEvt(evt,obj);
+  client.connect();
+  const res= await checkCar(obj.mdmid);
+
+    if(res === null){
+      console.log("This obd dosen't match any car !!") 
   }else {
-    console.log("This obd dosen't match any car !!")
-  } */
+     //Insert event-data in Redis
+     //InsertEvt(evt, obj,res);
+     //client.end();
+     //Insert device-data in Redis
+     InsertDataRedis(obj,res);
+   
+  }
 });
 
 function InsertDeviceData(obj) {
@@ -145,7 +159,7 @@ function InsertDeviceData(obj) {
   );
 }
 
-function InsertEvt(evt, obj) {
+function InsertEvt(evt, obj,id_car) {
   const events = getUniqueEvt(Object.values(evt).flat());
   var azure = require("azure-storage");
   var connectionString =
@@ -161,7 +175,7 @@ function InsertEvt(evt, obj) {
   for (var j in events) {
     for (var i in obj) {
       ent.RowKey = obj.timestamp;
-      ent.PartitionKey = `id_car_${events[j]}`;
+      ent.PartitionKey = `${id_car}_${events[j]}`;
       ent[i] = entGen.String(obj[i]);
     }
     tableService.insertOrReplaceEntity(
@@ -186,3 +200,47 @@ function getUniqueEvt(array) {
   });
   return unique;
 }
+
+
+async function checkCar(mdmid) {
+  const query = await client.query("SELECT * FROM cars WHERE mdmid  = $1", [
+    mdmid,
+  ]); 
+  if (query.rows.length === 0) {
+    return null;readline.clearScreenDown
+  } else {
+   
+    return JSON.parse(query.rows[0].id_car);
+    
+  }
+ 
+}
+function InsertEventRedis(){
+
+}
+function InsertDataRedis(obj,res){   
+  redis_client.hmset(
+    res,
+    ["id_cars",res,
+    "header",obj.header,
+    "mmid",obj.mdmid,
+    "gps-signal", obj.gps_signal,
+    "gps-lat",obj.gps_lat,
+    "gps-long",obj.gps_long,
+    "gps-hdop",obj.gps_hdop,
+    "gps-angle", obj.gps_angle,
+    "gps-speed",obj.gps_speed,
+    "miellage",obj.milleage,
+    "adc-power-supply-voltage",obj.adc_external_power_supply_voltage,
+    "adc-device-tempreature",obj.adc_device_tempreture,
+    "bdc-device-backup-battery-voltage", obj.adc_device_backup_battery_voltage,
+    "engine-run-time",obj.egt_value,
+    "obd",obj.obd_block1,
+    "fuel-consumption", obj.fuel_consumption,
+    "vin",obj.vin,
+    "event-code",obj.event_code,
+    /*"event-mask",obj.event_mask*/], function(err, res) {
+   console.log(err);
+});
+  console.log("added successfully in redis database :)");
+ }

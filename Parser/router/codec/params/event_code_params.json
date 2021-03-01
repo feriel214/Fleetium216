@@ -1,15 +1,15 @@
 {
-    "0":"Non event triggered",
-    "1":"Interval triggered:Time uploading event trigger uploads",
-    "2":"Angle triggered:Angle change reaches the set value trigger uploads",
-    "3":"Distance triggered:Distance change reaches the set value trigger uploads",
-    "4":"Request triggered:Command requests trigger uploads",
-    "10":"RFID reader triggered:RFID card swiping trigger uploads ",
-    "11":"iBeacon triggered:Find or lose iBeacon device trigger uploads",
-    "20":"Firmware upgraded:Firmware upgraded trigger uploads ",
-    "28":"OBDII scanner detected:OBDII scanner detected trigger uploads ",
-    "80":"Geo-fence triggered:Geo-fence state change trigger uploads",
-    "90":"driver behavior triggered:Detected bad driver behavior trigger uploads.",
-    "F0":"Status changed triggered:Device state change trigger uploads",
-    "F8":"Alarm triggered :Alarm trigger uploads"
+		"0":"non_event_triggered",
+		"1":"interval_triggered:time_uploading_event_trigger_uploads",
+		"2":"angle_triggered:angle_change_reaches_the_set_value_trigger_uploads",
+		"3":"distance_triggered:distance_change_reaches_the_set_value_trigger_uploads",
+		"4":"request_triggered:command_requests_trigger_uploads",
+		"10":"rfid_reader_triggered:rfid_card_swiping_trigger_uploads_",
+		"11":"ibeacon_triggered:find_or_lose_ibeacon_device_trigger_uploads",
+		"20":"firmware_upgraded:firmware_upgraded_trigger_uploads_",
+		"28":"obdii_scanner_detected:obdii_scanner_detected_trigger_uploads_",
+		"80":"geo-fence_triggered:geo-fence_state_change_trigger_uploads",
+		"90":"driver_behavior_triggered:detected_bad_driver_behavior_trigger_uploads.",
+		"F0":"status_changed_triggered:device_state_change_trigger_uploads",
+		"F8":"alarm_triggered_:alarm_trigger_uploads"
 }
