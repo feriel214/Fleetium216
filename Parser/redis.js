@@ -1,8 +1,5 @@
-const express = require("express");
 const redis = require("redis");
-const csv = require("csv-parser");
 const fs = require("fs");
-const pool = require("./router/SQLdatabase/db");
 const Check = require("./router/model/pgModel");
 require("dotenv").config();
 const client = redis.createClient({
@@ -25,9 +22,7 @@ fs.createReadStream("demo1.txt")
       //console.log(strArray);
       //const query = await pool.query("SELECT * FROM cars WHERE mdmid  =$1",[strArray[1].slice(strArray[1].indexOf(":")+1)]);
       const result = await Check(
-        strArray[1].slice(strArray[1].indexOf(":") + 1)
-      );
-
+        strArray[1].slice(strArray[1].indexOf(":") + 1));
       if (result === null) {
         console.log(
           "This mdmid " +
@@ -35,7 +30,6 @@ fs.createReadStream("demo1.txt")
             " dont exist in postgres database"
         );
       } else {
-        console.log("/////////////////" + result);
         client.HMSET(
           result,
           "id_cars",
