@@ -1,4 +1,3 @@
-
 try {
   var azure = require("azure-storage");
   var connectionString =
@@ -15,14 +14,13 @@ try {
   PartitionKey = carId + "_" + "acceleration_threshold1_exceed";
   return new Promise((resolve, reject) => {
    query = new azure.TableQuery()
-  .select(['*'])
+  .select(['PartitionKey'])
   .where('PartitionKey eq?', PartitionKey);
    tableSvc.queryEntities('eventsdata',query,null, function (error, result){
           if(!error){
-               console.log(result.entries[0].obd_distance_travled_value._); 
                 resolve(result.entries[0].obd_distance_travled_value._);
           }else{
-              console.log("Something went wrong");
+              reject(console.log("Something went wrong"));
           }
         });
       });

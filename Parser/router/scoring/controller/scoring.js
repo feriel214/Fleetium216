@@ -1,7 +1,9 @@
+
 // AccNerveuse //
 const acceleration_threshold1_exceed = require("../model/AccNerveuseModel");
+const acceleration_threshold2_exceed = require("../model/AccRisqueeModel");
 
-function RoadTime(param) {
+async function RoadTime(param) {
   let score = "";
   switch (true) {
     case param > 45 && param < 50:
@@ -40,7 +42,7 @@ function RoadTime(param) {
   return score;
 }
 
-function RoadSpeed(param) {
+async function RoadSpeed(param) {
   let score = "";
   switch (true) {
     case param > 4.5 && param < 5:
@@ -81,37 +83,38 @@ function RoadSpeed(param) {
 
 async function AccNerveuse(carId, param) {
   const distance = await acceleration_threshold1_exceed. acceleration_threshold1_exceed(carId);
-  console.log("test 2 " +distance);
+  result = distance / param;
+
   let score = "";
   switch (true) {
-    case param > 0 && param < 50:
+    case result > 0 && result < 50:
       score = 1;
       break;
-    case param > 50 && param < 100:
+    case result > 50 && result < 100:
       score = 2;
       break;
-    case param > 100 && param < 200:
+    case result > 100 && result < 200:
       score = 3;
       break;
-    case param > 200 && param < 300:
+    case result > 200 && result < 300:
       score = 4;
       break;
-    case param > 300 && param < 400:
+    case result > 300 && result < 400:
       score = 5;
       break;
-    case param > 400 && param < 500:
+    case result > 400 && result < 500:
       score = 6;
       break;
-    case param > 500 && param < 600:
+    case result > 500 && result < 600:
       score = 7;
       break;
-    case param > 600 && param < 700:
+    case result > 600 && result < 700:
       score = 8;
       break;
-    case param > 700 && param < 800:
+    case result > 700 && result < 800:
       score = 9;
       break;
-    case param > 800 && param < 1000:
+    case result > 800 && result < 1000:
       score = 10;
       break;
     default:
@@ -120,37 +123,40 @@ async function AccNerveuse(carId, param) {
   return score;
 }
 
-function AccRisquee(param) {
+
+async function AccRisquee(carId,param) {
+  const distance = await acceleration_threshold2_exceed. acceleration_threshold2_exceed(carId);
+  result = distance / param;
   let score = "";
   switch (true) {
-    case param > 0 && param < 1000:
+    case result > 0 && result < 1000:
       score = 1;
       break;
-    case (param > 1000) & (param < 2000):
+    case (result > 1000) & (result < 2000):
       score = 2;
       break;
-    case (param > 2000) & (param < 3000):
+    case (result > 2000) & (result < 3000):
       score = 3;
       break;
-    case (param > 3000) & (param < 4000):
+    case (result > 3000) & (result < 4000):
       score = 4;
       break;
-    case param > 4000 && param < 5000:
+    case result > 4000 && result < 5000:
       score = 5;
       break;
-    case param > 5000 && param < 6000:
+    case result > 5000 && result < 6000:
       score = 6;
       break;
-    case param > 6000 && param < 7000:
+    case result > 6000 && result < 7000:
       score = 7;
       break;
-    case param > 7000 && param < 8000:
+    case result > 7000 && result < 8000:
       score = 8;
       break;
-    case param > 8000 && param < 9000:
+    case result > 8000 && result < 9000:
       score = 9;
       break;
-    case param > 9000 && param < 10000:
+    case result > 9000 && result < 10000:
       score = 10;
       break;
     default:
@@ -159,7 +165,7 @@ function AccRisquee(param) {
   return score;
 }
 
-function AccDangereuse(param) {
+async function AccDangereuse(param) {
   let score = "";
   switch (true) {
     case param > 0 && param < 2000:
@@ -198,7 +204,7 @@ function AccDangereuse(param) {
   return score;
 }
 
-function FreExcessif(param) {
+async function FreExcessif(param) {
   let score = "";
   switch (true) {
     case param > 0 && param < 5:
@@ -237,7 +243,7 @@ function FreExcessif(param) {
   return score;
 }
 
-function FreRisquee(param) {
+async function FreRisquee(param) {
   let score = "";
   switch (true) {
     case param > 0 && param < 20:
@@ -276,7 +282,7 @@ function FreRisquee(param) {
   return score;
 }
 
-function FreDangereux(param) {
+async function FreDangereux(param) {
   let score = "";
   switch (true) {
     case param > 0 && param < 50:
@@ -315,7 +321,7 @@ function FreDangereux(param) {
   return score;
 }
 
-function Cornering(param) {
+async function Cornering(param) {
   let score = "";
   switch (true) {
     case param > 0 && param < 50:
@@ -354,11 +360,16 @@ function Cornering(param) {
   return score;
 }
 
-/*RoadTime = RoadTime(24.98);
-RoadSpeed = RoadSpeed(0.79);**/
 
-AccNerveuse = AccNerveuse(1, 34);
-console.log("Your score is " + AccNerveuse);
+
+async function calcScore() {
+  TAccNerveuse = await AccNerveuse(1, 34)
+  TAccRisquee = await AccRisquee(1,2)
+  console.log("Acc Nerveuse score " +TAccNerveuse);
+  console.log("Acc Risquee score " +TAccRisquee);
+  
+}
+calcScore();
 
 /*AccRisquee = AccRisquee();
 AccDangereuse = AccDangereuse();
