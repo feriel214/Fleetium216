@@ -91,8 +91,13 @@ module.exports = {
         case i == 8 && binary_status[i] == "1":
           evt.push(params["50011"]);
           break;
-        case i == 9 && binary_status[i] == "1":
-          evt.push(params["1110"]);
+        case i == 9 :
+         // if(binary_status[i] == "1"){
+			  //evt.push(params["1110"]);
+		  //}else{
+			  evt.push(params["1100"]);
+		  //}
+          console.log('evt',evt)
           break;
         case i == 10 && binary_status[i] == "1":
           evt.push(params["50013"]);
@@ -479,7 +484,7 @@ SS
       console.log("Fuel Consumption", real_fuel_consumption);
       obj.fuel_consumption = real_fuel_consumption;
     } //we will use the algorithm 0
-    else if (l.indexOf("FUL1") == -1) {
+    else if (l.indexOf("FUL") > -1) {
       fuel_value = parseInt(l.replace("FUL:", "")); // to check
       real_fuel_consumption = fuel_value / 10 / afr / density;
       obj.fuel_consumption = real_fuel_consumption;

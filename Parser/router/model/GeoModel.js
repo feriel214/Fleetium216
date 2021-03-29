@@ -10,6 +10,7 @@ const redis_client = redis.createClient({
 pool.connect();
 
 async function createGeofenceRedis(UniqueId,geojson) {
+  
   return new Promise((resolve, reject) => {
         redis_client.hset(`${UniqueId}`,`${geojson.type}`,geojson.coordinates,(err, val) => {
           if (err) {

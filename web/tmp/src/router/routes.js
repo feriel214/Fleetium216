@@ -198,7 +198,7 @@ const liveDataRoutes = [
         name: 'Gps Tracking',
         meta: { authRequired: true },
         component: () =>
-          lazyLoadView(import('@views/pages/apps/project/list')),
+          lazyLoadView(import('@views/pages/apps/LiveData.vue')),
       }
     ],
   }
