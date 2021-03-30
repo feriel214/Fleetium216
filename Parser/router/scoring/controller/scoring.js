@@ -3,7 +3,7 @@
 const acceleration_threshold1_exceed = require("../model/AccNerveuseModel");
 const acceleration_threshold2_exceed = require("../model/AccRisqueeModel");
 const acceleration_threshold3_exceed = require("../model/AccDangereuseModel");
-
+const deceleration_threshold1_exceed = require("../model/FreinageEx")
 
 async function RoadTime(param) {
   let score = "";
@@ -228,44 +228,51 @@ async function AccDangereuse(carId,param) {
   
 }
 
-async function FreExcessif(param) {
-  let score = "";
+async function FreExcessif(carId,param) {
+  const number_Acc = await deceleration_threshold1_exceed.deceleration_threshold1_exceed(carId)
+  result = param / number_Acc;
+  console.log(result);
+  if(isNaN(result)){
+    return 10;
+  }else{
+    let score = "";
   switch (true) {
-    case param > 0 && param < 5:
+    case result >= 0 && result < 5:
       score = 1;
       break;
-    case param > 5 && param < 10:
+    case result >= 5 && result < 10:
       score = 2;
       break;
-    case param > 10 && param < 15:
+    case result >= 10 && result < 15:
       score = 3;
       break;
-    case param > 15 && param < 20:
+    case result >= 15 && result < 20:
       score = 4;
       break;
-    case param > 20 && param < 25:
+    case result >= 20 && result < 25:
       score = 5;
       break;
-    case param > 25 && param < 30:
+    case result >= 25 && result < 30:
       score = 6;
       break;
-    case param > 30 && param < 35:
+    case result >= 30 && result < 35:
       score = 7;
       break;
-    case param > 35 && param < 40:
+    case result >= 35 && result < 40:
       score = 8;
       break;
-    case param > 40 && param < 45:
+    case result >= 40 && result < 45:
       score = 9;
       break;
-    case param > 45 && param < 50:
+    case result >= 45 && result < 50:
       score = 10;
       break;
     default:
       score = 10;
   }
   return score;
-}
+  }
+  }
 
 async function FreRisquee(param) {
   let score = "";
@@ -390,9 +397,11 @@ async function calcScore() {
   TAccNerveuse = await AccNerveuse(1, 1250)
   TAccRisquee = await AccRisquee(1,2)
   TAccDang = await AccDangereuse(1, 21)
+  TFreEx = await FreExcessif(1,3)
   console.log("Acc Nerveuse score " +TAccNerveuse);
   console.log("Acc Risquee score " +TAccRisquee);
   console.log("Acc Dang score " + TAccDang);
+  console.log("Fre Exessif "+ TFreEx);
   
 }
 calcScore();
