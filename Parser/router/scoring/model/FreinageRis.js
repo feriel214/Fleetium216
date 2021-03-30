@@ -1,5 +1,4 @@
 const { TableQuery } = require("azure-storage");
-
 try {
     var azure = require("azure-storage");
     var connectionString =
@@ -8,10 +7,10 @@ try {
   } catch (error) {
     console.log("can not connect to azure table storage");
   }
-  
-  
-async function acceleration_threshold3_exceed(carId){
-    PartitionKey = carId + "_" + "acceleration_threshold3_exceed";
+
+
+async function deceleration_threshold2_exceed(carId){
+    PartitionKey = carId + "_" + "deceleration_threshold2_exceed";
     return new Promise((resolve, reject) => {
     query = new azure.TableQuery()
     .select(['*'])
@@ -22,7 +21,8 @@ async function acceleration_threshold3_exceed(carId){
               resolve(result.entries.length);
             }else{
               resolve(NaN)
-            }    
+            }
+                
           }else{
               reject(error);
           }
@@ -32,5 +32,5 @@ async function acceleration_threshold3_exceed(carId){
 
 
 module.exports = { 
-    acceleration_threshold3_exceed
+    deceleration_threshold2_exceed
 }
