@@ -7,21 +7,25 @@ try {
     console.log("can not connect to azure table storage");
   }
   
-async function test(){
+ async function test(){
   let sum = 0.0;
   t = "1_engine_coolant_temperature";
   return new Promise(( resolve, reject) =>{
     query = new azure.TableQuery()
     .select(['*'])
-    .where('PartitionKey eq?', t);
+    .where('PartitionKey eq? ' , '1_ignition_off');
     tableSvc.queryEntities('eventsdata',query,null, function (error, result){
       if(!error){
-        for (i = 0 ; i < result.entries.length; i++){
-          sum = sum + parseFloat(result.entries[i].adc_device_backup_battery_voltage._);
-          }
-          resolve(sum);
+        // for (i = 0 ; i < result.entries.length; i++){
+        //  sum = sum + parseFloat(result.entries[i].obd_distance_travled_value._);
+        
+          resolve(result.entries)
+          console.log(result.entries.length)
+      //}
+          
       }else{
-        reject(console.log("Something went wrong"));
+        reject(error);
+        
       }
       
     });
@@ -29,7 +33,7 @@ async function test(){
   });
    
 }  
-async function show(){
+ async function show(){
   result = await test();
   console.log(result);
 }

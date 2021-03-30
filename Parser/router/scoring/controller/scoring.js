@@ -2,6 +2,8 @@
 // AccNerveuse //
 const acceleration_threshold1_exceed = require("../model/AccNerveuseModel");
 const acceleration_threshold2_exceed = require("../model/AccRisqueeModel");
+const acceleration_threshold3_exceed = require("../model/AccDangereuseModel");
+
 
 async function RoadTime(param) {
   let score = "";
@@ -82,91 +84,110 @@ async function RoadSpeed(param) {
 }
 
 async function AccNerveuse(carId, param) {
-  const distance = await acceleration_threshold1_exceed. acceleration_threshold1_exceed(carId);
-  result = distance / param;
-
-  let score = "";
+  const number_Acc = await acceleration_threshold1_exceed.acceleration_threshold1_exceed(carId);
+  result = param / number_Acc;
+  if (isNaN(result))
+  {
+    return 10
+  }else
+  {
+    let score = "";
   switch (true) {
-    case result > 0 && result < 50:
+    case result >= 0 && result < 50:
       score = 1;
       break;
-    case result > 50 && result < 100:
+    case result >= 50 && result < 100:
       score = 2;
       break;
-    case result > 100 && result < 200:
+    case result >= 100 && result < 200:
       score = 3;
       break;
-    case result > 200 && result < 300:
+    case result >= 200 && result < 300:
       score = 4;
       break;
-    case result > 300 && result < 400:
+    case result >= 300 && result < 400:
       score = 5;
       break;
-    case result > 400 && result < 500:
+    case result >= 400 && result < 500:
       score = 6;
       break;
-    case result > 500 && result < 600:
+    case result >= 500 && result < 600:
       score = 7;
       break;
-    case result > 600 && result < 700:
+    case result >= 600 && result < 700:
       score = 8;
       break;
-    case result > 700 && result < 800:
+    case result >= 700 && result < 800:
       score = 9;
       break;
-    case result > 800 && result < 1000:
+    case result >= 800 && result < 1000:
       score = 10;
       break;
     default:
       score = 10;
   }
   return score;
+  }
+  
 }
 
 
 async function AccRisquee(carId,param) {
-  const distance = await acceleration_threshold2_exceed. acceleration_threshold2_exceed(carId);
-  result = distance / param;
-  let score = "";
-  switch (true) {
-    case result > 0 && result < 1000:
-      score = 1;
-      break;
-    case (result > 1000) & (result < 2000):
-      score = 2;
-      break;
-    case (result > 2000) & (result < 3000):
-      score = 3;
-      break;
-    case (result > 3000) & (result < 4000):
-      score = 4;
-      break;
-    case result > 4000 && result < 5000:
-      score = 5;
-      break;
-    case result > 5000 && result < 6000:
-      score = 6;
-      break;
-    case result > 6000 && result < 7000:
-      score = 7;
-      break;
-    case result > 7000 && result < 8000:
-      score = 8;
-      break;
-    case result > 8000 && result < 9000:
-      score = 9;
-      break;
-    case result > 9000 && result < 10000:
-      score = 10;
-      break;
-    default:
-      score = 10;
+  const number_Acc = await acceleration_threshold2_exceed.acceleration_threshold2_exceed(carId);
+  result = param / number_Acc ;
+  if (isNaN(result))
+  {
+    return 10;
+  }else{
+    let score = "";
+    switch (true) {
+      case result >= 0 && result < 1000:
+        score = 1;
+        break;
+      case result >= 1000 && result < 2000:
+        score = 2;
+        break;
+      case result >= 2000 && result < 3000:
+        score = 3;
+        break;
+      case result >= 3000 && result < 4000:
+        score = 4;
+        break;
+      case result >= 4000 && result < 5000:
+        score = 5;
+        break;
+      case result >= 5000 && result < 6000:
+        score = 6;
+        break;
+      case result >= 6000 && result < 7000:
+        score = 7;
+        break;
+      case result >= 7000 && result < 8000:
+        score = 8;
+        break;
+      case result >= 8000 && result < 9000:
+        score = 9;
+        break;
+      case result >= 9000 && result < 10000:
+        score = 10;
+        break;
+      default:
+        score = 10;
+    }
+    return score;
   }
-  return score;
+ 
 }
 
-async function AccDangereuse(param) {
-  let score = "";
+async function AccDangereuse(carId,param) {
+  const number_Acc = await acceleration_threshold3_exceed.acceleration_threshold3_exceed(carId);
+  result = param / number_Acc ;
+  if (isNaN(result))
+  {
+    return 10
+  }else
+  {
+    let score = "";
   switch (true) {
     case param > 0 && param < 2000:
       score = 1;
@@ -202,6 +223,9 @@ async function AccDangereuse(param) {
       score = 10;
   }
   return score;
+
+  }
+  
 }
 
 async function FreExcessif(param) {
@@ -363,10 +387,12 @@ async function Cornering(param) {
 
 
 async function calcScore() {
-  TAccNerveuse = await AccNerveuse(1, 34)
+  TAccNerveuse = await AccNerveuse(1, 1250)
   TAccRisquee = await AccRisquee(1,2)
+  TAccDang = await AccDangereuse(1, 21)
   console.log("Acc Nerveuse score " +TAccNerveuse);
   console.log("Acc Risquee score " +TAccRisquee);
+  console.log("Acc Dang score " + TAccDang);
   
 }
 calcScore();

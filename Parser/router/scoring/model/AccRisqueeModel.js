@@ -17,9 +17,10 @@ try {
      tableSvc.queryEntities('eventsdata',query,null, function (error, result){
             if(!error){
                 if(result.entries.length != 0){
-                    resolve(result.entries[0].obd_distance_travled_value._);
+                    resolve(result.entries.length);
+                    
                 }else{
-                    resolve(false);
+                    resolve(NaN);
                 }
             }else{
                 reject(console.log("Something went wrong"));

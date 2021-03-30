@@ -14,13 +14,18 @@ try {
   PartitionKey = carId + "_" + "acceleration_threshold1_exceed";
   return new Promise((resolve, reject) => {
    query = new azure.TableQuery()
-  .select(['PartitionKey'])
+  .select(['*'])
   .where('PartitionKey eq?', PartitionKey);
    tableSvc.queryEntities('eventsdata',query,null, function (error, result){
           if(!error){
-                resolve(result.entries[0].obd_distance_travled_value._);
+            if(result.entries.length != 0){
+              resolve(result.entries.length);
+            }else{
+              reject(NaN);
+            }
+                
           }else{
-              reject(console.log("Something went wrong"));
+              reject(error);
           }
         });
       });
