@@ -323,7 +323,6 @@ async function FreRisquee(carId,param) {
 
 async function FreDangereux(carId,param) {
   const number_Dec = await deceleration_threshold3_exceed.deceleration_threshold3_exceed(carId);
-  console.log(number_Dec)
   result = param / number_Dec;
   if(isNaN(result)){
     return 10;
