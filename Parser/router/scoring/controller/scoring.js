@@ -5,6 +5,7 @@ const acceleration_threshold2_exceed = require("../model/AccRisqueeModel");
 const acceleration_threshold3_exceed = require("../model/AccDangereuseModel");
 const deceleration_threshold1_exceed = require("../model/FreinageEx");
 const deceleration_threshold2_exceed = require("../model/FreinageRis");
+const deceleration_threshold3_exceed = require("../model/FreinageDan");
 
 async function RoadTime(param) {
   let score = "";
@@ -190,34 +191,34 @@ async function AccDangereuse(carId,param) {
   {
     let score = "";
   switch (true) {
-    case param > 0 && param < 2000:
+    case result > 0 && result < 2000:
       score = 1;
       break;
-    case (param > 2000) & (param < 4000):
+    case (result > 2000) & (result < 4000):
       score = 2;
       break;
-    case (param > 4000) & (param < 6000):
+    case (result > 4000) & (result < 6000):
       score = 3;
       break;
-    case (param > 6000) & (param < 8000):
+    case (result > 6000) & (result < 8000):
       score = 4;
       break;
-    case param > 8000 && param < 10000:
+    case result > 8000 && result < 10000:
       score = 5;
       break;
-    case param > 10000 && param < 12000:
+    case result > 10000 && result < 12000:
       score = 6;
       break;
-    case param > 12000 && param < 14000:
+    case result > 12000 && result < 14000:
       score = 7;
       break;
-    case param > 14000 && param < 16000:
+    case result > 14000 && result < 16000:
       score = 8;
       break;
-    case param > 16000 && param < 18000:
+    case result > 16000 && result < 18000:
       score = 9;
       break;
-    case param > 18000 && param < 20000:
+    case result > 18000 && result < 20000:
       score = 10;
       break;
     default:
@@ -320,43 +321,51 @@ async function FreRisquee(carId,param) {
   
 }
 
-async function FreDangereux(param) {
-  let score = "";
+async function FreDangereux(carId,param) {
+  const number_Dec = await deceleration_threshold3_exceed.deceleration_threshold3_exceed(carId);
+  console.log(number_Dec)
+  result = param / number_Dec;
+  if(isNaN(result)){
+    return 10;
+  }else{
+    let score = "";
   switch (true) {
-    case param > 0 && param < 50:
+    case result >= 0 && result < 50:
       score = 1;
       break;
-    case param > 50 && param < 100:
+    case result >= 50 && result < 100:
       score = 2;
       break;
-    case param > 100 && param < 200:
+    case result >= 100 && result < 200:
       score = 3;
       break;
-    case param > 200 && param < 300:
+    case result >= 200 && result < 300:
       score = 4;
       break;
-    case param > 300 && param < 400:
+    case result >= 300 && result < 400:
       score = 5;
       break;
-    case param > 400 && param < 500:
+    case result >= 400 && result < 500:
       score = 6;
       break;
-    case param > 500 && param < 600:
+    case result >= 500 && result < 600:
       score = 7;
       break;
-    case param > 600 && param < 700:
+    case result >= 600 && result < 700:
       score = 8;
       break;
-    case param > 700 && param < 800:
+    case result >= 700 && result < 800:
       score = 9;
       break;
-    case param > 800 && param < 1000:
+    case result >= 800 && result < 1000:
       score = 10;
       break;
     default:
       score = 10;
   }
   return score;
+  }
+  
 }
 
 async function Cornering(param) {
@@ -406,11 +415,13 @@ async function calcScore() {
   TAccDang = await AccDangereuse(1, 21)
   TFreEx = await FreExcessif(1,3)
   TFreRis = await FreRisquee(1,60);
+  TFreDan = await FreDangereux(1,120);
   console.log("Acc Nerveuse score " +TAccNerveuse);
   console.log("Acc Risquee score " +TAccRisquee);
   console.log("Acc Dang score " + TAccDang);
   console.log("Fre Exessif "+ TFreEx);
   console.log("Fre Risque "+ TFreRis);
+  console.log("Fre Dangereuse "+ TFreDan);
 }
 calcScore();
 
