@@ -1,12 +1,21 @@
 
 // AccNerveuse //
 const acceleration_threshold1_exceed = require("../model/AccNerveuseModel");
+// AccRisquee //
 const acceleration_threshold2_exceed = require("../model/AccRisqueeModel");
+// AccDangereuse //
 const acceleration_threshold3_exceed = require("../model/AccDangereuseModel");
+// DecExisif //
 const deceleration_threshold1_exceed = require("../model/FreinageEx");
+// DecRisquee //
 const deceleration_threshold2_exceed = require("../model/FreinageRis");
+// DecDangeruese //
 const deceleration_threshold3_exceed = require("../model/FreinageDan");
+// Cornering //
 const angle_rapid_changed_alert = require("../model/CorneringModel");
+// Azure //
+const InsertScore = require("../model/InsertScoreToAzure")
+
 
 async function RoadTime(param) {
   let score = "";
@@ -371,7 +380,6 @@ async function FreDangereux(carId,param) {
 async function Cornering(carId,param) {
   const number_Cor = await angle_rapid_changed_alert.angle_rapid_changed_alert(carId)
   result = param / number_Cor;
-  console.log(result);
   if (isNaN(result))
   {
     return 10;
@@ -420,13 +428,14 @@ async function Cornering(carId,param) {
 
 
 async function calcScore() {
-  TAccNerveuse = await AccNerveuse(1, 1250)
-  TAccRisquee = await AccRisquee(1,2)
-  TAccDang = await AccDangereuse(1, 21)
-  TFreEx = await FreExcessif(1,3)
-  TFreRis = await FreRisquee(1,60);
-  TFreDan = await FreDangereux(1,120);
-  TCor = await Cornering(1,500);
+  carId = 1;
+  TAccNerveuse = await AccNerveuse(carId, 12500)
+  TAccRisquee = await AccRisquee(carId,1212)
+  TAccDang = await AccDangereuse(carId, 210)
+  TFreEx = await FreExcessif(carId,3)
+  TFreRis = await FreRisquee(carId,80);
+  TFreDan = await FreDangereux(carId,20);
+  TCor = await Cornering(carId,50000);
   console.log("Acc Nerveuse score " +TAccNerveuse);
   console.log("Acc Risquee score " +TAccRisquee);
   console.log("Acc Dang score " + TAccDang);
@@ -434,9 +443,12 @@ async function calcScore() {
   console.log("Fre Risque "+ TFreRis);
   console.log("Fre Dangereuse "+ TFreDan);
   console.log("Corenering "+ TCor);
+  ScoreFinal = Math.round((  (TAccNerveuse *2)+TAccRisquee + TAccDang + (TFreEx * 2) + TFreRis + TFreDan + TCor) / 11);
+  result = InsertScore.InsertScore(1,ScoreFinal);
 
 }
-calcScore();
+
+calcScore()
 
 /*AccRisquee = AccRisquee();
 AccDangereuse = AccDangereuse();
