@@ -1,4 +1,4 @@
-
+require('dotenv').config()
 // AccNerveuse //
 const acceleration_threshold1_exceed = require("../model/AccNerveuseModel");
 // AccRisquee //

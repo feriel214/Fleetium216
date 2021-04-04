@@ -1,9 +1,9 @@
 const { TableQuery } = require("azure-storage");
-
+require('dotenv').config();
 try {
     var azure = require("azure-storage");
     var connectionString =
-      "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
+      process.env.connectionString;
     var tableSvc = azure.createTableService(connectionString);
   } catch (error) {
     console.log("can not connect to azure table storage");
