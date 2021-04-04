@@ -444,7 +444,13 @@ async function calcScore() {
   console.log("Fre Dangereuse "+ TFreDan);
   console.log("Corenering "+ TCor);
   ScoreFinal = Math.round((  (TAccNerveuse *2)+TAccRisquee + TAccDang + (TFreEx * 2) + TFreRis + TFreDan + TCor) / 11);
+  console.log("Your final score is "+ScoreFinal)
   result = InsertScore.InsertScore(1,ScoreFinal);
+  if(result){
+    console.log("Score inserted succesfully");
+  }else{
+    console.log("Something went wrong")
+  }
 
 }
 
