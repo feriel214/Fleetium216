@@ -1,4 +1,5 @@
-require('dotenv').config()
+require('dotenv').config();
+
 // AccNerveuse //
 const acceleration_threshold1_exceed = require("../model/AccNerveuseModel");
 // AccRisquee //
@@ -97,7 +98,9 @@ async function RoadSpeed(param) {
 
 async function AccNerveuse(carId, param) {
   const number_Acc = await acceleration_threshold1_exceed.acceleration_threshold1_exceed(carId);
+  console.log(number_Acc)
   result = param / number_Acc;
+  
   if (isNaN(result))
   {
     return 10
