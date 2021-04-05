@@ -1,5 +1,5 @@
 const { TableQuery } = require("azure-storage");
-require('dotenv').config();
+
 try {
   var azure = require("azure-storage");
   var connectionString =
@@ -23,15 +23,13 @@ try {
               resolve(result.entries.length);
             }else{
               reject(NaN);
-            }
-                
+            }    
           }else{
               reject(error);
           }
         });
       });
-         
-}
+    }
 
 
 module.exports = {

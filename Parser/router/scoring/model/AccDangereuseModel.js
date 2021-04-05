@@ -1,5 +1,5 @@
 const { TableQuery } = require("azure-storage");
-require('dotenv').config()
+
 try {
     var azure = require("azure-storage");
     var connectionString = process.env.connectionString;

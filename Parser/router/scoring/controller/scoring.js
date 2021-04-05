@@ -146,7 +146,6 @@ async function AccNerveuse(carId, param) {
   
 }
 
-
 async function AccRisquee(carId,param) {
   const number_Acc = await acceleration_threshold2_exceed.acceleration_threshold2_exceed(carId);
   result = param / number_Acc ;
@@ -244,7 +243,7 @@ async function AccDangereuse(carId,param) {
 }
 
 async function FreExcessif(carId,param) {
-  const number_Dec = await deceleration_threshold1_exceed.deceleration_threshold1_exceed(carId)
+  const number_Dec = await deceleration_threshold1_exceed.deceleration_threshold1_exceed(carId);
   result = param / number_Dec;
   if(isNaN(result)){
     return 10;
@@ -432,7 +431,7 @@ async function Cornering(carId,param) {
 
 async function calcScore() {
   carId = 1;
-  TAccNerveuse = await AccNerveuse(carId, 12500)
+  TAccNerveuse = await AccNerveuse(carId, 27000)
   TAccRisquee = await AccRisquee(carId,1212)
   TAccDang = await AccDangereuse(carId, 210)
   TFreEx = await FreExcessif(carId,3)

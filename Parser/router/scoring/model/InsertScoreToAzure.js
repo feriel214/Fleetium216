@@ -1,4 +1,4 @@
-require('dotenv').config()
+
 try {
     var azure = require("azure-storage");
     var connectionString =
