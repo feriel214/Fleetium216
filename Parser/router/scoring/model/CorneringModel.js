@@ -9,25 +9,38 @@ try {
     console.log("can not connect to azure table storage");
   }
   
-  async function angle_rapid_changed_alert(carId){
+  async function queryEntitiesSegmented(carId , continuationToken){
     PartitionKey = carId + "_" + "angle_rapid_changed_alert";
-    return new Promise((resolve ,reject) =>{
-        query = new azure.TableQuery()
-        .select(['*'])
-        .where('PartitionKey eq?',PartitionKey)
-        tableSvc.queryEntities('eventsdata',query,null, function (error, result){
-            if(!error){
-              if(result.entries.length != 0){
-                resolve(result.entries.length);
-              }else{
-                resolve(NaN)
-              }    
-            }else{
-                reject(error);
-            }
-          });
+    return new Promise((resolve,reject)=>{
+      query = new azure.TableQuery()
+      .select(['*'])
+      .where('PartitionKey eq?', PartitionKey);
+        tableSvc.queryEntities('eventsdata', query, continuationToken, (error, results)=> {
+          if(!error){
+              resolve(results); 
+          }else{
+              reject(error);
+          }
+        });
     });
-  }
+}
+
+async function angle_rapid_changed_alert(carId){
+  
+   
+    var continuationToken = null;
+    
+    do{
+        var results =  await queryEntitiesSegmented(carId, continuationToken);
+        continuationToken = results.continuationToken;
+        
+    }
+    while(continuationToken!=null);
+    return results.entries.length;
+  
+    
+}
+
 
   module.exports = {
       angle_rapid_changed_alert

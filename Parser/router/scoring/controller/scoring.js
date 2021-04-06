@@ -98,7 +98,7 @@ async function RoadSpeed(param) {
 
 async function AccNerveuse(carId, param) {
   const number_Acc = await acceleration_threshold1_exceed.acceleration_threshold1_exceed(carId);
-  console.log(number_Acc)
+  console.log("Acc ner "+number_Acc)
   result = param / number_Acc;
   
   if (isNaN(result))
@@ -148,6 +148,7 @@ async function AccNerveuse(carId, param) {
 
 async function AccRisquee(carId,param) {
   const number_Acc = await acceleration_threshold2_exceed.acceleration_threshold2_exceed(carId);
+  console.log("Acc Ris " + number_Acc)
   result = param / number_Acc ;
   if (isNaN(result))
   {
@@ -195,6 +196,7 @@ async function AccRisquee(carId,param) {
 
 async function AccDangereuse(carId,param) {
   const number_Acc = await acceleration_threshold3_exceed.acceleration_threshold3_exceed(carId);
+  console.log("Acc Dan "+ number_Acc)
   result = param / number_Acc ;
   if (isNaN(result))
   {
@@ -244,6 +246,7 @@ async function AccDangereuse(carId,param) {
 
 async function FreExcessif(carId,param) {
   const number_Dec = await deceleration_threshold1_exceed.deceleration_threshold1_exceed(carId);
+  console.log("Fre Ex "+ number_Dec);
   result = param / number_Dec;
   if(isNaN(result)){
     return 10;
@@ -289,6 +292,7 @@ async function FreExcessif(carId,param) {
 
 async function FreRisquee(carId,param) {
   const number_Dec = await deceleration_threshold2_exceed.deceleration_threshold2_exceed(carId);
+  console.log("Fre Ris "+ number_Dec);
   result = param / number_Dec;
   if(isNaN(result)){
     return 10;
@@ -335,6 +339,7 @@ async function FreRisquee(carId,param) {
 
 async function FreDangereux(carId,param) {
   const number_Dec = await deceleration_threshold3_exceed.deceleration_threshold3_exceed(carId);
+  console.log("Fre Dan "+ number_Dec);
   result = param / number_Dec;
   if(isNaN(result)){
     return 10;
@@ -381,6 +386,7 @@ async function FreDangereux(carId,param) {
 
 async function Cornering(carId,param) {
   const number_Cor = await angle_rapid_changed_alert.angle_rapid_changed_alert(carId)
+  console.log("Cor "+number_Cor);
   result = param / number_Cor;
   if (isNaN(result))
   {
@@ -433,11 +439,14 @@ async function calcScore() {
   carId = 1;
   TAccNerveuse = await AccNerveuse(carId, 27000)
   TAccRisquee = await AccRisquee(carId,1212)
+ 
   TAccDang = await AccDangereuse(carId, 210)
+  
   TFreEx = await FreExcessif(carId,3)
   TFreRis = await FreRisquee(carId,80);
   TFreDan = await FreDangereux(carId,20);
   TCor = await Cornering(carId,50000);
+  
   console.log("Acc Nerveuse score " +TAccNerveuse);
   console.log("Acc Risquee score " +TAccRisquee);
   console.log("Acc Dang score " + TAccDang);
@@ -450,9 +459,9 @@ async function calcScore() {
   result = InsertScore.InsertScore(1,ScoreFinal);
   if(result){
     console.log("Score inserted succesfully");
-  }else{
+    }else{
     console.log("Something went wrong")
-  }
+    }
 
 }
 
