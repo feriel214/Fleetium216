@@ -42,6 +42,7 @@ async function ignitionOnQuery(carId ,  continuationToken){
   async function acceleration_threshold1_exceed(carId){
       let arr = [];
       let j = 0;
+      let trips={};
     var continuationToken1 = null;
     var continuationToken2 = null;
     do{
@@ -64,10 +65,15 @@ async function ignitionOnQuery(carId ,  continuationToken){
         j++;
     }
     arr.sort()
-    for (i = 0 ; i< arr.length ; i++)
-    {
-        console.log(arr[i])
-    }    
+    let trip={};
+    i=0;
+    while (i< arr.length)
+     {
+         trip= arr.slice(i,i+2);
+         console.log('********************* Trip ***********************',trip)
+         i+=2;
+     }
+    
   }
 
   acceleration_threshold1_exceed(1);
