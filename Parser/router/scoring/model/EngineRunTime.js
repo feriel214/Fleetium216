@@ -67,7 +67,7 @@ async function ignitionOnQuery(carId ,  continuationToken){
     }
     arr.sort()
     let trips=[];
-    let trip={};
+    
     let trps=[]
     i=0;
     while (i< arr.length)
@@ -75,22 +75,27 @@ async function ignitionOnQuery(carId ,  continuationToken){
          trps.push(arr.slice(i,i+2));      
          i+=2; 
      }
+    
      for( var i in trps){
+      
       console.log('********************* Trip treatment ***********************',trps[i])
-      trip.PartitionKey=carId;
-      trip.RowKey=trps[i][0];
-      trip.ignition_on=trps[i][0];
-      trip.ignition_off=trps[i][1];
-      trps.arret=trps.length/2;
-      trip.milleage=await Milleage(trps[i][1])-await Milleage(trps[i][0]);
+      let trip ={
+        PartitionKey:carId,
+        RowKey:trps[i][0],
+        ignition_on:trps[i][0],
+        ignition_off:trps[i][1],
+        arret:trps.length/2,
+        milleage:(await Milleage(trps[i][1]))-(await Milleage(trps[i][0]))
+      }
+      
       //engine run time here by ghaith 
       //trip.engine_run_time=await EGR(trps[i][1],trps[i][0]);
       //Nb Acceleration 
       //Nb Freinage excessif C2
       //Idling   neselou noura ala fazet el tripp 
-      console.log(trip)
-      trips.push(trip)
+      trips.push( trip) 
      }
+    
      console.log(trips)
  
   }
