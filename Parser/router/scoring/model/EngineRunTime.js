@@ -41,7 +41,7 @@ async function ignitionOnQuery(carId ,  continuationToken){
   
   async function acceleration_threshold1_exceed(carId){
       let arr = [];
-      let j = 1;
+      let j = 0;
     var continuationToken1 = null;
     var continuationToken2 = null;
     do{
@@ -55,9 +55,19 @@ async function ignitionOnQuery(carId ,  continuationToken){
     while(continuationToken1!=null && continuationToken2!=null);
     for (i = 0 ; i< results1.entries.length ; i++)
     {
-        console.log(results1.entries[i].RowKey._)
+        arr[i] = results1.entries[i].RowKey._;
+        j++;
     }
-    
+    for (i = 0 ; i < results2.entries.length ; i++)
+    {
+        arr[j] = results2.entries[i].RowKey._
+        j++;
+    }
+    arr.sort()
+    for (i = 0 ; i< arr.length ; i++)
+    {
+        console.log(arr[i])
+    }    
   }
 
   acceleration_threshold1_exceed(1);
