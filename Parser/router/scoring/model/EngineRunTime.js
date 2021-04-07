@@ -1,3 +1,4 @@
+const { reject } = require("async");
 const { TableQuery } = require("azure-storage");
 
 try {
@@ -76,15 +77,22 @@ async function ignitionOnQuery(carId ,  continuationToken){
      }
      for( var i in trps){
       console.log('********************* Trip treatment ***********************',trps[i])
-      //trip.PartitionKey=id_car;
+      trip.PartitionKey=carId;
       trip.RowKey=trps[i][0];
       trip.ignition_on=trps[i][0];
       trip.ignition_off=trps[i][1];
+      trps.arret=trps.length/2;
       trip.milleage=await Milleage(trps[i][1])-await Milleage(trps[i][0]);
+      //engine run time here by ghaith 
+      //trip.engine_run_time=await EGR(trps[i][1],trps[i][0]);
+      //Nb Acceleration 
+      //Nb Freinage excessif C2
+      //Idling   neselou noura ala fazet el tripp 
+      console.log(trip)
       trips.push(trip)
      }
      console.log(trips)
-    //console.log("object trip{} : ",trips)
+ 
   }
  async function Milleage(RowKey){
    return new Promise((resolve, reject)=> {
@@ -104,6 +112,15 @@ async function ignitionOnQuery(carId ,  continuationToken){
    
   })
 };
+async function EGR(tsignoff,tsignon){
+  return new Promise ((resolve,reject)=>{
+    //ghaith will do the tretement here   tsoff-tson then convert them to minutes 
+  })
+
+}
+async function InsertTripsCar(trips){
+  //here we're gonna insert all the trips and their summaries into scoring in table stotrage 
+} 
 
 
   acceleration_threshold1_exceed(1);
