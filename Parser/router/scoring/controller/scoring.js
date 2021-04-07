@@ -151,7 +151,7 @@ async function AccRisquee(carId,param) {
   console.log("Acc Ris " + number_Acc)
   result = param / number_Acc ;
   if (isNaN(result))
-  {
+  { 
     return 10;
   }else{
     let score = "";
@@ -442,7 +442,7 @@ async function calcScore() {
  
   TAccDang = await AccDangereuse(carId, 210)
   
-  TFreEx = await FreExcessif(carId,3)
+  TFreEx = await FreExcessif(carId,300)
   TFreRis = await FreRisquee(carId,80);
   TFreDan = await FreDangereux(carId,20);
   TCor = await Cornering(carId,50000);

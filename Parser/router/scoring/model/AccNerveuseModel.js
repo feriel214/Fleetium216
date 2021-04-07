@@ -9,7 +9,7 @@ try {
   console.log("can not connect to azure table storage");
 }
 
-  async function queryEntitiesSegmented(carId , continuationToken){
+async function queryEntitiesSegmented(carId , continuationToken){
     PartitionKey = carId + "_" + "acceleration_threshold1_exceed";
     return new Promise((resolve,reject)=>{
       query = new azure.TableQuery()
