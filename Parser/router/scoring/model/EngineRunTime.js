@@ -42,7 +42,7 @@ async function ignitionOnQuery(carId ,  continuationToken){
   async function acceleration_threshold1_exceed(carId){
       let arr = [];
       let j = 0;
-      let trips={};
+      
     var continuationToken1 = null;
     var continuationToken2 = null;
     do{
@@ -65,16 +65,46 @@ async function ignitionOnQuery(carId ,  continuationToken){
         j++;
     }
     arr.sort()
+    let trips=[];
     let trip={};
+    let trps=[]
     i=0;
     while (i< arr.length)
      {
-         trip= arr.slice(i,i+2);
-         console.log('********************* Trip ***********************',trip)
-         i+=2;
+         trps.push(arr.slice(i,i+2));      
+         i+=2; 
      }
-    
+     for( var i in trps){
+      console.log('********************* Trip treatment ***********************',trps[i])
+      //trip.PartitionKey=id_car;
+      trip.RowKey=trps[i][0];
+      trip.ignition_on=trps[i][0];
+      trip.ignition_off=trps[i][1];
+      trip.milleage=await Milleage(trps[i][1])-await Milleage(trps[i][0]);
+      trips.push(trip)
+     }
+     console.log(trips)
+    //console.log("object trip{} : ",trips)
   }
+ async function Milleage(RowKey){
+   return new Promise((resolve, reject)=> {
+    let  query = new azure.TableQuery().select(['milleage']).where('RowKey eq?', RowKey);
+      tableSvc.queryEntities('eventsdata', query,null,(error, results)=>{
+            if(!error){
+               resolve(results.entries[0].milleage._)
+               return  
+            }
+            if(error)
+            {
+             reject(error);
+             return
+            }
+         
+          })
+   
+  })
+};
+
 
   acceleration_threshold1_exceed(1);
 module.exports = {
