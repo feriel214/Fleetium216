@@ -248,7 +248,7 @@ export default {
       sortDesc: false,
       geocoder:[],
       fields: [
-        
+        { key: 'car', label: 'car', sortable: true, editable: true },
         { key: 'name', label: 'Name', sortable: true, editable: true },
         {
           key: 'description',
@@ -522,7 +522,7 @@ export default {
       })
       //To check with nourredine why the executed 2 times 
       this.lmap.on('draw:toolbaropened',(e)=>{
-          this.$toast.warning(`You should save after editing fence or editing will be canceld`)
+          //this.$toast.warning(`You should save after editing fence or editing will be canceld`)
       })
       this.lmap.on('draw:editstart',(e)=>{
        // this.$toast.warning(`You should save after editing fence or editing will be canceld`)
@@ -601,6 +601,7 @@ export default {
           this.clearMap(1000);
           console.log('res', res)
           this.geocoderInit("add")
+            this.refershForm();
         })
         .catch(function(error) {
           console.log('error ', error)
@@ -626,7 +627,11 @@ export default {
         })
     },
     Edit(id, item, pkey) {   
-      this.geocoderInit()  
+     if(this.showForm){
+         this.showForm=false;
+       this.clearMap(1000)
+     }
+        this.geocoderInit()  
       this.Show(id, true)
       this.edit = true
       this.idredis = id
@@ -650,6 +655,7 @@ export default {
         .catch(function(error) {
           console.log(error)
         })
+     
     },
     Delete(id) {
       this.$swal
@@ -841,28 +847,15 @@ export default {
        this.geocoderInit("add")
     }, */
     EditForm(item){
- 
-  console.log('item : ', item)
-  console.log('posts : ', this.posts)
-  let id = this.idredis
-  console.log('this.newgeo',this.newgeo)
-  let data ={}
-  let param ='';
+    console.log('item : ', item)
+    console.log('posts : ', this.posts)
+    let id = this.idredis
+    console.log('this.newgeo',this.newgeo)
+    let data ={}
+    let param ='';
     if (!Object.entries(this.newgeo).length === 0) {
-      //update fence and form
-      data = {
-        geojson: [this.newgeo],
-        name: item.name,
-        description: item.description,
-        time_start: item.startTime,
-        time_end: item.endTime,
-        rang: item.range,
-        cars: item.cars,
-        type_fence : item.type_fence
-      }
-      param='ff';
-    }else {
-      //update fence only form
+     
+       //update fence only form
       data = {
         name: item.name,
         description: item.description,
@@ -873,6 +866,20 @@ export default {
         type_fence : item.type_fence
       }
       param ='f';
+    }else {
+       //update fence and form
+       data = {
+        geojson: [this.newgeo],
+        name: item.name,
+        description: item.description,
+        time_start: item.startTime,
+        time_end: item.endTime,
+        rang: item.range,
+        cars: item.cars,
+        type_fence : item.type_fence
+      }
+      param='ff';
+    
     }
         axios.put(`http://localhost:3000/fences/edit/${id}/${param}`,data)
         .then((res)=>{
@@ -882,7 +889,9 @@ export default {
               this.getGeo()
               this.DrawControl('ADD')
               this.clearMap(1000);
+              this.refreshMap();
               this.geocoderInit("add")
+              this.refershForm();
 
         }).catch(function(error){
           console.log(error)
@@ -907,6 +916,7 @@ export default {
             this.clearMap();
             this.geocoderInit("add")
             this.DrawControl('Add')  
+             this.refershForm();
             this.$swal.fire('Canceled!', 'Action has been canceled.', 'success')
           }
         })
@@ -983,6 +993,15 @@ export default {
        if(!form.type_fence){
         errorForm.push('Fence Type is Required');
       }
+    },
+    refershForm(){
+      this.posts.name='';
+      this.posts.description='';
+      this.posts.startTime='00:00';
+      this.posts.endTime='00:00';
+      this.posts.range='';
+      this.posts.cars=[];
+      this.posts.type_fence='IN'
     }
   },
 }
@@ -1046,6 +1065,11 @@ export default {
 }
 .leaflet-control-geocoder {
   display: none;
+}
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+    background-color: white;
+    border: none;
 }
 </style>
 

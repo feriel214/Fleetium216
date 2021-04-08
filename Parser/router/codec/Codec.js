@@ -1,4 +1,6 @@
+const ClassRedis=require('../model/redis')
 module.exports = {
+	STT_STATUS : [],
   LBS: async (l, obj) => {
     console.log("*****************LBS***************");
     let lbs_data = l.split(";");
@@ -13,9 +15,8 @@ module.exports = {
       /*   
         let station_lac=lbs_data[j];
         let station_cid=lbs_data[j+1];
-        let dbm=lbs_data[j+2];//registred station signal length 
-        station =lac+cid+dbm
-            
+        let dbm=lbs_data[j+2];//registred station signal length  
+        station =lac+cid+dbm      
       */
       stations.push(
         lbs_data[j] + ";" + lbs_data[j + 1] + ";" + lbs_data[j + 2]
@@ -43,89 +44,80 @@ module.exports = {
         console.log("longitude : ", longitude);
       }
       j++;
-    }
-    obj.gps_hdop = gps_arr[gps_arr.length - 1];
-    console.log("HDOP", gps_arr[gps_arr.length - 1]);
-    obj.gps_angle = gps_arr[gps_arr.length - 2]; //range between 0~360°
-    console.log("angle", gps_arr[gps_arr.length - 2]);
-    obj.gps_speed = gps_arr[gps_arr.length - 3];
+    }  
     console.log("speed km/h : ", gps_arr[gps_arr.length - 3]);
+    obj.gps_speed = gps_arr[gps_arr.length - 3];
+    console.log("angle", gps_arr[gps_arr.length - 2]);
+    obj.gps_angle = gps_arr[gps_arr.length - 2]; //range between 0~360°
+    console.log("HDOP", gps_arr[gps_arr.length - 1]);
+    obj.gps_hdop = gps_arr[gps_arr.length - 1];
     return obj;
   },
-  STT: async (l, obj, evts) => {
+  STT: async (l, obj, evts,STT_STATUS) => {
     console.log("*****************STT***************");
     const params = require("./params/params.json");
     evt = [];
     stt_data = l.split(";");
     let device_status = stt_data[0].replace("STT:", "");
+    obj.stt_device_status=stt_data[0].replace("STT:", "");
     console.log("device status : ", stt_data[0].replace("STT:", ""));
     console.log("alarm device status : ", stt_data[1]);
     binary_status = parseInt(device_status, 16).toString(2).toString();
-    i = 0;
-    while (i < binary_status.length) {
-      switch (true) {
-        case i == 0 && binary_status[i] == "1":
-          evt.push(params["211"]);
-          break;
-        case i == 1 && binary_status[i] == "1":
-          evt.push(params["11000"]);
-          break;
-        case i == 2 && binary_status[i] == "1":
-          evt.push(params["11100"]);
-          break;
-        case i == 3 && binary_status[i] == "1":
-          evt.push(params["50001"]);
-          break;
-        case i == 4 && binary_status[i] == "1":
-          evt.push(params["50002"]);
-          break;
-        case i == 5 && binary_status[i] == "1":
-          evt.push(params["50004"]);
-          break;
-        case i == 6 && binary_status[i] == "1":
-          evt.push(params["50007"]);
-          break;
-        case i == 7 && binary_status[i] == "1":
-          evt.push(params["50009"]);
-          break;
-        case i == 8 && binary_status[i] == "1":
-          evt.push(params["50011"]);
-          break;
-        case i == 9 :
-         // if(binary_status[i] == "1"){
-			  //evt.push(params["1110"]);
-		  //}else{
-			  evt.push(params["1100"]);
-		  //}
-          console.log('evt',evt)
-          break;
-        case i == 10 && binary_status[i] == "1":
-          evt.push(params["50013"]);
-          break;
-        case i == 11 && binary_status[i] == "1":
-          evt.push(params["10710"]);
-          break;
-        case i == 12 && binary_status[i] == "1":
-          evt.push(params["50015"]);
-          break;
-        case i == 13 && binary_status[i] == "1":
-          evt.push(params["50017"]);
-          break;
-        case i == 14 && binary_status[i] == "1":
-          //DomesticRoaming judeg by MNC
-          evt.push(params["50019"]);
-          break;
-        case i == 15 && binary_status[i] == "1":
-          //International Roaming judeg by MCC
-          evt.push(params["11000"]);
-          break;
-      }
-      i++;
-    }
-    evts.stt_evt = evt;
 
-    return obj, evts;
-  }, //Trip Report Data
+	if(device_status == "0" && STT_STATUS[obj.id_car].toString() != "0"){//ig_off
+		STT_STATUS[obj.id_car] = "0";//await ClassRedis.GetIgnToRedis(obj.id_car);
+		ClassRedis.InsertEvtToRedis(obj.id_car,"last_ign","0")
+		 evt.push(params["1100"]);
+     console.log('#######################################')
+     console.log(evt);
+     console.log('#######################################')
+		//evt off storage
+	}else if(device_status != "0" && STT_STATUS[obj.id_car].toString() == "0"){//ig_off
+		STT_STATUS[obj.id_car] = "1";//await ClassRedis.GetIgnToRedis(obj.id_car);
+		ClassRedis.InsertEvtToRedis(obj.id_car,"last_ign","1")
+		 evt.push(params["1110"]);  console.log('#######################################')
+     console.log(evt);
+     console.log('#######################################')
+		//evt On storage
+	} 
+  //missed params event 
+    switch(true){
+        case stt_data[0]=='1': 
+        evt.push(params['210']);
+        break;
+        case stt_data[0]=='2': 
+        evt.push("move");//Move  params['']
+        break;
+        case stt_data[0]=='3': 
+        evt.push(params['210'],"move");//move
+        break;
+        case stt_data[0]=='200': 
+        evt.push("engine_status_on");//Engine status on 
+        break;
+        case stt_data[0]=='202': //Engine status on , move 
+        evt.push("engine_status_on","move");
+        break;
+        case stt_data[0]=='240': //Engine status on , acc_status_on
+        evt.push("engine_status_on","acc_status_on");
+        break;
+        case stt_data[0]=='242': //move ,Engine status on,acc_status_on
+        evt.push("move","engine_status_on","acc_status_on");
+        break;
+        case stt_data[0]=='A40': //Engine status on,acc_status_on,OBDII_alarm
+        evt.push("engine_status_on","acc_status_on","OBDII_alarm");
+        break;
+        case stt_data[0]=='A42': //move,Engine status on,acc_status_on,OBDII_alarm
+        evt.push("move","engine_status_on","acc_status_on","OBDII_alarm");
+        break;
+        case stt_data[0]=='A46': //move,over_speed,Engine status on,acc_status_on,OBDII_alarm
+        evt.push("move","over_speed","engine_status_on","acc_status_on","OBDII_alarm");
+        break;
+    }
+   
+    evts.stt_evt = evt;
+    return {obj,evt };
+  }, 
+  //Trip Report Data
   TripReportData: async (l, obj) => {
     trip_data.replace("TRP:", "");
     trip_data = l.split(";");
@@ -167,29 +159,28 @@ module.exports = {
     while (j < ad_arr.length) {
       switch (true) {
         case ad_arr[j] == "0":
-          obj.adc_external_power_supply_voltage = ad_arr[j + 1];
-          console.log("external power : ", ad_arr[j + 1], "V");
+          obj.adc_external_power_supply_voltage=ad_arr[j + 1];
+          console.log("external power: ", ad_arr[j + 1], "V");
           break;
         case ad_arr[j] == "1":
-          obj.adc_device_tempreture = ad_arr[j + 1];
-          console.log("Temertaure : ", ad_arr[j + 1]);
+          obj.adc_device_tempreture=ad_arr[j + 1];
+          console.log("Temertaure: ", ad_arr[j + 1]);
           break;
         case ad_arr[j] == "2":
           obj.adc_device_backup_battery_voltage = ad_arr[j + 1];
-          console.log("Backup Battery Voltage : ", ad_arr[j + 1], "V");
+          console.log("Backup Battery Voltage: ", ad_arr[j + 1], "V");
           break;
         case ad_arr[j] == "3":
           obj.adc_analog_input_voltage = ad_arr[j + 1];
-          console.log(" Analog input voltage : ", ad_arr[j + 1]);
+          console.log(" Analog input voltage: ",ad_arr[j + 1]);
           break;
         case ad_arr[j] == "4":
           obj.adc_device_backup_battery_percent = ad_arr[j + 1];
-          console.log("Device backup battery : ", ad_arr[j + 1]);
+          console.log("Device backup battery: ", ad_arr[j + 1]);
           break;
         case (ad_arr[j] >= "5") | (ad_arr[j] <= "9"):
           console.log("Fuel Height : ", ad_arr[j + 1]);
           obj.adc_fuel_sensor_height = ad_arr[j + 1];
-          console.log("obj: ", this.obj);
           break;
       }
       j++;
@@ -199,14 +190,14 @@ module.exports = {
   //EVENT DATA
   EventData: async (l, obj, evt) => {
     console.log("*****************EVT***************");
-
     const params = require("./params/params.json");
     const evt_params = require("./params/event_code_params.json");
-
     evt_data = l.replace("EVT:", "").replace("#", "").split(";");
     event_code = evt_data[0];
     obj.event_code = event_code;
-    obj.event_mask = evt_data[1];
+    if(evt_data[1]!= undefined){
+      obj.event_mask = evt_data[1];
+    }
     console.log("EVT code  ", event_code);
     evt_codes = [];
     switch (true) {
@@ -248,68 +239,29 @@ module.exports = {
         break;
     }
     evt.evt_code = evt_codes;
+   //missed mask params
     if (!(typeof evt_data[1] == "undefined")) {
       console.log("EVT mask  ", evt_data[1]);
-      event_code_mask = parseInt(parseInt(evt_data[1]), 16)
-        .toString(2)
-        .toString();
-      // device status (first array )
       event_mask = [];
-      i = 0;
-      while (i < event_code_mask.length) {
-        switch (true) {
-          case i == 0 && event_code_mask[i] == "1":
-            event_mask.push(params["211"]);
-            break;
-          case i == 1 && event_code_mask[i] == "1":
-            event_mask.push(params["11010"]);
-            break;
-          case i == 2 && event_code_mask[i] == "1":
-            event_mask.push(params["11400"]);
-            break;
-          case i == 3 && event_code_mask[i] == "1":
-            event_mask.push(params["50001"]);
-            break;
-          case i == 4 && event_code_mask[i] == "1":
-            event_mask.push(params["50002"]);
-            break;
-          case i == 5 && event_code_mask[i] == "1":
-            event_mask.push(params["50004"]);
-            break;
-          case i == 6 && event_code_mask[i] == "1":
-            event_mask.push(params["50007"]);
-            break;
-          case i == 7 && event_code_mask[i] == "1":
-            event_mask.push(params["50009"]);
-            break;
-          case i == 8 && event_code_mask[i] == "1":
-            event_mask.push(params["50011"]);
-            break;
-          case i == 9 && event_code_mask[i] == "1":
-            event_mask.push(params["1110"]);
-            break;
-          case i == 10 && event_code_mask[i] == "1":
-            event_mask.push(params["50013"]);
-            break;
-          case i == 11 && event_code_mask[i] == "1":
-            event_mask.push(params["10710"]);
-            break;
-          case i == 12 && event_code_mask[i] == "1":
-            event_mask.push(params["50015"]);
-            break;
-          case i == 13 && event_code_mask[i] == "1":
-            event_mask.push(params["50017"]);
-            break;
-          case i == 14 && event_code_mask[i] == "1":
-            //Domestic roaming judged by MNC
-            event_mask.push(params["50019"]);
-            break;
-          case i == 15 && event_code_mask[i] == "1":
-            //International Roaming judeg by MCC
-            event_mask.push(params["50021"]);
-            break;
-        }
-        i++;
+      switch(true){
+        case evt_data[1]=='1':
+           event_mask.push(params["210"]);  //main_powwer_lost
+           break ; 
+        case evt_data[1]=='2':
+           event_mask.push("move");  //move  params[""]
+           break ; 
+        case evt_data[1]=='4':
+           event_mask.push("over_speed");  //over_speed
+           break ; 
+        case evt_data[1]=='40':
+            event_mask.push("over_speed","acc_status_on");  //over_speed,acc_status_on
+            break ; 
+        case evt_data[1]=='200':
+             event_mask.push("engine_status_on");  //engine_status_on
+             break ; 
+        case evt_data[1]=='800':
+             event_mask.push("OBDIIalarm_alert");  //OBDIIalarm_alert
+             break ; 
       }
       evt.evts_code_mask = event_mask;
     }
@@ -389,13 +341,18 @@ SS
   VIN: async (l, obj) => {
     console.log("*****************VIN***************");
     console.log("VIN: ", l.replace("VIN:", ""));
-    obj.vin = l.replace("VIN:", "");
+    vin = l.replace("VIN:", "");
+    if(vin != undefined){
+      obj.vin=vin
+    }else{
+      obj.vin="NAN"
+    }
     return obj;
   },
   //OBDII alarm DATA
   OAL: async (l, obj, evt) => {
     console.log("*****************OAL***************");
-    const params = require("./params/params.json");
+    const pid = require("./params/pid.json");
     let obd_alarm_data = l.replace("OAL:", "");
     oal_evts = [];
     //block 1
@@ -407,11 +364,14 @@ SS
       //length block 1
       length_service_blk1 = data_blk1[0];
       //long_term_fuel
-      long_term_fuel_bank = parseInt(parseInt(data_blk1[1]), 16)
-        .toString(2)
-        .toString();
-      oal_evts.push(params["50025"]);
-      parseInt(parseInt(data_blk1[3]), 16).toString(2).toString(); // name var not menntionned ?
+      long_term_fuel_bank = parseInt(parseInt(data_blk1[1]), 16).toString(2);
+        //semi-block1
+        sb1 = blk1.substring(2, 4);
+        oal_evts.push(pid[`${sb1}`]);
+        //Semi-Block 2
+        sb2= blk1.substring(4, 6);
+        oal_evts.push(pid[`${sb2}`]);
+     
     }
     //block 2
     blk2 = obd_alarm_data.substring(6, 14);
@@ -420,14 +380,12 @@ SS
       console.log("OAL block 2 :", blk2);
       //length
       length_service_blk2 = blk2.substring(0, 2);
-      //engine_rpm_oal_evt
-      engine_rpm = parseInt(parseInt(blk2.substring(2, 4)), 16)
-        .toString(2)
-        .toString();
-      oal_evts.push(params["50023"]);
-      parseInt(parseInt(blk2.substring(5, 8)), 16)
-        .toString(2)
-        .toString(); // name var not menntionned ?
+      //semi-block1
+      sb21 = blk2.substring(2, 4);
+      oal_evts.push(pid[`${sb21}`]);
+      //Semi-Block 2
+      sb22= blk2.substring(4, 8);
+      oal_evts.push(pid[`${sb22}`]);
     }
     //block 3
     blk3 = obd_alarm_data.substring(14, 20);
@@ -435,14 +393,12 @@ SS
       obj.oal_block3 = blk3;
       console.log("OAL block 3 :", blk3);
       length_service_blk3 = blk3.substring(0, 2);
-      //vehicle speed
-      vehicle_speed = parseInt(parseInt(blk3.substring(2, 4)), 16)
-        .toString(2)
-        .toString();
-      oal_evts.push(params["50024"]);
-      parseInt(parseInt(blk3.substring(4, 6)), 16)
-        .toString(2)
-        .toString(); // name var not menntionned ?
+      //semi-block1
+      sb31 = blk3.substring(2, 4);
+      oal_evts.push(pid[`${sb31}`]);
+      //Semi-Block 2
+      sb32= blk3.substring(4, 6);
+      oal_evts.push(pid[`${sb32}`]);
     }
     //block 4
     blk4 = obd_alarm_data.substring(20, 34);
@@ -495,56 +451,56 @@ SS
   OBD: async (l, obj, evt) => {
     console.log("*****************OBD***************");
     const params = require("./params/params.json");
+    const pid=require('./params/pid.json')
     let obd_data = l.replace("OBD:", "");
     obd_evts = [];
     //Block 1
-    blk1 = obd_data.substring(0, 6);
+    let blk1 = obd_data.substring(0,6);
     if (blk1.length != 0) {
       console.log("OBD block 1 : ", blk1);
       obj.obd_block1 = blk1;
-      engine_coolant_temperature_value = parseInt(
-        parseInt(blk1.substring(2, 4)),
-        16
-      )
-        .toString(2)
-        .toString();
-      obj.obd_engine_coolant_temperature = engine_coolant_temperature_value;
-      obd_evts.push(params["50022"]);
+      //Semi-Block 1
+      sb1 = blk1.substring(2, 4);
+      obd_evts.push(pid[`${sb1}`])
+      //Semi-Block 2
+      sb2= blk1.substring(4, 6);
+      obd_evts.push(pid[`${sb2}`])
     }
     //block 2
-    blk2 = obd_data.substring(6, 14);
+    let blk2 = obd_data.substring(6,14);
     if (blk2.length != 0) {
       obj.obd_block2 = blk2;
       console.log("block 2 : ", blk2);
-      engine_rpm = parseInt(parseInt(blk2.substring(2, 4)), 16)
-        .toString(2)
-        .toString();
-      obj.obd_engine_rpm_value = engine_rpm;
-      obd_evts.push(params["50023"]);
+       //Semi-Block 1
+       sb21 = blk2.substring(2,4);
+       obd_evts.push(pid[`${sb21}`])
+       //Semi-Block 2
+       sb22= blk2.substring(4,8);
+       obd_evts.push(pid[`${sb22}`]) 
     }
-
     //block 3
-    blk3 = obd_data.substring(14, 20);
+    let blk3 = obd_data.substring(14, 20);
     if (blk3.length != 0) {
       obj.obd_block3 = blk3;
       console.log("block 3 : ", blk3);
-      vehicle_spped = parseInt(parseInt(blk3.substring(2, 4)), 16)
-        .toString(2)
-        .toString();
-      obj.obd_vehicle_speed_value = vehicle_spped;
-      obd_evts.push(params["50024"]);
+      //Semi-Block 1
+      sb31 = blk3.substring(2,4);
+      obd_evts.push(pid[`${sb31}`])
+      //Semi-Block 2
+      sb32= blk3.substring(4, 6);
+      obd_evts.push(pid[`${sb32}`])
     }
-
     //block 4
-    blk4 = obd_data.substring(20, 28);
+    let blk4 = obd_data.substring(20, 28);
     if (blk4.length != 0) {
       obj.obd_block4 = blk4;
       console.log("block 4 : ", blk4);
-      distance_travled = parseInt(parseInt(blk4.substring(2, 4)), 16)
-        .toString(2)
-        .toString();
-      obj.obd_distance_travled_value = distance_travled;
-      obd_evts.push(params["50025"]);
+       //Semi-Block 1
+       sb41 = blk4.substring(2,4);
+       obd_evts.push(pid[`${sb41}`])
+       //Semi-Block 2
+       sb42= blk4.substring(4,8);
+       obd_evts.push(pid[`${sb42}`]) 
     }
     evt.obd_evt = obd_evts;
     return obj, evt;
@@ -553,6 +509,7 @@ SS
   HDB: async (l, obj, evt) => {
     console.log("*****************HDB***************");
     const hdb_params = require("./params/hdb_params.json");
+    const params=require('./params/params.json')
     hdb_satus = parseInt(parseInt(l.replace("HDB:", "").replace("#", "")), 16)
       .toString(2)
       .toString();
@@ -563,7 +520,7 @@ SS
     while (i < 7) {
       switch (true) {
         case i == 0 && !(typeof hdb_satus[i] == "undefined"):
-          hdb_evts.push(hdb_params["0"]);
+          hdb_evts.push(params["11100"]);
           break;
         case i == 1 && !(typeof hdb_satus[i] == "undefined"):
           hdb_evts.push(hdb_params["1"]);

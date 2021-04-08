@@ -8,5 +8,4 @@ const pool = new Pool({
   password: "admin",
 });
 
-
 module.exports = pool;
