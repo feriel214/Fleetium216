@@ -43,32 +43,32 @@ async function ignitionOnQuery(carId ,  continuationToken){
   async function acceleration_threshold1_exceed(carId){
       let arr = [];
       let j = 0;
+      let trips=[];
+      let trps=[]
       
     var continuationToken1 = null;
     var continuationToken2 = null;
     do{
-        var results1 =  await ignitionOnQuery(carId, continuationToken1);
-        var results2 =  await ignitionOffQuery(carId, continuationToken2);
-        continuationToken1 = results1.continuationToken1;
-        continuationToken2 = results2.continuationToken2;
+        var ignition_on =  await ignitionOnQuery(carId, continuationToken1);
+        var ignition_off =  await ignitionOffQuery(carId, continuationToken2);
+        continuationToken1 = ignition_on.continuationToken1;
+        continuationToken2 = ignition_off.continuationToken2;
 
         
     }
     while(continuationToken1!=null && continuationToken2!=null);
-    for (i = 0 ; i< results1.entries.length ; i++)
+    for (i = 0 ; i< ignition_on.entries.length ; i++)
     {
-        arr[i] = results1.entries[i].RowKey._;
+        arr[i] = ignition_on.entries[i].RowKey._;
         j++;
     }
-    for (i = 0 ; i < results2.entries.length ; i++)
+    for (i = 0 ; i < ignition_off.entries.length ; i++)
     {
-        arr[j] = results2.entries[i].RowKey._
+        arr[j] = ignition_off.entries[i].RowKey._
         j++;
     }
     arr.sort()
-    let trips=[];
     
-    let trps=[]
     i=0;
     while (i< arr.length)
      {
@@ -86,7 +86,7 @@ async function ignitionOnQuery(carId ,  continuationToken){
         ignition_off:trps[i][1],
         arret:trps.length/2,
         milleage:(await Milleage(trps[i][1]))-(await Milleage(trps[i][0])),
-        runTime : trps[i][1] - trps[i][0]
+        runTime : (await EGR(trps[i][1],trps[i][0]))
       }
       
       //engine run time here by ghaith 
@@ -94,7 +94,7 @@ async function ignitionOnQuery(carId ,  continuationToken){
       //Nb Acceleration 
       //Nb Freinage excessif C2
       //Idling   neselou noura ala fazet el tripp 
-      trips.push( trip) 
+      trips.push(trip) 
      }
     
      console.log(trips)
@@ -120,7 +120,13 @@ async function ignitionOnQuery(carId ,  continuationToken){
 };
 async function EGR(tsignoff,tsignon){
   return new Promise ((resolve,reject)=>{
-    //ghaith will do the tretement here   tsoff-tson then convert them to minutes 
+    result = (tsignoff - tsignon) / 60000;
+    // we can use Math.round(result) to get a more clear result 
+    if(result){
+      resolve(result)
+    }else{
+      reject(error);
+    }
   })
 
 }
