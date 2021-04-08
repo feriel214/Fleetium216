@@ -1,4 +1,5 @@
 const ClassRedis=require('../model/redis')
+const classAzure =require('../model/azuretablestorage')
 module.exports = {
 	STT_STATUS : [],
   LBS: async (l, obj) => {
@@ -64,21 +65,24 @@ module.exports = {
     console.log("alarm device status : ", stt_data[1]);
     binary_status = parseInt(device_status, 16).toString(2).toString();
 
-	if(device_status == "0" && STT_STATUS[obj.id_car].toString() != "0"){//ig_off
+	if(device_status == "0" && STT_STATUS[obj.id_car].toString() != "0"){
+    //ig_off
 		STT_STATUS[obj.id_car] = "0";//await ClassRedis.GetIgnToRedis(obj.id_car);
 		ClassRedis.InsertEvtToRedis(obj.id_car,"last_ign","0")
-		 evt.push(params["1100"]);
-     console.log('#######################################')
-     console.log(evt);
-     console.log('#######################################')
-		//evt off storage
-	}else if(device_status != "0" && STT_STATUS[obj.id_car].toString() == "0"){//ig_off
+		evt.push(params["1100"]);
+    //here we're gonna insert into score azuure table the summaries of trip 
+    //get ignition_on timestamp from redis 
+    ignition_on = await  ClassRedis.GetPlageIgnitionsRedis(obj.id_car);
+    console.log('++++++++++++++++++++++++++++++++++++++',ignition_on)
+    await classAzure.StartScore(obj.id_car.toString(),ignition_on.toString(),obj.timestamp.toString());
+	
+	}else if(device_status != "0" && STT_STATUS[obj.id_car].toString() == "0"){
+    //ig_on
 		STT_STATUS[obj.id_car] = "1";//await ClassRedis.GetIgnToRedis(obj.id_car);
+    ClassRedis.InsertEvtToRedis(obj.id_car,"last_ignnition_on",`${obj.timestamp}`)
 		ClassRedis.InsertEvtToRedis(obj.id_car,"last_ign","1")
-		 evt.push(params["1110"]);  console.log('#######################################')
-     console.log(evt);
-     console.log('#######################################')
-		//evt On storage
+		evt.push(params["1110"]);  
+	
 	} 
   //missed params event 
     switch(true){

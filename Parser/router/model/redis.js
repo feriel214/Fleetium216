@@ -1,3 +1,4 @@
+const { reject } = require("async");
 const redis = require("redis");
 require("dotenv").config();
 module.exports = {
@@ -76,5 +77,19 @@ module.exports = {
 				}
 			});
 		});
+	},
+	GetPlageIgnitionsRedis : async (key)=>{
+		return new Promise((resolve,reject)=>{
+			this.redis_client.hgetall(key,(err,value)=>{
+				if((typeof(value.last_ignnition_on)=="undefined")){
+					resolve('error last_ignnition_on value ')
+				}else {
+					resolve(value.last_ignnition_on)
+				}
+				if(err){
+				reject(err)
+				}
+			})
+		})
 	}
 };

@@ -3,60 +3,60 @@ const connectionString = "DefaultEndpointsProtocol=https;AccountName=pfe2021;Acc
 var tableService = azure.createTableService(connectionString);
 var entGen = azure.TableUtilities.entityGenerator;
 module.exports = {
-   InsertDeviceData: async(obj,timeout) =>{
-        //Table Storage
-        var entity = {};
-        entity.PartitionKey = obj.mdmid.toString();
-        entity.RowKey = obj.timestamp.toString();
-        for (var i in obj) {
-            if(obj[i])
-              entity[i] = entGen.String(obj[i]);
-        }
-        tableService.insertOrReplaceEntity(
-          "devicedata",
-          entity,
-          async function (error, result, response) {
-            if (!error) {
-              console.log("Device Data Adeed succefully in table storage ! ");
-            } else {
-            timeout(10000);
-              InsertDeviceData(obj);
-            }
-          });
-      },
-      getUniqueEvt : async (array)=> {
-        let unique = [];
-        array.forEach((element) => {
-          if (!unique.includes(element)) {
-            unique.push(element);
-          }
-        });
-        return unique;
-    },
-	
-    InsertEvt : async (evt, obj,id_car,timeout)=> {
-        console.log('*********************** obj+id_car ******************************',obj,id_car);
-        console.log('*********************** evt ******************************',evt);
-        const events =Object.values(evt).flat();
-        console.log('*********************** events of Line ******************************',events);
-        var ent = {};
-        for (var j in events) {
-              ent = {};
-              ent.PartitionKey = `${id_car}_${events[j]}`;
-              ent.RowKey = obj.timestamp.toString();
-              for (var i in obj) {
-                ent[i] = entGen.String(obj[i]);
-              }
-              tableService.insertOrReplaceEntity("eventsdata",ent,async function (error, result, response) {
-                  if (!error) {
-                    console.log(" Event Adeed succefully in table storage ! ");
-                  } else {
-                      timeout(10000);
-                      InsertEvt(evt, obj,id_car)
-                  }
-                }
-              );
-        }
-    },
+  StartScore : async(id_car,ignition_on,ignition_off)=>{
+      var data = {};
+      data.PartitionKey = id_car;
+      data.RowKey = ignition_on;
+      data.ignition_off = ignition_off;
+      //data eventsdata
+      //data devisedata
+      //proccess 
+     // data.milleage=(await this.Milleage(ignition_off)-(await this.Milleage(ignition_on)));
     
-};
+    this.InsertTripDataScoreAzure(id_car,ignition_on,data);
+
+  },
+
+  InsertTripDataScoreAzure : async(id_car,ignition_on,ignition_off)=>{
+    let trip ={
+      PartitionKey:id_car.toString(),
+      RowKey:ignition_on.toString(),
+      ignition_on:ignition_on,
+      ignition_off:ignition_off,
+      //milleage:(await Milleage(trps[i][1]))-(await Milleage(trps[i][0]))
+    }
+    tableService.insertOrReplaceEntity(
+      "scoredata",
+      trip,
+      async function (error, result, response) {
+        if (!error) {
+          console.log("Adeed succefully in score table storage ! ");
+        } else {
+        timeout(10000);
+        InsertTripDataScoreAzure(id_car,ignition_on,ignition_off);
+        }
+      }
+    );
+    return;
+  },
+   Milleage : async(RowKey) =>{
+    return new Promise((resolve, reject)=> {
+     let  query = new azure.TableQuery().select(['milleage']).where('RowKey eq?', RowKey);
+       tableSvc.queryEntities('eventsdata', query,null,(error, results)=>{
+             if(!error){
+                resolve(results.entries[0].milleage._)
+                return  
+             }
+             if(error)
+             {
+              reject(error);
+              return
+             }
+          
+           })
+    
+   })
+
+   }  
+
+}
