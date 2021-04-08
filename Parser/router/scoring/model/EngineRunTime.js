@@ -85,7 +85,8 @@ async function ignitionOnQuery(carId ,  continuationToken){
         ignition_on:trps[i][0],
         ignition_off:trps[i][1],
         arret:trps.length/2,
-        milleage:(await Milleage(trps[i][1]))-(await Milleage(trps[i][0]))
+        milleage:(await Milleage(trps[i][1]))-(await Milleage(trps[i][0])),
+        runTime : trps[i][1] - trps[i][0]
       }
       
       //engine run time here by ghaith 
