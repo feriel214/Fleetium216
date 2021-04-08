@@ -1,5 +1,6 @@
-const { reject } = require("async");
-const { TableQuery } = require("azure-storage");
+
+const Vehicle_speed = require("./Vehicle_speed");
+const Freinage = require("./Freinage");
 
 try {
   var azure = require("azure-storage");
@@ -40,7 +41,7 @@ async function ignitionOnQuery(carId ,  continuationToken){
     });
   }
   
-  async function acceleration_threshold1_exceed(carId){
+  async function collect_score_data(carId){
       let arr = [];
       let j = 0;
       let trips=[];
@@ -86,10 +87,11 @@ async function ignitionOnQuery(carId ,  continuationToken){
         ignition_off:trps[i][1],
         arret:trps.length/2,
         milleage:(await Milleage(trps[i][1]))-(await Milleage(trps[i][0])),
-        runTime : (await EGR(trps[i][1],trps[i][0]))
+        runTime : (await EGR(trps[i][1],trps[i][0])),
+        Vehicle_speed : (await Vehicle_speed.Vehicle_speed(carId,trps[i][0],trps[i][1])),
+        Freinage : (await Freinage.Freinage(carId,trps[i][0],trps[i][1]))
       }
       
-      //engine run time here by ghaith 
       //trip.engine_run_time=await EGR(trps[i][1],trps[i][0]);
       //Nb Acceleration 
       //Nb Freinage excessif C2
@@ -100,6 +102,8 @@ async function ignitionOnQuery(carId ,  continuationToken){
      console.log(trips)
  
   }
+ 
+  
  async function Milleage(RowKey){
    return new Promise((resolve, reject)=> {
     let  query = new azure.TableQuery().select(['milleage']).where('RowKey eq?', RowKey);
@@ -118,6 +122,7 @@ async function ignitionOnQuery(carId ,  continuationToken){
    
   })
 };
+
 async function EGR(tsignoff,tsignon){
   return new Promise ((resolve,reject)=>{
     result = (tsignoff - tsignon) / 60000;
@@ -135,7 +140,7 @@ async function InsertTripsCar(trips){
 } 
 
 
-  acceleration_threshold1_exceed(1);
+  collect_score_data(1);
 module.exports = {
-  acceleration_threshold1_exceed
+  acceleration_threshold1_exceed: collect_score_data
 }
