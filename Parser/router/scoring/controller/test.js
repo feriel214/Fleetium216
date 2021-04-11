@@ -1,4 +1,4 @@
-try {
+/*try {
     var azure = require("azure-storage");
     var connectionString =
       "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
@@ -37,4 +37,27 @@ try {
   result = await test();
   console.log(result);
 }
-show();
+show();*/
+const RoadSpeed = require('../model/RoadSpeed');
+
+
+
+async function show(carId,on,off){
+  result = await RoadSpeed.RoadSpeed(carId,on,off);
+  console.log(result);
+}
+
+show("1","1584512459000","1584515346000");
+function RowKey(){
+  today = new Date();
+  Hour = (today.getHours() < 10 ? '0' : '') + today.getHours();
+  Sec = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
+  Min = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
+  Year = today.getFullYear()
+  Month = ((today.getMonth()+1) < 10 ? '0' : '') + (today.getMonth()+1);
+  Day = (today.getDate() < 10 ? '0' : '') + today.getDate();
+  date = Year+""+Month+""+Day;
+  time = Hour + "" + Min + ""+ Sec;
+  dateTime = date+time;
+  return dateTime;
+}

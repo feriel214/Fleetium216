@@ -29,7 +29,6 @@ async function queryEntitiesSegmented(carId , continuationToken,on,off){
     do{
         var results =  await queryEntitiesSegmented(carId, continuationToken,on,off);
         continuationToken = results.continuationToken;
-        
     }
     while(continuationToken!=null);
     return results.entries.length;
