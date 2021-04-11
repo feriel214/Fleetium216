@@ -48,16 +48,3 @@ async function show(carId,on,off){
 }
 
 show("1","1584512459000","1584515346000");
-function RowKey(){
-  today = new Date();
-  Hour = (today.getHours() < 10 ? '0' : '') + today.getHours();
-  Sec = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
-  Min = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
-  Year = today.getFullYear()
-  Month = ((today.getMonth()+1) < 10 ? '0' : '') + (today.getMonth()+1);
-  Day = (today.getDate() < 10 ? '0' : '') + today.getDate();
-  date = Year+""+Month+""+Day;
-  time = Hour + "" + Min + ""+ Sec;
-  dateTime = date+time;
-  return dateTime;
-}

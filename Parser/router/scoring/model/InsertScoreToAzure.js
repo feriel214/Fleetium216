@@ -1,6 +1,7 @@
 const Vehicle_speed = require('../model/Vehicle_speed');
 const Freinage = require('../model/Freinage');
 const RoadSpeed = require('../model/RoadSpeed');
+const Idling = require('../model/Idling');
 try {
   var azure = require("azure-storage");
   var connectionString = "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
@@ -35,6 +36,7 @@ function RowKey(){
    speed_1 : entGen.String(JSON.stringify(speed[0])),
    speed_2 : entGen.String(JSON.stringify(speed[1])),
    speed_3 : entGen.String(JSON.stringify(speed[2])),
+   Idling : entGen.String(JSON.stringify(await Idling.Idling(carId,on,off)))
   
  };
  return new Promise((resolve,reject)=>{
@@ -49,7 +51,7 @@ function RowKey(){
  }
 
 
-res = InsertScore("1","1584512459000","1584515346000");
+res = InsertScore("1","1584512570000","1584515346000");
 if (res){
   console.log("nice");
 }else{
