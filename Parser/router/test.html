@@ -1,0 +1,84 @@
+<html>
+	<body>
+	
+	
+	
+	
+		<script>
+		var startdate = 1584649800000;
+        var enddate = 1584606600000;
+		//var enddate = 1618250400000;
+		var dS = new Date(startdate);
+		var dE = new Date(enddate);
+		dS.setHours(02,00,00,00);
+		dE.setHours(02,00,00,00);
+		pS1 = dS.getTime();
+		pE1 = dE.getTime();
+		
+		dS.setHours(16,00,00,00);
+		dE.setHours(16,00,00,00);
+		pS2 = dS.getTime();
+		pE2 = dE.getTime();
+		
+		dS.setHours(20,00,00,00);
+		dE.setHours(20,00,00,00);
+		/*dS.setDate(dS.getDate()+1);
+		dE.setDate(dS.getDate()+1);*/
+		pS3 = dS.getTime();
+		pE3 = dE.getTime();
+
+		var C1 = Calcul(startdate,enddate,pS1,pE2);
+		var C2 = Calcul(startdate,enddate,pS2,pE3);
+
+		
+		var C3 = Calcul(startdate,enddate,pS3,pE1);
+		
+		console.log(new Date(startdate));
+		console.log(new Date(enddate));
+		console.log("C1",timeDifference(C1));
+		console.log("C2",timeDifference(C2));
+		console.log("C3",timeDifference(C3));
+		
+		
+		function Calcul(startdate,enddate,p1,p2) {
+			console.log(p1 ,p2);
+			console.log(startdate ,enddate);
+			if(startdate >= p1 && enddate <= p2){
+				var C1 = enddate - startdate
+				console.log(11111);
+			}else if(startdate >= p1 && enddate > p2){
+				var C1 = p2-startdate
+				console.log(22222);
+			}else if(startdate < p1 && enddate <= p2){
+				var C1 = enddate-p1
+				console.log(33333);
+			}else if(startdate < p1 && enddate >= p2 && startdate >= p2){
+				var C1 = enddate-p1
+				console.log(44444);
+			}else if(startdate < p1 && enddate >= p2 ){
+				var C1 = p2-p1 > 0 ? p2-p1 : p1-p2;
+				console.log(55555);
+			}else{
+				var C1 = 0;
+				console.log(66666);
+			}
+			return C1;
+		}
+		function timeDifference(SSSS) {
+			var difference = (SSSS);
+			result = {};
+			result.day = Math.floor(difference/1000/60/60/24);
+			difference -= result.day *1000*60*60*24
+
+			result.hour = Math.floor(difference/1000/60/60);
+			difference -= result.hour *1000*60*60
+
+			result.minute = Math.floor(difference/1000/60);
+			difference -= result.minute*1000*60
+ 
+			result.seconds = Math.floor(difference/1000);
+			return result;
+		}
+		</script>
+	</body>
+</html>

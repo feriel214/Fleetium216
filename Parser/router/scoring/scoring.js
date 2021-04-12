@@ -1,11 +1,9 @@
-const { v1 } = require("uuid");
 
-let nbJour=0;
-let fonctionnement_moteur=0;
-let idling=0;
-let distance =0;
-let arret=0;
 
+plage1=0;
+plage2=0;
+plage3=0;
+ 
 /*************************************** RoadTime 2 *****************************/
 //RoadTime Trip 1 & 2 & 3 
 function RoadTimeTrip(ignition_on,ignition_off){
