@@ -1,4 +1,7 @@
   async function RoadSpeed(dt){
+    console.log('-------------------------------------------------')
+    dt.entries.sort((a,b) => a.RowKey - b.RowKey);
+    console.log('-------------------------------------------------')
       let max1 = 0;
       let min1 = 9999999999999;
       let max2 = 0;

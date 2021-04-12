@@ -66,6 +66,7 @@ function RowKey(){
 
 ///////////////////////////////////////////////////
 ////////////////Inserting score data//////////////
+let dt=[];
   async function InsertScore(carId,on,off){
    dt = await data(carId,on,off)
    speed = await RoadSpeed.RoadSpeed(dt);
@@ -102,7 +103,6 @@ if (res){
 }else{
   console.log(false);
 }
-
  module.exports = {
      InsertScore
  }
