@@ -78,9 +78,9 @@ function RowKey(){
    ignition_off : entGen.String(off),
    Vehicle_speed : entGen.String(JSON.stringify(await Vehicle_speed.Vehicle_speed(dt,carId))),
    Freinage : entGen.String(JSON.stringify(await Freinage.Freinage(dt,carId))),
-   //speed_1 : entGen.String(JSON.stringify((speed.speed_1 / 60000))),
-   //speed_2 : entGen.String(JSON.stringify(speed.speed_2)),
-   //speed_3 : entGen.String(JSON.stringify(speed.speed_3)),
+   speed_1 : entGen.String(JSON.stringify(speed.speed_1 )),
+   speed_2 : entGen.String(JSON.stringify(speed.speed_2)),
+   speed_3 : entGen.String(JSON.stringify(speed.speed_3)),
    Idling : entGen.String(JSON.stringify(await Idling.Idling(dt)))
   
  };

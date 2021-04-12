@@ -13,53 +13,49 @@
       for (i = 0; i < dt.entries.length ; i++)
             {
                 if(parseInt(dt.entries[i].gps_speed._) <= 90){
-                    if (max1 < dt.entries[i].RowKey._){
-                        max1 = dt.entries[i].RowKey._
+                    if (max1 < parseInt(dt.entries[i].RowKey._)){
+                        max1 = parseInt(dt.entries[i].RowKey._)
                     }
-                    if (min1 > dt.entries[i].RowKey._){
-                        min1 = dt.entries[i].RowKey._
+                    if (min1 > parseInt(dt.entries[i].RowKey._)){
+                        min1 = parseInt(dt.entries[i].RowKey._)
                     }
-                    //speed.speed_1 = (parseInt(dt.entries[i].RowKey._) - speed.speed_1);  
-                    //console.log(covertTs((parseInt(dt.entries[i].RowKey._),speed.speed_1))) 
                 }else
                 if(parseInt(dt.entries[i].gps_speed._) > 90 && parseInt(dt.entries[i].gps_speed._) <= 120)
                 {
-                    if (max2 < dt.entries[i].RowKey._){
-                        max2 = dt.entries[i].RowKey._
+                    if (max2 < parseInt(dt.entries[i].RowKey._)){
+                        max2 = parseInt(dt.entries[i].RowKey._)
                     }
-                    if (min2 > dt.entries[i].RowKey._){
-                        min2 = dt.entries[i].RowKey._
+                    if (min2 > parseInt(dt.entries[i].RowKey._)){
+                        min2 = parseInt(dt.entries[i].RowKey._)
                     }
                 }else
                 if(parseInt(dt.entries[i].gps_speed._) > 120)
                 {
-                    if (max3 < dt.entries[i].RowKey._){
-                        max3 = dt.entries[i].RowKey._
+                    console.log(dt.entries[i].RowKey._)
+                    if (max3 < parseInt(dt.entries[i].RowKey._)){
+                        max3 = parseInt(dt.entries[i].RowKey._)
                     }
-                    if (min3 > dt.entries[i].RowKey._){
-                        min3 = dt.entries[i].RowKey._
+                    if (min3 > parseInt(dt.entries[i].RowKey._)){
+                        min3 = parseInt(dt.entries[i].RowKey._)
                     }
                 }
             }
-            console.log("max1 "+max1)
-            console.log("mix1 "+min1)
-            console.log("max2 "+max2)
-            console.log("min2 "+min2)
-            console.log("max3 "+max3)
-            console.log("mix3 "+min3)
+            speed.speed_1 = Math.round((max1 - min1)/60000)
+            speed.speed_2 = Math.round((max2 - min2)/60000)
+            speed.speed_3 = Math.round((max3 - min3)/60000)
+
+            if (speed.speed_2 < 0){
+                speed.speed_2 = 0
+            }
+            if (speed.speed_3 < 0){
+                speed.speed_3 = 0
+            }
+
             
        
-            return ;
+            return speed;
   }
-  /*function covertTs(date1,date2){
-      
-    var diffInSeconds = Math.abs(date1 - date2) / 1000;
-    var days = Math.floor(diffInSeconds / 60 / 60 / 24);
-    var hours = Math.floor(diffInSeconds / 60 / 60 % 24);
-    var minutes = Math.floor(diffInSeconds / 60 % 60);
-    var seconds = Math.floor(diffInSeconds % 60);
-    console.log(hours+':'+minutes+':'+seconds);
-  }*/
+
  module.exports = {
      RoadSpeed
 }
