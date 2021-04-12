@@ -1,87 +1,65 @@
-const { TableQuery } = require("azure-storage");
-try {
-    var azure = require("azure-storage");
-    var connectionString = "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
-    var tableSvc = azure.createTableService(connectionString);
-  } catch (error) {
-    console.log("can not connect to azure table storage");
-  }
-
-
-async function speedQuery(carId,continuationToken,on,off){
-return new Promise((resolve ,reject)=>{
-    carId2 = parseInt(carId);
-    carId2 = carId2 + 1;
-    carId2 = carId2.toString();
-    query = new azure.TableQuery()
-    .select(['*'])
-    .where('PartitionKey ge ? and PartitionKey lt ? and RowKey ge ? and RowKey le ?',carId,carId2,on,off);
-    tableSvc.queryEntities('eventsdata', query, continuationToken, (error, results)=> {
-        if(!error){
-            resolve(results)           
-        }else{
-            reject(error);
-        }
-      });
-
-})
-}
-
-
-async function speed(carId,on,off){
-    var continuationToken = null;
-    do{
-        var results =  await speedQuery(carId, continuationToken,on,off);
-        continuationToken = results.continuationToken;
-        
-    }
-    while(continuationToken!=null);
-    return results;
-}
-
-  async function RoadSpeed(carId,on,off){
-      speed1 = [];
-      speed2 = [];
-      speed3 = [];
-      j = 0;
-      k = 0;
-      l = 0;
-      result1 = await speed(carId,on,off);
-        // Speed 0 - 90
-      for (i = 0; i < result1.entries.length ; i++)
+  async function RoadSpeed(dt){
+      let max1 = 0;
+      let min1 = 9999999999999;
+      let max2 = 0;
+      let min2 = 9999999999999;
+      let max3 = 0;
+      let min3 = 9999999999999;
+      var speed = {
+          speed_1 : 0,
+          speed_2 : 0,
+          speed_3 : 0
+      };
+      for (i = 0; i < dt.entries.length ; i++)
             {
-                if(parseInt(result1.entries[i].gps_speed._) <= 90){
-                     
-                    speed1[j] = parseInt(result1.entries[i].RowKey._);
-                    j++;
+                if(parseInt(dt.entries[i].gps_speed._) <= 90){
+                    if (max1 < dt.entries[i].RowKey._){
+                        max1 = dt.entries[i].RowKey._
+                    }
+                    if (min1 > dt.entries[i].RowKey._){
+                        min1 = dt.entries[i].RowKey._
+                    }
+                    //speed.speed_1 = (parseInt(dt.entries[i].RowKey._) - speed.speed_1);  
+                    //console.log(covertTs((parseInt(dt.entries[i].RowKey._),speed.speed_1))) 
+                }else
+                if(parseInt(dt.entries[i].gps_speed._) > 90 && parseInt(dt.entries[i].gps_speed._) <= 120)
+                {
+                    if (max2 < dt.entries[i].RowKey._){
+                        max2 = dt.entries[i].RowKey._
+                    }
+                    if (min2 > dt.entries[i].RowKey._){
+                        min2 = dt.entries[i].RowKey._
+                    }
+                }else
+                if(parseInt(dt.entries[i].gps_speed._) > 120)
+                {
+                    if (max3 < dt.entries[i].RowKey._){
+                        max3 = dt.entries[i].RowKey._
+                    }
+                    if (min3 > dt.entries[i].RowKey._){
+                        min3 = dt.entries[i].RowKey._
+                    }
                 }
             }
-        // Speed 90 /120
-        for (i = 0; i < result1.entries.length ; i++)
-            {
-                if(parseInt(result1.entries[i].gps_speed._) >= 90 && (parseInt(result1.entries[i].gps_speed._) <= 120)){
-                     
-                    speed2[k] = parseInt(result1.entries[i].RowKey._);
-                    k++;
-                }
-            }
+            console.log("max1 "+max1)
+            console.log("mix1 "+min1)
+            console.log("max2 "+max2)
+            console.log("min2 "+min2)
+            console.log("max3 "+max3)
+            console.log("mix3 "+min3)
             
-
-        // Speed over 120 
-        for (i = 0; i < result1.entries.length ; i++)
-            {
-                if(parseInt(result1.entries[i].gps_speed._) >= 120){
-                    speed3[l] = parseInt(result1.entries[i].RowKey._);
-                    l++;
-                }
-            }
-
-            TimeSpeed1 = Math.round((Math.max.apply(Math,speed1) - Math.min.apply(Math,speed1)) /60);
-            TimeSpeed2 = Math.round((Math.max.apply(Math,speed2) - Math.min.apply(Math,speed2)) /60);
-            TimeSpeed3 = Math.round((Math.max.apply(Math,speed3) - Math.min.apply(Math,speed3)) /60);
-            
-            return [TimeSpeed1,TimeSpeed2,TimeSpeed3];
+       
+            return ;
   }
+  /*function covertTs(date1,date2){
+      
+    var diffInSeconds = Math.abs(date1 - date2) / 1000;
+    var days = Math.floor(diffInSeconds / 60 / 60 / 24);
+    var hours = Math.floor(diffInSeconds / 60 / 60 % 24);
+    var minutes = Math.floor(diffInSeconds / 60 % 60);
+    var seconds = Math.floor(diffInSeconds % 60);
+    console.log(hours+':'+minutes+':'+seconds);
+  }*/
  module.exports = {
      RoadSpeed
 }
