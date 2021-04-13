@@ -91,15 +91,9 @@ async function ignitionOnQuery(carId ,  continuationToken){
         Vehicle_speed : (await Vehicle_speed.Vehicle_speed(carId,trps[i][0],trps[i][1])),
         Freinage : (await Freinage.Freinage(carId,trps[i][0],trps[i][1]))
       }
-      
-      //trip.engine_run_time=await EGR(trps[i][1],trps[i][0]);
-      //Nb Acceleration 
-      //Nb Freinage excessif C2
-      //Idling   neselou noura ala fazet el tripp 
       trips.push(trip) 
      }
-    
-     console.log(trips)
+      console.log(trips)
  
   }
  

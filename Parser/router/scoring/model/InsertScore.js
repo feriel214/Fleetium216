@@ -1,7 +1,7 @@
-const Vehicle_speed = require('../model/Vehicle_speed');
-const Freinage = require('../model/Freinage');
-const RoadSpeed = require('../model/RoadSpeed');
-const Idling = require('../model/Idling');
+const Vehicle_speed = require('./Vehicle_speed');
+const Freinage = require('./Freinage');
+const RoadSpeed = require('./RoadSpeed');
+const Idling = require('./Idling');
 
 
 /////////////////////////////////////////////////
@@ -69,7 +69,6 @@ function RowKey(){
   async function InsertScore(carId,on,off){
    dt = await data(carId,on,off)
    speed = await RoadSpeed.RoadSpeed(dt);
- 
    var entGen = azure.TableUtilities.entityGenerator;
    var task = {
    PartitionKey: entGen.String(carId),
@@ -81,7 +80,7 @@ function RowKey(){
    speed_1 : entGen.String(JSON.stringify(speed.speed_1 )),
    speed_2 : entGen.String(JSON.stringify(speed.speed_2)),
    speed_3 : entGen.String(JSON.stringify(speed.speed_3)),
-   Idling : entGen.String(JSON.stringify(await Idling.Idling(dt)))
+   Idling : entGen.String(JSON.stringify(await Idling.Idling(speed,on,off)))
   
  };
  return new Promise((resolve,reject)=>{

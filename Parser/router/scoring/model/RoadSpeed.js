@@ -12,7 +12,7 @@
       };
       for (i = 0; i < dt.entries.length ; i++)
             {
-                if(parseInt(dt.entries[i].gps_speed._) <= 90){
+                if(parseInt(dt.entries[i].gps_speed._) > 0 && parseInt(dt.entries[i].gps_speed._) <= 90){
                     if (max1 < parseInt(dt.entries[i].RowKey._)){
                         max1 = parseInt(dt.entries[i].RowKey._)
                     }
