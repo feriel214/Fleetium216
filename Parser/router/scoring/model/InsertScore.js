@@ -1,14 +1,13 @@
-const Vehicle_speed = require('./Vehicle_speed');
-const Freinage = require('./Freinage');
+const Events = require('./Events');
 const RoadSpeed = require('./RoadSpeed');
 const Idling = require('./Idling');
-
+require('dotenv').config();
 
 /////////////////////////////////////////////////
 //////////////// Azure connection ///////////////
 try {
   var azure = require("azure-storage");
-  var connectionString = "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
+  var connectionString = process.env.connectionString;
   var tableSvc = azure.createTableService(connectionString);
 } catch (error) {
   console.log("can not connect to azure table storage");
@@ -35,7 +34,7 @@ async function dataQuery(carId,continuationToken,on,off){
   
   });
   } 
-  async function data(carId,on,off){
+  async function ScoreData(carId,on,off){
       var continuationToken = null;
       do{
           var results =  await dataQuery(carId, continuationToken,on,off);
@@ -67,16 +66,17 @@ function RowKey(){
 ///////////////////////////////////////////////////
 ////////////////Inserting score data//////////////
   async function InsertScore(carId,on,off){
-   dt = await data(carId,on,off)
+   dt = await ScoreData(carId,on,off)
    speed = await RoadSpeed.RoadSpeed(dt);
+   events = await Events.get_events(dt,carId);
    var entGen = azure.TableUtilities.entityGenerator;
    var task = {
    PartitionKey: entGen.String(carId),
    RowKey: entGen.String(RowKey()),
    ignition_on : entGen.String(on),
    ignition_off : entGen.String(off),
-   Vehicle_speed : entGen.String(JSON.stringify(await Vehicle_speed.Vehicle_speed(dt,carId))),
-   Freinage : entGen.String(JSON.stringify(await Freinage.Freinage(dt,carId))),
+   Vehicle_speed : entGen.String(JSON.stringify(events.speed)),
+   Freinage : entGen.String(JSON.stringify(events.freinage)),
    speed_1 : entGen.String(JSON.stringify(speed.speed_1 )),
    speed_2 : entGen.String(JSON.stringify(speed.speed_2)),
    speed_3 : entGen.String(JSON.stringify(speed.speed_3)),
@@ -86,9 +86,9 @@ function RowKey(){
  return new Promise((resolve,reject)=>{
     tableSvc.insertEntity('scoredata',task, function (error, result, response) {
         if(!error){
-          resolve(true)
+          resolve(JSON.stringify(true))
         }else{
-            reject(false)
+            reject(JSON.stringify(false))
         }
       });
  });
