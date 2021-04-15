@@ -4,7 +4,6 @@ async function Idling(speed,on,off){
         speedTime = speed.speed_1 + speed.speed_2 + speed.speed_3;
         return duration-speedTime;
     }
-
 module.exports = {
     Idling
 }
