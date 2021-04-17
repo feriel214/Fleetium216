@@ -1,6 +1,7 @@
 const Events = require('./Events');
 const RoadSpeed = require('./RoadSpeed');
 const Idling = require('./Idling');
+const Millage = require('./millage');
 require('dotenv').config();
 
 /////////////////////////////////////////////////
@@ -45,7 +46,6 @@ async function dataQuery(carId,continuationToken,on,off){
       return results;
   }
 
-
 /////////////////////////////////////////////////////
 ///////////////////RowKey function//////////////////
 function RowKey(){
@@ -81,6 +81,7 @@ function RowKey(){
    speed_1 : entGen.String(JSON.stringify(speed.speed_1 )),
    speed_2 : entGen.String(JSON.stringify(speed.speed_2)),
    speed_3 : entGen.String(JSON.stringify(speed.speed_3)),
+   millage : entGen.String(JSON.stringify(await Millage.millage(dt,on,off,carId))),
    Idling : entGen.String(JSON.stringify(await Idling.Idling(speed,on,off)))
   
  };
@@ -96,7 +97,7 @@ function RowKey(){
  }
 
 ////////////////////////////////////////////////////////////
-res = InsertScore("1","1584512570000","1584515346000");
+res = InsertScore("1","1584518355000","1584540410000");
 if (res){
   console.log(true);
 }else{
