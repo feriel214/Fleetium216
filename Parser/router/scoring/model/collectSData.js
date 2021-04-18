@@ -35,24 +35,30 @@ async function ScoreData(carId){
     while(continuationToken!=null);
     return results;
 }
-async function getScore(carId,debut,fin){
-    let array = [];
+async function collectSData(carId,debut,fin){
+    let data = {
+        roadspeed_3 : 0,
+        Acceleration :0,
+        Freinage :0,
+        Cornering :0
+    }
     res = await ScoreData(carId);
     for(i = 0; i < res.entries.length ; i++){
         date = res.entries[i].Timestamp._.toISOString().slice(0, 10);
         if (date >= debut && date <= fin){
-            array.push(
-                {
+            
                      //roadspeed_1: parseFloat(((parseFloat(res.entries[i].speed_1._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2)),
                      //roadspeed_2:  parseFloat(((parseFloat(res.entries[i].speed_2._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2)),
-                     roadspeed_3:  parseFloat(((parseFloat(res.entries[i].speed_3._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2)),
-                     Acceleration : Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Vehicle_speed._)),
-                     Freinage : Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Freinage._)),
-                     Cornering : Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Cornering._))
-                });
+                     data.roadspeed_3 = data.roadspeed_3 + parseFloat(((parseFloat(res.entries[i].speed_3._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2)),
+                     data.Acceleration = data.Acceleration + Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Vehicle_speed._)),
+                     data.Freinage = data.Freinage +  Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Freinage._)),
+                     data.Cornering = data.Cornering + Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Cornering._))
+                
         }
     }
-    console.log(array)
+    return data;
     
 }
-getScore('1','2021-03-14','2021-04-16')
+module.exports = {
+    collectSData
+}

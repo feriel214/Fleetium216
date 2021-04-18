@@ -1,7 +1,7 @@
-const Events = require('./Events');
-const RoadSpeed = require('./RoadSpeed');
-const Idling = require('./Idling');
-const Millage = require('./millage');
+const Events = require('../model/Events');
+const RoadSpeed = require('../model/RoadSpeed');
+const Idling = require('../model/Idling');
+const Millage = require('../model/millage');
 require('dotenv').config();
 
 /////////////////////////////////////////////////
@@ -65,7 +65,7 @@ function RowKey(){
 
 ///////////////////////////////////////////////////
 ////////////////Inserting score data//////////////
-  async function InsertScore(carId,on,off){
+  async function scoreData(carId,on,off){
    dt = await ScoreData(carId,on,off)
    speed = await RoadSpeed.RoadSpeed(dt);
    events = await Events.get_events(dt,carId);
@@ -97,7 +97,7 @@ function RowKey(){
  }
 
 ////////////////////////////////////////////////////////////
-res = InsertScore("1","1584518355000","1584540410000");
+res = scoreData("1","1584518355000","1584540410000");
 if (res){
   console.log(true);
 }else{
@@ -105,5 +105,5 @@ if (res){
 }
 
  module.exports = {
-     InsertScore
+     InsertScore: scoreData
  }
