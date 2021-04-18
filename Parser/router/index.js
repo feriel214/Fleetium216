@@ -8,13 +8,15 @@ app.use(cors());
 
 let StorageController = require('./controller/StorageController');
 let GeoController = require('./controller/GeoController');
-
+let ScoreController = require('./scoring/controller/scoreController');
 
 app.get('/login', function (req, res) {
     res.json({login:"true"});
 })
 
-
+app.post('/score', function (req,res){
+    ScoreController.getScore(req,res)
+})
 // POST /api/users gets JSON bodies
 app.get('/2021/:id', function (req, res) {
     StorageController.GetParams(req, res)
