@@ -97,13 +97,13 @@ function RowKey(){
  }
 
 ////////////////////////////////////////////////////////////
-res = scoreData("1","1584518355000","1584540410000");
+/*res = scoreData("1","1584518355000","1584540410000");
 if (res){
   console.log(true);
 }else{
   console.log(false);
-}
+}*/
 
  module.exports = {
-     InsertScore: scoreData
+     scoreData
  }

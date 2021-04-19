@@ -7,7 +7,7 @@ fin =  '2021-04-17';*/
 async function calcScore(carId,debut,fin){
     result = await collectSData.collectSData(carId,debut,fin);
     if(result == null){
-        return null
+    return null;
     }else{
     SCornering = Point.Cornering((result.Cornering));
     SFreinage = Point.Freinage(result.Freinage);
