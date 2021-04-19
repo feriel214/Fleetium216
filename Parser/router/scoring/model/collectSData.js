@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config()
 
 /////////////////////////////////////////////////
 //////////////// Azure connection ///////////////
@@ -43,10 +43,12 @@ async function collectSData(carId,debut,fin){
         Cornering :0
     }
     res = await ScoreData(carId);
+    if(res.entries.length == 0){
+        return null;
+    }else{
     for(i = 0; i < res.entries.length ; i++){
         date = res.entries[i].Timestamp._.toISOString().slice(0, 10);
         if (date >= debut && date <= fin){
-            
                      //roadspeed_1: parseFloat(((parseFloat(res.entries[i].speed_1._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2)),
                      //roadspeed_2:  parseFloat(((parseFloat(res.entries[i].speed_2._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2)),
                      data.roadspeed_3 = data.roadspeed_3 + parseFloat(((parseFloat(res.entries[i].speed_3._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2)),
@@ -56,8 +58,12 @@ async function collectSData(carId,debut,fin){
                 
         }
     }
-    return data;
-    
+    if(data.roadspeed_3 == 0 && data.Acceleration == 0 && data.Freinage == 0 && data.Cornering == 0){
+        return null;
+    }else{
+        return data;
+    }
+    }
 }
 module.exports = {
     collectSData

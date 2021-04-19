@@ -5,7 +5,7 @@ module.exports = {
     getScore : async function(req,res){
         try {
             result = await finalScore.calcScore(req.body.carId,req.body.debut,req.body.fin);
-            if(result.length != 0){
+            if(result != null){
                 res.status(200).json(result);
             }else{
                 res.status(404).json({error : true})
