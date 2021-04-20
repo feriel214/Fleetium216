@@ -64,7 +64,7 @@ function Acceleration(param) {
     case param >= 600 && param < 700:
       score = 8;
       break;
-    case rparam >= 700 && param < 800:
+    case param >= 700 && param < 800:
       score = 9;
       break;
     case param >= 800 && param < 1000:

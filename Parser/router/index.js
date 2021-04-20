@@ -9,9 +9,13 @@ app.use(cors());
 let StorageController = require('./controller/StorageController');
 let GeoController = require('./controller/GeoController');
 let ScoreController = require('./scoring/controller/scoreController');
-
+let HistoryController = require('./scoring/controller/historyController');
 app.get('/login', function (req, res) {
     res.json({login:"true"});
+})
+
+app.get('/score/history', function (req,res){
+  HistoryController.getHistory(req,res)
 })
 
 app.post('/score', function (req,res){

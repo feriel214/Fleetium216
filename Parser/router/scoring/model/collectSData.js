@@ -29,8 +29,7 @@ async function ScoreData(carId){
     var continuationToken = null;
     do{
         var results =  await calcQuery(carId,continuationToken);
-        continuationToken = results.continuationToken;
-        
+        continuationToken = results.continuationToken;  
     }
     while(continuationToken!=null);
     return results;
@@ -65,6 +64,44 @@ async function collectSData(carId,debut,fin){
     }
     }
 }
+
+/////////////////////////////////////////////////////
+  ///////////////////RowKey function//////////////////
+  function RowKey(){
+    today = new Date();
+    Hour = (today.getHours() < 10 ? '0' : '') + today.getHours();
+    Sec = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
+    Min = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
+    Year = today.getFullYear()
+    Month = ((today.getMonth()+1) < 10 ? '0' : '') + (today.getMonth()+1);
+    Day = (today.getDate() < 10 ? '0' : '') + today.getDate();
+    date = Year+""+Month+""+Day;
+    time = Hour + "" + Min + ""+ Sec;
+    dateTime = date+time;
+    return dateTime;
+  }
+
+async function insertFS(carId,debut,fin,score){
+    var entGen = azure.TableUtilities.entityGenerator;
+    var task = {
+    PartitionKey: entGen.String(carId),
+    RowKey: entGen.String(RowKey()), 
+    debut : entGen.String(debut),
+    fin : entGen.String(fin),
+    score : entGen.String(JSON.stringify(score)),
+  };
+  return new Promise((resolve,reject)=>{
+     tableSvc.insertEntity('finalscore',task, function (error, result, response) {
+         if(!error){
+           resolve(true)
+         }else{
+             reject(false)
+         }
+       });
+  });
+  }
+
 module.exports = {
-    collectSData
+    collectSData,
+    insertFS
 }

@@ -15,9 +15,11 @@ async function calcScore(carId,debut,fin){
         SFreinage = Point.Freinage(result.Freinage);
         SRoadSpeed = Point.RoadSpeed((result.roadspeed_3)/100);
         SAcceleration = Point.Acceleration(result.Acceleration);
-        Score = Math.round((SCornering + (SFreinage * 2) + SRoadSpeed + (SAcceleration * 2)) / 7)
+        Score = Math.round((SCornering + (SFreinage * 2) + SRoadSpeed + (SAcceleration * 2)) / 7);
+        collectSData.insertFS(carId,debut,fin,Score);
         return Score;
-    }
+
+    } 
     
 }
 module.exports = {
