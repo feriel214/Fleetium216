@@ -1,8 +1,7 @@
-const Events = require('./Events');
-const RoadSpeed = require('./RoadSpeed');
-const Idling = require('./Idling');
-const Millage = require('./millage');
-require('dotenv').config();
+const Events = require('./EventsModel');
+const RoadSpeed = require('./RoadSpeedModel');
+const Idling = require('./IdlingModel');
+const Millage = require('./millageModel');
 
 /////////////////////////////////////////////////
 //////////////// Azure connection ///////////////
@@ -96,7 +95,6 @@ function RowKey(){
  });
  }
 
-////////////////////////////////////////////////////////////
 /*res = scoreData("1","1584518355000","1584540410000");
 if (res){
   console.log(true);

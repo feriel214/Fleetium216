@@ -1,4 +1,4 @@
-const scoreModel = require('../model/finalScore');
+const scoreModel = require('../model/finalScoreModel');
 const { json } = require('body-parser');
 
 module.exports = {
