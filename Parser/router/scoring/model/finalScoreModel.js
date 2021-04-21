@@ -39,7 +39,10 @@ try {
           roadspeed_3 : 0,
           Acceleration :0,
           Freinage :0,
-          Cornering :0
+          Cornering :0,
+          nbrAcceleration :0,
+          nbrFreinage :0,
+          nbrCornering :0
       }
       res = await ScoreData(carId);
       if(res.entries.length == 0){
@@ -52,8 +55,11 @@ try {
                        //roadspeed_2:  parseFloat(((parseFloat(res.entries[i].speed_2._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2)),
                        data.roadspeed_3 = data.roadspeed_3 + parseFloat(((parseFloat(res.entries[i].speed_3._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2)),
                        data.Acceleration = data.Acceleration + Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Vehicle_speed._)),
+                       data.nbrAcceleration = data.nbrAcceleration + parseFloat(res.entries[i].Vehicle_speed._),
                        data.Freinage = data.Freinage +  Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Freinage._)),
-                       data.Cornering = data.Cornering + Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Cornering._))
+                       data.nbrFreinage =  data.nbrFreinage + parseFloat(res.entries[i].Freinage._),
+                       data.Cornering = data.Cornering + Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Cornering._)),
+                       data.nbrCornering = data.nbrCornering + parseFloat(res.entries[i].Cornering._)
                   
           }
       }
@@ -81,17 +87,20 @@ try {
       return dateTime;
     }
   
- async function insertFinalScore(carId,debut,fin,score){
+ async function insertFinalScore(carId,debut,fin,Cornering,Freinage,Acceleration,Score){
       var entGen = azure.TableUtilities.entityGenerator;
       var task = {
       PartitionKey: entGen.String(carId),
       RowKey: entGen.String(RowKey()), 
       debut : entGen.String(debut),
       fin : entGen.String(fin),
-      score : entGen.String(JSON.stringify(score)),
+      Cornering : entGen.String(Cornering),
+      Freinage : entGen.String(Freinage),
+      Acceleration : entGen.String(Acceleration),
+      score : entGen.String(JSON.stringify(Score)),
     };
     return new Promise((resolve,reject)=>{
-       tableSvc.insertEntity('finalscore',task, function (error, result, response) {
+       tableSvc.insertEntity('scorefinal',task, function (error, result, response) {
            if(!error){
              resolve(true)
            }else{
@@ -113,7 +122,7 @@ async function calcScore(carId,debut,fin){
         SRoadSpeed = Point.RoadSpeed((result.roadspeed_3)/100);
         SAcceleration = Point.Acceleration(result.Acceleration);
         Score = Math.round((SCornering + (SFreinage * 2) + SRoadSpeed + (SAcceleration * 2)) / 7);
-        insertFinalScore(carId,debut,fin,Score);
+        insertFinalScore(carId,debut,fin,result.nbrCornering,result.nbrFreinage,result.nbrAcceleration,Score);
         return Score;
     } 
 }

@@ -6,14 +6,12 @@ try {
     console.log("can not connect to azure table storage");
   }
 
-  ////////////////////////////////////////////////
-  /////////////// Collecting data ///////////////
   async function historyQuery(carId,continuationToken){
     return new Promise((resolve ,reject)=>{
         query = new azure.TableQuery()
         .select(['*'])
         .where('PartitionKey eq ? ',carId);
-        tableSvc.queryEntities('finalscore', query, continuationToken, (error, results)=> {
+        tableSvc.queryEntities('scorefinal', query, continuationToken, (error, results)=> {
             if(!error){
                 resolve(results)           
             }else{
