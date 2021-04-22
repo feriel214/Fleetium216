@@ -30,6 +30,7 @@ try {
             
         }
         while(continuationToken!=null);
+        
         for (i = results.entries.length -1 ; i >= 0 ; i--){
           if(parseInt(results.entries[i].score._) > max){
             max = parseInt(results.entries[i].score._);
@@ -39,7 +40,27 @@ try {
         }
         return driver;
     }
+    async function powerSaver(){
+      let min = 999999999999999;
+      var continuationToken = null;
+      do{
+          var results =  await Query(continuationToken);
+          continuationToken = results.continuationToken;
+          
+      }
+      while(continuationToken!=null);
+      
+      for (i = results.entries.length -1 ; i >= 0 ; i--){
+        if(parseInt(results.entries[i].Idling._) < min){
+          min = parseInt(results.entries[i].Idling._);
+          driver = results.entries[i];
+        }
+            
+      }
+      return driver;
+  }
 
 module.exports = {
-  topDriver
+  topDriver,
+  powerSaver
 }

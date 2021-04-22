@@ -20,6 +20,10 @@ app.get('/ranks/top-driver',function(req,res){
   RanksController.topDriver(req,res)
 })
 
+app.get('/ranks/power-saver',function(req,res){
+  RanksController.powerSaver(req,res)
+})
+
 app.get('/score/history', function (req,res){
   HistoryController.getHistory(req,res)
 })

@@ -40,6 +40,7 @@ try {
           Acceleration :0,
           Freinage :0,
           Cornering :0,
+          Idling : 0,
           nbrAcceleration :0,
           nbrFreinage :0,
           nbrCornering :0
@@ -60,6 +61,7 @@ try {
                        data.nbrFreinage =  data.nbrFreinage + parseInt(res.entries[i].Freinage._),
                        data.Cornering = data.Cornering + Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Cornering._)),
                        data.nbrCornering = data.nbrCornering + parseInt(res.entries[i].Cornering._)
+                       data.Idling = data.Idling + parseInt(res.entries[i].Idling._)
                   
           }
       }
@@ -87,7 +89,7 @@ try {
       return dateTime;
     }
   
- async function insertFinalScore(carId,debut,fin,Cornering,Freinage,Acceleration,Score){
+ async function insertFinalScore(carId,debut,fin,Cornering,SCornering,Freinage,SFreinage,Acceleration,SAcceleration,Idling,Score){
       var entGen = azure.TableUtilities.entityGenerator;
       var task = {
       PartitionKey: entGen.String(carId),
@@ -95,8 +97,12 @@ try {
       debut : entGen.String(debut),
       fin : entGen.String(fin),
       Cornering : entGen.String(Cornering),
+      SCornering : entGen.String(SCornering),
       Freinage : entGen.String(Freinage),
+      SFreinage : entGen.String(SFreinage),
       Acceleration : entGen.String(Acceleration),
+      SAcceleration : entGen.String(SAcceleration),
+      Idling : entGen.String(Idling),
       score : entGen.String(JSON.stringify(Score)),
     };
     return new Promise((resolve,reject)=>{
@@ -122,7 +128,7 @@ async function calcScore(carId,debut,fin){
         SRoadSpeed = Point.RoadSpeed((result.roadspeed_3)/100);
         SAcceleration = Point.Acceleration(result.Acceleration);
         Score = Math.round((SCornering + (SFreinage * 2) + SRoadSpeed + (SAcceleration * 2)) / 7);
-        insertFinalScore(carId,debut,fin,result.nbrCornering,result.nbrFreinage,result.nbrAcceleration,Score);
+        insertFinalScore(carId,debut,fin,result.nbrCornering,SCornering,result.nbrFreinage,SFreinage,result.nbrAcceleration,SAcceleration,result.Idling,Score);
         return {Score, SCornering ,SFreinage , SRoadSpeed , SAcceleration };
     } 
 }
