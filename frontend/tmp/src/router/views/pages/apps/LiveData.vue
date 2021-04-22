@@ -4,8 +4,7 @@ import PageHeader from '@components/page-header'
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import * as L1 from 'leaflet.markercluster'
-
-
+//import markerIconPng from "leaflet/dist/images/marker-icon.png"
 
 export default {
   name: 'LiveData',
@@ -194,39 +193,33 @@ export default {
     },
     async DrawLiveCars(){
     var carIcon = L.icon({
-    iconUrl: '',
-    shadowUrl: 'leaf-shadow.png',
-
-    iconSize:     [38, 95], // size of the icon
-    shadowSize:   [50, 64], // size of the shadow
+    iconUrl:  require('../../../../assets/images/car6.png'),
+    iconSize:     [50, 50], // size of the icon
     iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-    shadowAnchor: [4, 62],  // the same for the shadow
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
-      var markers = new L1.MarkerClusterGroup();    
+      var markers = new L.MarkerClusterGroup();    
       await  Object.values(this.userCars.data).forEach((e) => {
         let info={
           adresse:e.adresse,
           speed:e.gps_speed,
           name:e.name,   
         }
-        markers.addLayer(L.marker([e.gps_latitude,e.gps_longitude])
-        .bindPopup('Adresse :'+ info.adresse+' \n Speed :'+info.speed+'\n Name :'+info.name));
+        markers.addLayer(L.marker([e.gps_latitude,e.gps_longitude], {icon: carIcon})
+        .bindPopup('Adresse :'+ info.adresse+' \n Speed :'+info.speed+'\n Name :'+info.name).openPopup());
         this.map.addLayer(markers);
       })    
    
-      markers.on('click', function (a) {
-        console.log('marker ' + a.layer);
-      });
 
-      markers.on('clusterclick', function (a) {
-        // a.layer is actually a cluster
-        map.addLayer(L.polygon(a.layer.getConvexHull()));
+    markers.on('clusterclick', function (a) {
+    
         a.layer.zoomToBounds({padding: [20, 20]});
         console.log('cluster ' + a.layer.getAllChildMarkers().length);
+      
+       });
+      markers.on('click', function (a) {
+          console.log('Marker Clicked'); 
       });
-    
-    
     }
   }
 }
