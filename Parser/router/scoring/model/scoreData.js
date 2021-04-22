@@ -2,6 +2,7 @@ const Events = require('./EventsModel');
 const RoadSpeed = require('./RoadSpeedModel');
 const Idling = require('./IdlingModel');
 const Millage = require('./millageModel');
+const RoadTime = require('./roadTime');
 
 /////////////////////////////////////////////////
 //////////////// Azure connection ///////////////
@@ -66,6 +67,7 @@ function RowKey(){
 ////////////////Inserting score data//////////////
   async function scoreData(carId,on,off){
    dt = await ScoreData(carId,on,off)
+   rt = RoadTime.Calcul(on,off)
    speed = await RoadSpeed.RoadSpeed(dt);
    events = await Events.get_events(dt,carId);
    var entGen = azure.TableUtilities.entityGenerator;

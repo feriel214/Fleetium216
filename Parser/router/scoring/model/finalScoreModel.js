@@ -17,7 +17,7 @@ try {
           .where('PartitionKey eq ?',carId);
           tableSvc.queryEntities('scoredata', query, continuationToken, (error, results)=> {
               if(!error){
-                  resolve(results)           
+                  resolve(results);           
               }else{
                   reject(error);
               }
@@ -55,11 +55,11 @@ try {
                        //roadspeed_2:  parseFloat(((parseFloat(res.entries[i].speed_2._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2)),
                        data.roadspeed_3 = data.roadspeed_3 + parseFloat(((parseFloat(res.entries[i].speed_3._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2)),
                        data.Acceleration = data.Acceleration + Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Vehicle_speed._)),
-                       data.nbrAcceleration = data.nbrAcceleration + parseFloat(res.entries[i].Vehicle_speed._),
+                       data.nbrAcceleration = data.nbrAcceleration + parseInt(res.entries[i].Vehicle_speed._),
                        data.Freinage = data.Freinage +  Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Freinage._)),
-                       data.nbrFreinage =  data.nbrFreinage + parseFloat(res.entries[i].Freinage._),
+                       data.nbrFreinage =  data.nbrFreinage + parseInt(res.entries[i].Freinage._),
                        data.Cornering = data.Cornering + Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Cornering._)),
-                       data.nbrCornering = data.nbrCornering + parseFloat(res.entries[i].Cornering._)
+                       data.nbrCornering = data.nbrCornering + parseInt(res.entries[i].Cornering._)
                   
           }
       }
@@ -104,7 +104,7 @@ try {
            if(!error){
              resolve(true)
            }else{
-               reject(false)
+             reject(false)
            }
          });
     });
@@ -123,7 +123,7 @@ async function calcScore(carId,debut,fin){
         SAcceleration = Point.Acceleration(result.Acceleration);
         Score = Math.round((SCornering + (SFreinage * 2) + SRoadSpeed + (SAcceleration * 2)) / 7);
         insertFinalScore(carId,debut,fin,result.nbrCornering,result.nbrFreinage,result.nbrAcceleration,Score);
-        return Score;
+        return {Score, SCornering ,SFreinage , SRoadSpeed , SAcceleration };
     } 
 }
 module.exports = {

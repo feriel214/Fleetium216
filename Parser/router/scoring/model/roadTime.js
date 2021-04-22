@@ -69,9 +69,9 @@ while (diff != 0 && diff > 0) {
 
 
 
-res=Calcul(	1618993800,1619002800);
+res=Calcul(	1584518355,1584540410);
 
-console.log('res',res)
+console.log('res',res.roadTime1)
 
 
 
@@ -85,4 +85,7 @@ function timestartProcess(ts_hours,ts){
   ts_hours > 2 && ts_hours <= 16  ? p1-=ts .getMinutes()*60:p1;
   ts_hours > 16 && ts_hours <= 20 ? p2-=ts .getMinutes()*60:p2;
   ts_hours > 20 && ts_hours <= 02 ? p3-=ts .getMinutes()*60:p3;
+}
+module.exports = {
+  Calcul
 }

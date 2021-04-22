@@ -10,8 +10,14 @@ let StorageController = require('./controller/StorageController');
 let GeoController = require('./controller/GeoController');
 let ScoreController = require('./scoring/controller/scoreController');
 let HistoryController = require('./scoring/controller/historyController');
+let RanksController  = require('./scoring/controller/ranksController');
+
 app.get('/login', function (req, res) {
     res.json({login:"true"});
+})
+
+app.get('/ranks/top-driver',function(req,res){
+  RanksController.topDriver(req,res)
 })
 
 app.get('/score/history', function (req,res){
