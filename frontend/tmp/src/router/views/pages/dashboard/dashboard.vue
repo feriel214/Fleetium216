@@ -307,7 +307,7 @@ export default {
 			<div class="col-xl-3">
 				<div class="card">
 					<div class="card-body pb-0">
-						<h5 class="card-title header-title">Targets</h5>
+						<h5 class="card-title header-title">Top 10 Drivers </h5>
 						<!-- Target Radialbar chart -->
 						<div class="mt-3">
 							<apexchart
@@ -342,20 +342,15 @@ export default {
 			<div class="col-xl-7">
 				<div class="card">
 					<div class="card-body">
-						<a
-							href="javascript: void(0);"
-							class="btn btn-primary btn-sm float-right"
-						>
-							<i class="uil uil-export ml-1"></i> Export
-						</a>
-						<h5 class="card-title mt-0 mb-0 header-title">Recent Orders</h5>
+					
+						<h5 class="card-title mt-0 mb-0 header-title">Top 10 Drivers Details</h5>
 						<div class="table-responsive mt-4 mb-0">
 							<b-table-simple class="table table-hover table-nowrap mb-0">
 								<b-thead class="thead-white">
 									<b-tr>
-										<b-th>#</b-th>
-										<b-th>Product</b-th>
-										<b-th>Customer</b-th>
+										<b-th>Car Name </b-th>
+										<b-th>Driver </b-th>
+										<b-th>Score</b-th>
 										<b-th>Price</b-th>
 										<b-th>Status</b-th>
 									</b-tr>
@@ -403,34 +398,7 @@ export default {
 				</div>
 			</div>
 
-			<div class="col-xl-4">
-				<div class="card">
-					<div class="card-body pt-2 pb-3">
-						<router-link
-							to="/task/list"
-							class="btn btn-primary btn-sm mt-2 float-right"
-							>View All</router-link
-						>
-						<h5 class="mb-4 header-title">Tasks</h5>
-
-						<VuePerfectScrollbar style="max-height: 390px;">
-							<div>
-								<div v-for="task in tasksData" :key="task.id">
-									<Task :id="task.id" :text="task.text" :title="task.title" />
-								</div>
-							</div>
-						</VuePerfectScrollbar>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-xl-4">
-				<Chat
-					:chat-window-height="maxHeight"
-					:messages="chatMessages"
-					title="Recent Conversation"
-				/>
-			</div>
+			
 		</div>
 	</Layout>
 </template>

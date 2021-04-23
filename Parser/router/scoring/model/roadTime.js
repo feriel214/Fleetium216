@@ -3,8 +3,9 @@ p2 = 0;
 p3 = 0;
  
 function Calcul(starttrip,endTrip){
-  let diff = endTrip - starttrip;
-  let x = starttrip;
+
+  let diff = parseInt(endTrip.substr(0,9))-parseInt(starttrip.substr(0,9));
+  let x = parseInt(starttrip.substr(0,9));
 console.log(diff / 3600);
 while (diff != 0 && diff > 0) {
   let hours = new Date(x * 1000).getHours(); 
@@ -32,8 +33,8 @@ while (diff != 0 && diff > 0) {
   }
 }
 
-    let ts= new Date(starttrip * 1000);
-    let te= new Date(endTrip * 1000)
+    let ts= new Date(parseInt(starttrip.substr(0,9)) * 1000);
+    let te= new Date(parseInt(endTrip.substr(0,9)) * 1000)
     let ts_hours =ts.getHours();
     let te_hours = te.getHours();
     console.log('******** ts_hours **********',ts_hours);
@@ -62,8 +63,8 @@ while (diff != 0 && diff > 0) {
       }
    }
    
-   console.log(new Date(starttrip*1000))
-   console.log(new Date(endTrip*1000))
+   console.log(new Date(parseInt(starttrip.substr(0,9))*1000)) 
+   console.log(new Date(parseInt(endTrip.substr(0,9))*1000))
    return { roadTime1: p1 /60, roadTime2: p2 / 60, roadTime3: p3 / 60 };
 }
 
@@ -71,7 +72,7 @@ while (diff != 0 && diff > 0) {
 
 res=Calcul(	1584518355,1584540410);
 
-console.log('res',res.roadTime1)
+console.log('res',res)
 
 
 
