@@ -141,7 +141,7 @@ async function calcScore(carId,debut,fin){
         SAcceleration = Point.Acceleration(result.Acceleration);
         Score = Math.round((SCornering + (SFreinage * 2) + SRoadSpeed + (SAcceleration * 2)) / 7);
         insertFinalScore(carId,debut,fin,result.nbrCornering,SCornering,result.nbrFreinage,SFreinage,result.nbrAcceleration,SAcceleration,result.Idling,Score);
-        return {Score, SCornering ,SFreinage , SRoadSpeed , SAcceleration , roadspeed_1, roadspeed_2 ,roadspeed_3,millage , idling};
+        return {Score, SCornering ,SFreinage , SRoadSpeed , SAcceleration , roadspeed_1, roadspeed_2 ,roadspeed_3 , millage , idling};
     } 
 }
 module.exports = {
