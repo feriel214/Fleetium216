@@ -82,6 +82,9 @@ function RowKey(){
    speed_1 : entGen.String(JSON.stringify(speed.speed_1 )),
    speed_2 : entGen.String(JSON.stringify(speed.speed_2)),
    speed_3 : entGen.String(JSON.stringify(speed.speed_3)),
+   roadtime_1 :  entGen.String(JSON.stringify(rt.roadTime1)),
+   roadtime_2 : entGen.String(JSON.stringify(rt.roadTime2)),
+   roadtime_3 : entGen.String(JSON.stringify(rt.roadTime3)),
    millage : entGen.String(JSON.stringify(await Millage.millage(dt,on,off,carId))),
    Idling : entGen.String(JSON.stringify(await Idling.Idling(speed,on,off)))
   
