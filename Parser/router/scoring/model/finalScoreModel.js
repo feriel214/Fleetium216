@@ -67,13 +67,13 @@ try {
                        data.nbrCornering = data.nbrCornering + parseInt(res.entries[i].Cornering._),
                        data.millage = data.millage + parseInt(res.entries[i].millage._),
                        data.Idling = data.Idling + parseInt(res.entries[i].Idling._)
+                       data.length = data.length + 1;
                   
           }
       }
       if(data.roadspeed_3 == 0 && data.Acceleration == 0 && data.Freinage == 0 && data.Cornering == 0){
           return null;
       }else{
-          data.length = res.entries.length;
           return data;
       }
       }
@@ -129,7 +129,6 @@ async function calcScore(carId,debut,fin){
         return null;
     }else
     {
-        console.log(result.length)
         roadspeed_1 = result.roadspeed_1 / result.length;
         roadspeed_2 = result.roadspeed_2 / result.length;
         roadspeed_3 = result.roadspeed_3 / result.length;

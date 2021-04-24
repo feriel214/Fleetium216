@@ -9,7 +9,7 @@ module.exports = {
                 res.status(200).json(result);
             }
             else{
-                res.status(404).json({error : true})
+                res.status(404).json({error : true});
             }
             
             
@@ -21,12 +21,12 @@ module.exports = {
 
 topTen : async function(req,res){
     try {
-        result = await ranksModel.topTen()
+        result = await ranksModel.topTen();
         if(result != 0){
             res.status(200).json(result);
         }
         else{
-            res.status(404).json({error : true})
+            res.status(404).json({error : true});
         }
         
         
@@ -43,7 +43,7 @@ powerSaver : async function(req,res){
             res.status(200).json(result);
         }
         else{
-            res.status(404).json({error : true})
+            res.status(404).json({error : true});
         }
         
         

@@ -69,12 +69,11 @@ try {
       }
     }
     return driver;
-
   }
 
   async function topTen(){
     var continuationToken = null;
-    var driver1 =await topDriver();
+    var driver1 = await topDriver();
       do{
           var results =  await Query(continuationToken);
           continuationToken = results.continuationToken;
