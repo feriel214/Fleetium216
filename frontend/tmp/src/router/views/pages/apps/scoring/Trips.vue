@@ -5,10 +5,19 @@ import PageHeader from '@components/page-header'
 export default {
   name: 'Trips',
   components: { Layout, PageHeader},
-  data(){},
-  mounted() {},
-  methods: {}
+  data(){
+    return {
+    
+    }
+  },
+  mounted() {
+    this.drawMap()
+  },
+  methods: {
+   
+  }
 }
+
 </script>
 
 <style>
@@ -19,7 +28,7 @@ export default {
   <Layout>
     <PageHeader   />
       <div id="trips">
-          <h1>Hello in Trips </h1>
+         
       </div>
   </Layout>
 </template>

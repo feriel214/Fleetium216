@@ -10,7 +10,7 @@ import LDraw from 'leaflet-draw'
 import * as Vue2Leaflet from 'leaflet-control-geocoder'
 import 'leaflet-control-geocoder/dist/Control.Geocoder'
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css'
-import { required ,numeric} from 'vuelidate/lib/validators'
+import { required, numeric } from 'vuelidate/lib/validators'
 export default {
   name: 'LeafletMapView',
   components: { Layout, PageHeader, Multiselect, L },
@@ -43,166 +43,171 @@ export default {
         cars: [],
         type_fence: null,
       },
-      errorForm:[],
       userCars: {
-        "data":{
-        "21038":{
-          "gps_longitude":10.187016666666667,
-          "gps_heading":254.6,
-          "adresse":"Rue El Bahja, Ariana Ville, Ariana",
-          "mainpower":"1",
-          "gps_altitude":"12",
-          "gps_latitude":36.87251666666667,
-          "name":"21038",
-          "gps_speed":0,
-          "rtc":1589369876000,
-          "ignition":0,
-          "motion":0,
-          "mdmid":"013799001768045",
-          "code_driver":false,
-          "status_scooter":false},
-          "20910":{
-            "name":"20910",
-            "gps_longitude":10.140433333333334,
-            "gps_heading":301.9,
-            "gps_speed":0,
-            "rtc":1603289917000,
-            "adresse":"Rue Ibn El Khatib, Cit\u00e9 Ibn Khaldoun, El Omrane Sup\u00e9rieur, Tunis",
-            "mainpower":"1",
-            "gps_altitude":"65",
-            "gps_latitude":36.828833333333336,
-            "ignition":1,
-            "motion":1,
-            "mdmid":"013799001702804",
-            "code_driver":false,
-            "status_scooter":false}
-            ,"20914":{
-              "gps_longitude":10.186883333333334,
-              "gps_heading":0,"adresse":"Rue El Bahja, Ariana Ville, Ariana",
-              "mainpower":"0",
-              "gps_altitude":"6",
-              "gps_latitude":36.87243333333333,
-              "name":"20914",
-              "gps_speed":0,
-              "rtc":1598026053000,
-              "ignition":0,
-              "motion":0,
-              "mdmid":"013799001767922",
-              "code_driver":"285",
-              "status_scooter":false
-              },"20902":{
-                "name":"20902",
-                "gps_longitude":10.146433333333333,
-                "gps_heading":188.5,
-                "gps_speed":0,
-                "rtc":1615347133000,
-                "adresse":"Zaghouan, Zaghouan",
-                "mainpower":"0",
-                "gps_altitude":"162",
-                "gps_latitude":36.4045,
-                "ignition":0,
-                "motion":0,
-                "mdmid":"013799001702770",
-                "code_driver":false,
-                "status_scooter":false
-                },
-                "20945":{
-                  "name":"20945",
-                  "gps_longitude":10.059366666666667,
-                  "gps_heading":41.8,
-                  "gps_speed":33.891600000000004,
-                  "rtc":1604504627000,
-                  "adresse":"RN 5 \u0637\u0648, El Hrairia, Tunis",
-                  "mainpower":"0",
-                  "gps_altitude":"104",
-                  "gps_latitude":36.77718333333333,
-                  "ignition":0,
-                  "motion":1,
-                  "mdmid":"013799001675174",
-                  "code_driver":false,
-                  "status_scooter":false
-                  },
-                  "21041":{
-                    "name":"21041",
-                    "gps_longitude":10.186916666666667,
-                    "gps_heading":175.8,
-                    "gps_speed":0,
-                    "rtc":1592843991000,
-                    "adresse":"Rue El Bahja, Ariana Ville, Ariana",
-                    "mainpower":"0",
-                    "gps_altitude":"36",
-                    "gps_latitude":36.8725,
-                    "ignition":0,
-                    "motion":1,
-                    "mdmid":"013799001702648",
-                    "code_driver":false,
-                    "status_scooter":false
-                    },
-                    "20911":{
-                      "gps_longitude":10.131683333333333,
-                      "gps_heading":0,
-                      "adresse":"Cit\u00e9 Ettahrir, El Omrane Sup\u00e9rieur, Tunis",
-                      "mainpower":"1",
-                      "gps_altitude":"61",
-                      "gps_latitude":36.829633333333334,
-                      "name":"20911",
-                      "gps_speed":0,
-                      "rtc":1601636259000,
-                      "ignition":0,
-                      "motion":0,
-                      "mdmid":"013799001674144",
-                      "code_driver":"283",
-                      "status_scooter":false
-                      },
-                      "21034":{
-                        "gps_longitude":10.186983333333334,
-                        "gps_heading":95.3,
-                        "adresse":"",
-                        "mainpower":"1",
-                        "gps_altitude":"18",
-                        "gps_latitude":36.872483333333335,
-                        "name":"21034",
-                        "gps_speed":5.556,
-                        "rtc":1598542481041,
-                        "ignition":1,
-                        "motion":1,
-                        "mdmid":"013799001674037",
-                        "code_driver":"303",
-                        "status_scooter":false
-                        },
-                        "21047":{
-                          "name":"21047",
-                          "gps_longitude":0,
-                          "gps_heading":0,
-                          "gps_speed":0,
-                          "rtc":1601377388000,
-                          "adresse":"",
-                          "mainpower":"1",
-                          "gps_altitude":"9",
-                          "gps_latitude":0,
-                          "ignition":0,
-                          "motion":0,
-                          "mdmid":"013799001705369",
-                          "code_driver":false,
-                          "status_scooter":false
-                          },
-                          "21046":{
-                            "name":"21046",
-                            "gps_longitude":10.1839,
-                            "gps_heading":101.3,
-                            "gps_speed":0,
-                            "rtc":1585984992000,
-                            "adresse":"Raoued, Ariana",
-                            "mainpower":"1",
-                            "gps_altitude":"73",
-                            "gps_latitude":36.900533333333335,
-                            "ignition":0,
-                            "motion":0,
-                            "mdmid":"013799001674136",
-                            "code_driver":false,
-                            "status_scooter":false}
-                            }
-              },
+        data: {
+          21038: {
+            gps_longitude: 10.187016666666667,
+            gps_heading: 254.6,
+            adresse: 'Rue El Bahja, Ariana Ville, Ariana',
+            mainpower: '1',
+            gps_altitude: '12',
+            gps_latitude: 36.87251666666667,
+            name: '21038',
+            gps_speed: 0,
+            rtc: 1589369876000,
+            ignition: 0,
+            motion: 0,
+            mdmid: '013799001768045',
+            code_driver: false,
+            status_scooter: false,
+          },
+          20910: {
+            name: '20910',
+            gps_longitude: 10.140433333333334,
+            gps_heading: 301.9,
+            gps_speed: 0,
+            rtc: 1603289917000,
+            adresse:
+              'Rue Ibn El Khatib, Cit\u00e9 Ibn Khaldoun, El Omrane Sup\u00e9rieur, Tunis',
+            mainpower: '1',
+            gps_altitude: '65',
+            gps_latitude: 36.828833333333336,
+            ignition: 1,
+            motion: 1,
+            mdmid: '013799001702804',
+            code_driver: false,
+            status_scooter: false,
+          },
+          20914: {
+            gps_longitude: 10.186883333333334,
+            gps_heading: 0,
+            adresse: 'Rue El Bahja, Ariana Ville, Ariana',
+            mainpower: '0',
+            gps_altitude: '6',
+            gps_latitude: 36.87243333333333,
+            name: '20914',
+            gps_speed: 0,
+            rtc: 1598026053000,
+            ignition: 0,
+            motion: 0,
+            mdmid: '013799001767922',
+            code_driver: '285',
+            status_scooter: false,
+          },
+          20902: {
+            name: '20902',
+            gps_longitude: 10.146433333333333,
+            gps_heading: 188.5,
+            gps_speed: 0,
+            rtc: 1615347133000,
+            adresse: 'Zaghouan, Zaghouan',
+            mainpower: '0',
+            gps_altitude: '162',
+            gps_latitude: 36.4045,
+            ignition: 0,
+            motion: 0,
+            mdmid: '013799001702770',
+            code_driver: false,
+            status_scooter: false,
+          },
+          20945: {
+            name: '20945',
+            gps_longitude: 10.059366666666667,
+            gps_heading: 41.8,
+            gps_speed: 33.891600000000004,
+            rtc: 1604504627000,
+            adresse: 'RN 5 \u0637\u0648, El Hrairia, Tunis',
+            mainpower: '0',
+            gps_altitude: '104',
+            gps_latitude: 36.77718333333333,
+            ignition: 0,
+            motion: 1,
+            mdmid: '013799001675174',
+            code_driver: false,
+            status_scooter: false,
+          },
+          21041: {
+            name: '21041',
+            gps_longitude: 10.186916666666667,
+            gps_heading: 175.8,
+            gps_speed: 0,
+            rtc: 1592843991000,
+            adresse: 'Rue El Bahja, Ariana Ville, Ariana',
+            mainpower: '0',
+            gps_altitude: '36',
+            gps_latitude: 36.8725,
+            ignition: 0,
+            motion: 1,
+            mdmid: '013799001702648',
+            code_driver: false,
+            status_scooter: false,
+          },
+          20911: {
+            gps_longitude: 10.131683333333333,
+            gps_heading: 0,
+            adresse: 'Cit\u00e9 Ettahrir, El Omrane Sup\u00e9rieur, Tunis',
+            mainpower: '1',
+            gps_altitude: '61',
+            gps_latitude: 36.829633333333334,
+            name: '20911',
+            gps_speed: 0,
+            rtc: 1601636259000,
+            ignition: 0,
+            motion: 0,
+            mdmid: '013799001674144',
+            code_driver: '283',
+            status_scooter: false,
+          },
+          21034: {
+            gps_longitude: 10.186983333333334,
+            gps_heading: 95.3,
+            adresse: '',
+            mainpower: '1',
+            gps_altitude: '18',
+            gps_latitude: 36.872483333333335,
+            name: '21034',
+            gps_speed: 5.556,
+            rtc: 1598542481041,
+            ignition: 1,
+            motion: 1,
+            mdmid: '013799001674037',
+            code_driver: '303',
+            status_scooter: false,
+          },
+          21047: {
+            name: '21047',
+            gps_longitude: 0,
+            gps_heading: 0,
+            gps_speed: 0,
+            rtc: 1601377388000,
+            adresse: '',
+            mainpower: '1',
+            gps_altitude: '9',
+            gps_latitude: 0,
+            ignition: 0,
+            motion: 0,
+            mdmid: '013799001705369',
+            code_driver: false,
+            status_scooter: false,
+          },
+          21046: {
+            name: '21046',
+            gps_longitude: 10.1839,
+            gps_heading: 101.3,
+            gps_speed: 0,
+            rtc: 1585984992000,
+            adresse: 'Raoued, Ariana',
+            mainpower: '1',
+            gps_altitude: '73',
+            gps_latitude: 36.900533333333335,
+            ignition: 0,
+            motion: 0,
+            mdmid: '013799001674136',
+            code_driver: false,
+            status_scooter: false,
+          },
+        },
+      },
       preload: {
         enableTime: true,
         noCalendar: true,
@@ -210,7 +215,10 @@ export default {
         defaultDate: '00:00',
         time_24hr: true,
       },
-      option: [{ value: true, text: 'IN' }, { value: false, text: ' OUT' }],
+      option: [
+        { value: true, text: 'IN' },
+        { value: false, text: ' OUT' },
+      ],
       options: [],
       idredis: null,
       value: [],
@@ -246,7 +254,7 @@ export default {
       filterOn: [],
       sortBy: 'age',
       sortDesc: false,
-      geocoder:[],
+      geocoder: [],
       fields: [
         { key: 'car', label: 'car', sortable: true, editable: true },
         { key: 'name', label: 'Name', sortable: true, editable: true },
@@ -268,34 +276,33 @@ export default {
       ],
     }
   },
-  validations:{
+  validations: {
     posts: {
-          name: {required},
-          description: {required},
-          startTime: {required},
-          endTime: {required},
-          range: {required , numeric},
-          cars: {required},
-          type_fence: {required},
-        }
+      name: { required },
+      description: { required },
+      startTime: { required },
+      endTime: { required },
+      range: { required, numeric },
+      cars: { required },
+      type_fence: { required },
+    },
   },
   async mounted() {
-    await this.setupLeafletMap() 
+    await this.setupLeafletMap()
     // Set the initial number of items
     this.totalRows = this.items.length
     //await this.getUserCars()
     await this.getGeo()
     Object.keys(this.userCars.data).forEach((e) => this.options.push(`${e}`))
-      
   },
-   computed: {
+  computed: {
     /**
      * Total no. of records
      */
     rows() {
       return this.tableData.length
     },
-   
+
     editableFields() {
       return this.fields.filter((field) => {
         return field.editable === true
@@ -312,23 +319,23 @@ export default {
         maxZoom: 20,
         attribution:
           '&copy; Openstreetmap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(this.lmap)       
-      this.geocoderInit("add")
+      }).addTo(this.lmap)
+      this.geocoderInit('add')
       // Initialise the FeatureGroup to store editable layers
       this.editableLayers = new L.FeatureGroup()
       this.lmap.addLayer(this.editableLayers)
       this.DrawControl('Add')
     },
     async geocoderInit(action) {
-      if(action == "add"){
+      if (action == 'add') {
         this.geocoder = L.Control.geocoder({
           defaultMarkGeocode: false,
-        }).addTo(this.lmap);
+        }).addTo(this.lmap)
         this.geocoder.on('markgeocode', (e) => {
           console.log('e', e)
           this.GeoCodec(e)
         })
-      }else{
+      } else {
         this.geocoder.remove()
       }
     },
@@ -366,8 +373,8 @@ export default {
             remove: true,
           },
         }
-      } else if(type == 'View'){
-          var drawPluginOptions = {
+      } else if (type == 'View') {
+        var drawPluginOptions = {
           position: 'topright',
           draw: {
             polyline: false,
@@ -377,9 +384,9 @@ export default {
             rectangle: false,
             marker: false,
           },
-          edit: false
-          }
-        }else {
+          edit: false,
+        }
+      } else {
         var drawPluginOptions = {
           position: 'topright',
           draw: {
@@ -420,7 +427,7 @@ export default {
           console.log('geojson', geo)
           this.geojson = geo
           this.layer_type = 'circle'
-          this.circle = e.layer;
+          this.circle = e.layer
         }
 
         if (e.layerType === 'rectangle' || e.layerType === 'polygon') {
@@ -429,13 +436,13 @@ export default {
           } else {
             this.layer_type = 'polygon'
           }
-      
+
           let geo = {
             type: e.layerType,
-            coordinates: e.layer._latlngs[0].map(function(obj) {
+            coordinates: e.layer._latlngs[0].map(function (obj) {
               return Object.keys(obj)
                 .sort()
-                .map(function(key) {
+                .map(function (key) {
                   return obj[key]
                 })
             }),
@@ -443,9 +450,9 @@ export default {
           console.log('geojson', geo)
           this.geojson = geo
           if (e.layerType === 'rectangle') {
-            this.rectangle = e.layer;
-          }else{
-            this.polygon = e.layer;
+            this.rectangle = e.layer
+          } else {
+            this.polygon = e.layer
           }
         }
         if (e.layerType === 'marker') {
@@ -458,8 +465,7 @@ export default {
       this.lmap.on('draw:edited', (e) => {
         this.CreateElementLayer = true
         this.editShape = this.e
-       
-        
+
         console.log('this.layer_type', this.layer_type)
         //circle
         if (this.layer_type == 'circle') {
@@ -482,11 +488,8 @@ export default {
               e.layers._layers[Object.keys(e.layers._layers)]._latlng.lng,
               e.layers._layers[Object.keys(e.layers._layers)]._mRadius,
             ],
-             
           }
-         
         } else {
-
           //polygon || Rectangle
           let latlngs = []
           console.log(e.layers._layers[Object.keys(e.layers._layers)])
@@ -511,29 +514,27 @@ export default {
             type: this.layer_type,
             coordinates: latlngs,
           }
-         
+
           console.log('this.newgeo', this.newgeo)
         }
       })
       this.lmap.on('draw:deleted', (e) => {
         this.showForm = false
         this.CreateElementLayer = false
-        this.geocoderInit("add")
+        this.geocoderInit('add')
       })
-      //To check with nourredine why the executed 2 times 
-      this.lmap.on('draw:toolbaropened',(e)=>{
-          //this.$toast.warning(`You should save after editing fence or editing will be canceld`)
+      //To check with nourredine why the executed 2 times
+      this.lmap.on('draw:toolbaropened', (e) => {
+        //this.$toast.warning(`You should save after editing fence or editing will be canceld`)
       })
-      this.lmap.on('draw:editstart',(e)=>{
-       // this.$toast.warning(`You should save after editing fence or editing will be canceld`)
+      this.lmap.on('draw:editstart', (e) => {
+        // this.$toast.warning(`You should save after editing fence or editing will be canceld`)
       })
     },
     async GeoCodec(e) {
       axios
         .get(
-          `https://nominatim.openstreetmap.org/details?place_id=${
-            e.geocode.properties.place_id
-          }&polygon_geojson=1&format=json`
+          `https://nominatim.openstreetmap.org/details?place_id=${e.geocode.properties.place_id}&polygon_geojson=1&format=json`
         )
         .then(async (response) => {
           console.log(response.data)
@@ -557,9 +558,9 @@ export default {
         )
         .then((response) => {
           console.log('********************** live data api ', response.data)
-          this.userCars.data=response.data;
+          this.userCars.data = response.data
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error)
         })
     },
@@ -569,13 +570,13 @@ export default {
     InsertStartTime(Params) {
       this.posts.startTime = Params['__ob__'].value[0].getTime()
     },
-    ValidationsStatus(validation){
-      console.log('validation : ',validation )
-       return typeof validation != "undefined" ? validation.$error :false;
+    ValidationsStatus(validation) {
+      console.log('validation : ', validation)
+      return typeof validation != 'undefined' ? validation.$error : false
     },
     PostGeofence() {
-       this.$v.$touch();
-       if(this.$v.$pending || this.$v.$error) return;
+      this.$v.$touch()
+      if (this.$v.$pending || this.$v.$error) return
       let data = {
         geojson: this.geojson,
         name: this.posts.name,
@@ -584,11 +585,11 @@ export default {
         time_end: this.posts.endTime,
         rang: this.posts.range,
         cars: this.posts.cars,
-        type_fence : this.posts.type_fence,
+        type_fence: this.posts.type_fence,
       }
-      
+
       console.log('data :', data)
-        console.log('typeof(data.time_start) :',typeof(data.time_start))
+      console.log('typeof(data.time_start) :', typeof data.time_start)
       //Test and put the data of fence
       axios
         .post('http://localhost:3000/api/geofence', data)
@@ -598,16 +599,15 @@ export default {
           this.showForm = false
           this.getGeo()
           this.DrawControl('Add')
-          this.clearMap(1000);
+          this.clearMap(1000)
           console.log('res', res)
-          this.geocoderInit("add")
-            this.refershForm();
+          this.geocoderInit('add')
+          this.refershForm()
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log('error ', error)
         })
       return false
-      
     },
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
@@ -622,16 +622,16 @@ export default {
           this.tableData = response.data
           this.totalRows = this.tableData.length
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error)
         })
     },
-    Edit(id, item, pkey) {   
-     if(this.showForm){
-         this.showForm=false;
-       this.clearMap(1000)
-     }
-        this.geocoderInit()  
+    Edit(id, item, pkey) {
+      if (this.showForm) {
+        this.showForm = false
+        this.clearMap(1000)
+      }
+      this.geocoderInit()
       this.Show(id, true)
       this.edit = true
       this.idredis = id
@@ -643,19 +643,18 @@ export default {
       this.posts.description = item.description
       this.posts.startTime = item.time_start
       this.posts.endTime = item.time_end
-      this.posts.type_fence=item.type_fence;
+      this.posts.type_fence = item.type_fence
       axios
         .get(`http://localhost:3000/get/cars/fence/${id}`)
         .then((res) => {
           console.log('res: ', res)
-          this.posts.cars = res.data.map(function(obj) {
+          this.posts.cars = res.data.map(function (obj) {
             return obj.car
           })
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error)
         })
-     
     },
     Delete(id) {
       this.$swal
@@ -676,22 +675,22 @@ export default {
                 this.getGeo()
                 console.log(res)
               })
-              .catch(function(error) {
+              .catch(function (error) {
                 console.log(error)
               })
             this.$swal.fire('Deleted!', 'Car has been deleted.', 'success')
           }
         })
     },
-    async Show(id, edit) { 
-      // This function will be executed in two case 
-      // 1-if we wanna show the fence ||   2-if we wanna edit the fence  
-      this.geocoder.remove();
+    async Show(id, edit) {
+      // This function will be executed in two case
+      // 1-if we wanna show the fence ||   2-if we wanna edit the fence
+      this.geocoder.remove()
       if (edit) {
         this.DrawControl('Edit')
       } else {
-        this.showForm=false;
-        this.DrawControl('View')     
+        this.showForm = false
+        this.DrawControl('View')
       }
       axios
         .get(`http://localhost:3000/fences/${id}`)
@@ -705,32 +704,28 @@ export default {
             this.clearMap()
             this.DrawGeocoder(coordinates)
             this.DrawControl('View')
-            if (!edit) this.refreshMap();
+            if (!edit) this.refreshMap()
           }
           if (type[0] == 'rectangle' || type[0] == 'polygon') {
-         
             let val = Object.values(obj)
-            var coordinates = JSON.parse(val[0]) 
+            var coordinates = JSON.parse(val[0])
             console.log('val ', val)
             console.log('arr ', coordinates)
             //polygon
             if (type[0] == 'polygon') {
               this.clearMap()
               this.updatefence = true
-              this.polygon = L.polygon(coordinates,{
+              this.polygon = L.polygon(coordinates, {
                 color: '#00f',
                 fillOpacity: 0.3,
                 fillColor: '#c2bfed',
               }).addTo(this.lmap)
               console.log('polygon bounds ', this.polygon.getBounds())
               this.lmap.fitBounds(this.polygon.getBounds())
-              this.$toast.info(
-                `Go to the map to see or edit position !`
-              )
+              this.$toast.info(`Go to the map to see or edit position !`)
               this.editableLayers.addLayer(this.polygon)
-              this.layer_type = 'polygon'   
-              if (!edit) this.refreshMap();
-              
+              this.layer_type = 'polygon'
+              if (!edit) this.refreshMap()
             }
             //Rectangle
             if (type[0] == 'rectangle') {
@@ -743,47 +738,42 @@ export default {
               }).addTo(this.lmap)
               // zoom the map to the rectangle bounds
               this.lmap.fitBounds(this.rectangle.getBounds())
-              this.$toast.info(
-                `Go to the map to see or edit position !`
-              )
+              this.$toast.info(`Go to the map to see or edit position !`)
               this.editableLayers.addLayer(this.rectangle)
               this.layer_type = 'rectangle'
-              if (!edit) this.refreshMap();
-            
+              if (!edit) this.refreshMap()
             }
           }
           //Circle
           if (type == 'circle') {
-             this.clearMap()
+            this.clearMap()
             this.updatefence = true
             let val = Object.values(obj)
             console.log('circle obj', val)
-            var arr = JSON.parse(val[0]) 
+            var arr = JSON.parse(val[0])
             let radius = parseFloat(arr[2])
             this.circle = L.circle(
               [parseFloat(arr[0]), parseFloat(arr[1])],
               radius
             ).addTo(this.lmap)
             this.lmap.fitBounds(this.circle.getBounds())
-              this.$toast.info(
-                `Go to the map to see or edit position !`
-              )
+            this.$toast.info(`Go to the map to see or edit position !`)
             this.editableLayers.addLayer(this.circle)
             this.layer_type = 'circle'
-              if (!edit) this.refreshMap();      
-          }   
-          document.body.scrollTop = 0 
+            if (!edit) this.refreshMap()
+          }
+          document.body.scrollTop = 0
           document.documentElement.scrollTop = 0
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error)
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error)
         })
     },
-    //To Optimise 
-  /*   EditForm(item) {    
+    //To Optimise
+    /*   EditForm(item) {    
       console.log('item : ', item)
       console.log('posts : ', this.posts)
       let id = this.idredis
@@ -846,60 +836,57 @@ export default {
       }
        this.geocoderInit("add")
     }, */
-    EditForm(item){
-    console.log('item : ', item)
-    console.log('posts : ', this.posts)
-    let id = this.idredis
-    console.log('this.newgeo',this.newgeo)
-    let data ={}
-    let param ='';
-    if (!Object.entries(this.newgeo).length === 0) {
-     
-       //update fence only form
-      data = {
-        name: item.name,
-        description: item.description,
-        time_start: item.startTime,
-        time_end: item.endTime,
-        rang: item.range,
-        cars: item.cars,
-        type_fence : item.type_fence
+    EditForm(item) {
+      console.log('item : ', item)
+      console.log('posts : ', this.posts)
+      let id = this.idredis
+      console.log('this.newgeo', this.newgeo)
+      let data = {}
+      let param = ''
+      if (!Object.entries(this.newgeo).length === 0) {
+        //update fence only form
+        data = {
+          name: item.name,
+          description: item.description,
+          time_start: item.startTime,
+          time_end: item.endTime,
+          rang: item.range,
+          cars: item.cars,
+          type_fence: item.type_fence,
+        }
+        param = 'f'
+      } else {
+        //update fence and form
+        data = {
+          geojson: [this.newgeo],
+          name: item.name,
+          description: item.description,
+          time_start: item.startTime,
+          time_end: item.endTime,
+          rang: item.range,
+          cars: item.cars,
+          type_fence: item.type_fence,
+        }
+        param = 'ff'
       }
-      param ='f';
-    }else {
-       //update fence and form
-       data = {
-        geojson: [this.newgeo],
-        name: item.name,
-        description: item.description,
-        time_start: item.startTime,
-        time_end: item.endTime,
-        rang: item.range,
-        cars: item.cars,
-        type_fence : item.type_fence
-      }
-      param='ff';
-    
-    }
-        axios.put(`http://localhost:3000/fences/edit/${id}/${param}`,data)
-        .then((res)=>{
+      axios
+        .put(`http://localhost:3000/fences/edit/${id}/${param}`, data)
+        .then((res) => {
           console.log('res : ', res)
-              this.showForm = false
-              this.$toast.success(`Geofence Updated Successfully ! `)
-              this.getGeo()
-              this.DrawControl('ADD')
-              this.clearMap(1000);
-              this.refreshMap();
-              this.geocoderInit("add")
-              this.refershForm();
-
-        }).catch(function(error){
+          this.showForm = false
+          this.$toast.success(`Geofence Updated Successfully ! `)
+          this.getGeo()
+          this.DrawControl('ADD')
+          this.clearMap(1000)
+          this.refreshMap()
+          this.geocoderInit('add')
+          this.refershForm()
+        })
+        .catch(function (error) {
           console.log(error)
         })
-
-}
-    ,
-    Cancel() { 
+    },
+    Cancel() {
       this.$swal
         .fire({
           title: 'Are you sure to undo ?',
@@ -913,10 +900,10 @@ export default {
         .then((result) => {
           if (result.isConfirmed) {
             this.showForm = false
-            this.clearMap();
-            this.geocoderInit("add")
-            this.DrawControl('Add')  
-             this.refershForm();
+            this.clearMap()
+            this.geocoderInit('add')
+            this.DrawControl('Add')
+            this.refershForm()
             this.$swal.fire('Canceled!', 'Action has been canceled.', 'success')
           }
         })
@@ -928,15 +915,13 @@ export default {
         for (var i in coordinates[j]) {
           coordinate[i] = [coordinates[j][i][1], coordinates[j][i][0]]
         }
-         this.polygon = L.polygon(coordinate, {
+        this.polygon = L.polygon(coordinate, {
           color: '#00f',
           fillOpacity: 0.2,
           fillColor: '#080afe',
         }).addTo(this.lmap)
         this.lmap.fitBounds(this.polygon.getBounds())
-        this.$toast.info(
-                `Go to the map to see or edit position !`
-              )
+        this.$toast.info(`Go to the map to see or edit position !`)
       } else {
         //for (var j in coordinates) {
         var j = 0
@@ -949,60 +934,35 @@ export default {
           fillOpacity: 0.2,
           fillColor: '#BFBFBF',
         }).addTo(this.lmap)
-        console.log('polygon bounds ',this.polygon.getBounds())
+        console.log('polygon bounds ', this.polygon.getBounds())
         this.lmap.fitBounds(this.polygon.getBounds())
-          this.$toast.info(
-                `Go to the map to see or edit position !`
-              )
+        this.$toast.info(`Go to the map to see or edit position !`)
         //}
       }
     },
-    async clearMap(){
-      console.log(this.circle,this.polygon,this.rectangle);
+    async clearMap() {
+      console.log(this.circle, this.polygon, this.rectangle)
       if (this.circle) this.lmap.removeLayer(this.circle)
       if (this.polygon) this.lmap.removeLayer(this.polygon)
       if (this.rectangle) this.lmap.removeLayer(this.rectangle)
-      this.geocoder.remove();
+      this.geocoder.remove()
     },
-    refreshMap(){
-      setTimeout(()=>{ 
-        this.clearMap() 
-        this.geocoderInit("add")
+    refreshMap() {
+      setTimeout(() => {
+        this.clearMap()
+        this.geocoderInit('add')
         this.DrawControl('Add')
-        },10000);
+      }, 10000)
     },
-    checkForm(form){
-      if (!form.name ){
-        errorForm.push('Name is Required');
-      }
-      if(! form.cars){
-        errorForm.push('Cars is Required');
-      }
-       if(!form.description){
-        errorForm.push('Description is Required');
-      }
-       if(!form.startTime){
-        errorForm.push('Time Start is Required');
-      }
-       if(!form.endTime){
-        errorForm.push('Time End is Required');
-      }
-       if(! form.range){
-        errorForm.push('Range is Required');
-      }
-       if(!form.type_fence){
-        errorForm.push('Fence Type is Required');
-      }
+    refershForm() {
+      this.posts.name = ''
+      this.posts.description = ''
+      this.posts.startTime = '00:00'
+      this.posts.endTime = '00:00'
+      this.posts.range = ''
+      this.posts.cars = []
+      this.posts.type_fence = 'IN'
     },
-    refershForm(){
-      this.posts.name='';
-      this.posts.description='';
-      this.posts.startTime='00:00';
-      this.posts.endTime='00:00';
-      this.posts.range='';
-      this.posts.cars=[];
-      this.posts.type_fence='IN'
-    }
   },
 }
 </script>
@@ -1067,9 +1027,9 @@ export default {
   display: none;
 }
 .btn:not(:disabled):not(.disabled) {
-    cursor: pointer;
-    background-color: white;
-    border: none;
+  cursor: pointer;
+  background-color: white;
+  border: none;
 }
 </style>
 
@@ -1081,9 +1041,7 @@ export default {
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <div id="l-container"
-            >
-            </div>
+            <div id="l-container"> </div>
             <form v-on:submit.prevent="PostGeofence" v-show="showForm">
               <div class="row">
                 <div class="col-lg-4">
@@ -1095,24 +1053,35 @@ export default {
                           type="text"
                           placeholder="Name"
                           :maxlength="25"
-                          class="form-control "
-                          :class="{'is-invalid': ValidationsStatus($v.posts.name)}"
+                          class="form-control"
+                          :class="{
+                            'is-invalid': ValidationsStatus($v.posts.name),
+                          }"
                         />
-                          <div class="invalid-feedback" v-if="!$v.posts.name.required">
+                        <div
+                          class="invalid-feedback"
+                          v-if="!$v.posts.name.required"
+                        >
                           The Name field is required
                         </div>
                       </div>
                       <div class="form-group mb-3">
                         <textarea
                           v-model.trim="$v.posts.description.$model"
-                          class="form-control "
+                          class="form-control"
                           :maxlength="225"
                           rows="3"
                           placeholder="description"
-                           :class="{'is-invalid': ValidationsStatus($v.posts.description)}"
-                         
+                          :class="{
+                            'is-invalid': ValidationsStatus(
+                              $v.posts.description
+                            ),
+                          }"
                         ></textarea>
-                          <div class="invalid-feedback" v-if="!$v.posts.description.required">
+                        <div
+                          class="invalid-feedback"
+                          v-if="!$v.posts.description.required"
+                        >
                           The Descreption field is required
                         </div>
                       </div>
@@ -1127,25 +1096,35 @@ export default {
                         <flat-pickr
                           v-model="$v.posts.startTime.$model"
                           :config="preload"
-                          class="form-control "
+                          class="form-control"
                           @on-change="InsertStartTime"
                           placeholder="Time start"
-                           :class="{'is-invalid':  ValidationsStatus($v.posts.startTime)}"
+                          :class="{
+                            'is-invalid': ValidationsStatus($v.posts.startTime),
+                          }"
                         ></flat-pickr>
-                         <div class="invalid-feedback is-invalid" v-if="!$v.posts.startTime.required">
-                          Time Start  is required
+                        <div
+                          class="invalid-feedback is-invalid"
+                          v-if="!$v.posts.startTime.required"
+                        >
+                          Time Start is required
                         </div>
                       </div>
                       <div class="form-group mb-3">
                         <flat-pickr
                           v-model="$v.posts.endTime.$model"
                           :config="preload"
-                          class="form-control "
+                          class="form-control"
                           placeholder="Time End"
                           @on-change="InsertEndTime"
-                           :class="{'is-invalid': ValidationsStatus($v.posts.endTime)}"
+                          :class="{
+                            'is-invalid': ValidationsStatus($v.posts.endTime),
+                          }"
                         ></flat-pickr>
-                        <div class="invalid-feedback" v-if="!$v.posts.endTime.required">
+                        <div
+                          class="invalid-feedback"
+                          v-if="!$v.posts.endTime.required"
+                        >
                           Time End is required
                         </div>
                       </div>
@@ -1160,11 +1139,16 @@ export default {
                           v-model.number="$v.posts.range.$model"
                           type="number"
                           placeholder="Range Meter"
-                          class="form-control "
-                           :class="{'is-invalid': ValidationsStatus($v.posts.range)}"
+                          class="form-control"
+                          :class="{
+                            'is-invalid': ValidationsStatus($v.posts.range),
+                          }"
                         />
-                        <div class="invalid-feedback" v-if="!$v.posts.range.required">
-                         Range Value is required
+                        <div
+                          class="invalid-feedback"
+                          v-if="!$v.posts.range.required"
+                        >
+                          Range Value is required
                         </div>
                       </div>
                       <div class="form-group mt-3 mt-sm-0">
@@ -1172,10 +1156,15 @@ export default {
                           v-model="$v.posts.cars.$model"
                           :options="options"
                           :multiple="true"
-                          :class="{'is-invalid': ValidationsStatus($v.posts.cars)}"
+                          :class="{
+                            'is-invalid': ValidationsStatus($v.posts.cars),
+                          }"
                         ></multiselect>
-                        <div class="invalid-feedback" v-if="!$v.posts.cars.required">
-                         Car is required
+                        <div
+                          class="invalid-feedback"
+                          v-if="!$v.posts.cars.required"
+                        >
+                          Car is required
                         </div>
                       </div>
                     </div>
@@ -1191,11 +1180,16 @@ export default {
                         class="mb-2"
                         v-model="$v.posts.type_fence.$model"
                         :options="option"
-                         :class="{'is-invalid':ValidationsStatus($v.posts.type_fence)}"
+                        :class="{
+                          'is-invalid': ValidationsStatus($v.posts.type_fence),
+                        }"
                       ></b-form-select>
-                      <div class="invalid-feedback" v-if="!$v.posts.type_fence.required">
-                          Type Fence is required
-                        </div>
+                      <div
+                        class="invalid-feedback"
+                        v-if="!$v.posts.type_fence.required"
+                      >
+                        Type Fence is required
+                      </div>
                     </div>
                   </div>
                 </div>

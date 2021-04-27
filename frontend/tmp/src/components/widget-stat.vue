@@ -33,13 +33,13 @@ export default {
             class="text-muted text-uppercase font-size-12 font-weight-bold"
             >{{ title }}</span
           >
-          <h2 class="mb-0">{{ value }}</h2>
+          <h6 class="mb-0">{{ value }}</h6>
         </div>
         <div class="align-self-center">
           <span>
             <feather
               :type="`${icon}`"
-              :class="`icon-lg align-middle icon-dual-${color}`"
+              :style="`color:${color}`"
             ></feather>
           </span>
         </div>
@@ -47,3 +47,9 @@ export default {
     </div>
   </div>
 </template>
+<style scoped>
+.p-3 {
+    padding: 1rem !important;
+    height: 130px;
+}
+</style>

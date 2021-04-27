@@ -49,7 +49,7 @@ Vue.use(VueSweetalert2);
 // Uncomment this if you are having api served through other url or do not want to use fake backend
 // Vue.prototype.$http = require('axios')
 // Vue.prototype.$http.defaults.baseURL  = 'http://mock-api.coderthemes.com/'
-
+;
 const app = new Vue({
   router,
   store,

@@ -3,10 +3,10 @@ p2 = 0;
 p3 = 0;
  
 function Calcul(starttrip,endTrip){
-
-  let diff = parseInt(endTrip.substr(0,9))-parseInt(starttrip.substr(0,9));
-  let x = parseInt(starttrip.substr(0,9));
-console.log(diff / 3600);
+  let diff = parseInt(String(endTrip).substr(0,9))-parseInt(String(starttrip).substr(0,9));
+  
+  let x = parseInt(String(starttrip).substr(0,9));
+console.log('diff en hours ',diff / 3600);
 while (diff != 0 && diff > 0) {
   let hours = new Date(x * 1000).getHours(); 
   if (hours > 2 && hours <= 16) {
@@ -33,8 +33,8 @@ while (diff != 0 && diff > 0) {
   }
 }
 
-    let ts= new Date(parseInt(starttrip.substr(0,9)) * 1000);
-    let te= new Date(parseInt(endTrip.substr(0,9)) * 1000)
+    let ts= new Date(parseInt(String(starttrip).substr(0,9)) * 1000);
+    let te= new Date(parseInt(String(endTrip).substr(0,9)) * 1000)
     let ts_hours =ts.getHours();
     let te_hours = te.getHours();
     console.log('******** ts_hours **********',ts_hours);
@@ -63,16 +63,14 @@ while (diff != 0 && diff > 0) {
       }
    }
    
-   console.log(new Date(parseInt(starttrip.substr(0,9))*1000)) 
-   console.log(new Date(parseInt(endTrip.substr(0,9))*1000))
+   console.log(new Date(parseInt(String(starttrip).substr(0,9))*1000)) 
+   console.log(new Date(parseInt(String(endTrip).substr(0,9))*1000))
    return { roadTime1: p1 /60, roadTime2: p2 / 60, roadTime3: p3 / 60 };
 }
 
 
 
-res=Calcul(	1584518355,1584540410);
 
-console.log('res',res)
 
 
 

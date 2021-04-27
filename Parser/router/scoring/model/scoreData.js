@@ -67,6 +67,8 @@ function RowKey(){
 ////////////////Inserting score data//////////////
   async function scoreData(carId,on,off){
    dt = await ScoreData(carId,on,off)
+   console.log('++++++++++++++++++++++++++',typeof(on))
+
    rt = RoadTime.Calcul(on,off)
    speed = await RoadSpeed.RoadSpeed(dt);
    events = await Events.get_events(dt,carId);

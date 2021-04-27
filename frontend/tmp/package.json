@@ -48,6 +48,7 @@
     "leaflet-control-geocoder": "^2.1.0",
     "leaflet-draw": "^1.0.4",
     "leaflet-geosearch": "^3.2.1",
+    "leaflet-rotatedmarker": "^0.2.0",
     "leaflet.featuregroup.subgroup": "^1.0.2",
     "leaflet.markercluster": "^1.5.0",
     "loader": "^2.1.1",
