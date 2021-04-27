@@ -31,7 +31,9 @@ app.get('/ranks/power-saver',function(req,res){
 app.get('/score/history', function (req,res){
   HistoryController.getHistory(req,res)
 })
-
+app.get('/score/all', function (req,res){
+  ScoreController.getAllScores(req,res)
+})
 app.post('/score', function (req,res){
     ScoreController.getScore(req,res)
 })
