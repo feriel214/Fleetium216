@@ -1,11 +1,10 @@
-const finaScoreModel = require('../model/finalScoreModel');
-const getAllScores = require('../model/scoresModel');
+const ScoreModel = require('../model/scoreModel');
 const { json } = require('body-parser');
 
 module.exports = {
     getScore : async function(req,res){
         try {
-            result = await finaScoreModel.calcScore(req.body.carId,req.body.debut,req.body.fin);
+            result = await ScoreModel.calcScore(req.body.carId,req.body.debut,req.body.fin);
             if(result != null){
                 res.status(200).json(result);
             }else{
@@ -20,7 +19,7 @@ module.exports = {
     },
     getAllScores : async function(req,res){
         try {
-            result = await getAllScores.getScores();
+            result = await ScoreModel.getScores();
             if(result != null){
                 res.status(200).json(result);
             }else{

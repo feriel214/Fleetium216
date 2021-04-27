@@ -9,6 +9,38 @@ try {
   } catch (error) {
     console.log("can not connect to azure table storage");
   }
+
+  async function scoresQuery(continuationToken){
+    return new Promise((resolve ,reject)=>{
+        query = new azure.TableQuery()
+        .select(['*'])
+        tableSvc.queryEntities('scorefinal', query, continuationToken, (error, results)=> {
+            if(!error){
+                resolve(results)           
+            }else{
+                reject(error);
+            }
+          });
+    
+    });
+    } 
+    async function getScores(){
+        let driver = []
+        var continuationToken = null;
+        do{
+            var results =  await scoresQuery( continuationToken);
+            continuationToken = results.continuationToken;
+            
+        }
+        while(continuationToken!=null);
+        
+        for (i = results.entries.length -1 ; i >= 0 ; i--){
+            driver.push(results.entries[i]);
+          }
+          return driver  
+          
+          
+    }
   
   async function calcQuery(carId,continuationToken){
       return new Promise((resolve ,reject)=>{
@@ -144,5 +176,6 @@ async function calcScore(carId,debut,fin){
     } 
 }
 module.exports = {
-    calcScore
+    calcScore,
+    getScores
 }
