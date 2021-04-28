@@ -2,8 +2,7 @@
     var speed = {
           speed_1 : 0,
           speed_2 : 0,
-          speed_3 : 0,
-          speed_0 : 0
+          speed_3 : 0
       };
       for (i = 0; i < dt.entries.length ; i++)
             {
