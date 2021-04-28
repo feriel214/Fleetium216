@@ -1,3 +1,5 @@
+/////////////////////////////////////////////////
+//////////////// Azure connection ///////////////
 try {
     var azure = require("azure-storage");
     var connectionString = "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
@@ -5,7 +7,8 @@ try {
   } catch (error) {
     console.log("can not connect to azure table storage");
   }
-
+/////////////////////////////////////////////////
+//////////////// History query ///////////////
   async function historyQuery(carId,continuationToken){
     return new Promise((resolve ,reject)=>{
         query = new azure.TableQuery()
@@ -21,6 +24,8 @@ try {
     
     });
     } 
+///////////////////////////////////////////////////
+//////////////// History query call /////////////
     async function getHistory(carId){
         var continuationToken = null;
         do{

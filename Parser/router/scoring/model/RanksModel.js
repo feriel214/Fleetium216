@@ -1,3 +1,5 @@
+/////////////////////////////////////////////////
+//////////////// Azure connection ///////////////
 try {
     var azure = require("azure-storage");
     var connectionString = "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
@@ -5,7 +7,8 @@ try {
   } catch (error) {
     console.log("can not connect to azure table storage");
   }
-
+/////////////////////////////////////////////////
+//////////////// Query ////////////////////////
   async function Query(continuationToken){
     
     return new Promise((resolve ,reject)=>{
@@ -21,6 +24,8 @@ try {
     
     });
     } 
+///////////////////////////////////////////////////
+//////////////// Top driver query call ///////////
     async function topDriver(){
         let max = 0;
         var continuationToken = null;
@@ -40,6 +45,8 @@ try {
         }
         return driver;
     }
+///////////////////////////////////////////////////
+//////////////// Power saver query call //////////
     async function powerSaver(){
       let min = 999999999999999;
       var continuationToken = null;
@@ -59,6 +66,9 @@ try {
       }
       return driver;
   }
+
+  /////////////////////////////////////////////////
+
   function getMax(cMax,results){
     //console.log(parseInt(cMax.score._))
     let max = 0;
@@ -70,7 +80,8 @@ try {
     }
     return driver;
   }
-
+/////////////////////////////////////////////////
+//////////////// Top 10 query call /////////////
   async function topTen(){
     var continuationToken = null;
     var driver1 = await topDriver();

@@ -19,7 +19,7 @@ module.exports = {
     },
     getAllScores : async function(req,res){
         try {
-            result = await ScoreModel.getScores();
+            result = await ScoreModel.getAllScores();
             if(result != null){
                 res.status(200).json(result);
             }else{

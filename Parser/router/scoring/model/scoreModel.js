@@ -10,6 +10,8 @@ try {
     console.log("can not connect to azure table storage");
   }
 
+/////////////////////////////////////////////////
+////////// retrieve all scores query ///////////
   async function scoresQuery(continuationToken){
     return new Promise((resolve ,reject)=>{
         query = new azure.TableQuery()
@@ -23,8 +25,11 @@ try {
           });
     
     });
-    } 
-    async function getScores(){
+    }
+
+//////////////////////////////////////////////////
+///////////// all scores query call /////////////
+    async function getAllScores(){
         let driver = []
         var continuationToken = null;
         do{
@@ -38,10 +43,10 @@ try {
             driver.push(results.entries[i]);
           }
           return driver  
-          
-          
     }
-  
+
+///////////////////////////////////////////////////
+////////// retrieve score with ID query  /////////
   async function calcQuery(carId,continuationToken){
       return new Promise((resolve ,reject)=>{
           query = new azure.TableQuery()
@@ -57,6 +62,8 @@ try {
       
       });
   }
+///////////////////////////////////////////////////
+////////// retrieve score query call /////////////
   async function ScoreData(carId){
       var continuationToken = null;
       do{
@@ -66,6 +73,9 @@ try {
       while(continuationToken!=null);
       return results;
   }
+
+///////////////////////////////////////////////////
+///////// callect data between two dates /////////
   async function collectSData(carId,debut,fin){
       let data = {
           roadspeed_1 : 0,
@@ -111,8 +121,8 @@ try {
       }
   }
   
-  /////////////////////////////////////////////////////
-    ///////////////////RowKey function//////////////////
+/////////////////////////////////////////////////////
+///////////////////RowKey function//////////////////
     function RowKey(){
       today = new Date();
       Hour = (today.getHours() < 10 ? '0' : '') + today.getHours();
@@ -126,7 +136,9 @@ try {
       dateTime = date+time;
       return dateTime;
     }
-  
+
+/////////////////////////////////////////////////////////////
+////////// insert fional score to FinalScore table /////////  
  async function insertFinalScore(carId,debut,fin,Cornering,SCornering,Freinage,SFreinage,Acceleration,SAcceleration,Idling,Score){
       var entGen = azure.TableUtilities.entityGenerator;
       var task = {
@@ -154,6 +166,8 @@ try {
     });
     }
 
+///////////////////////////////////////////////////
+///////////// calculate final score  /////////////
 async function calcScore(carId,debut,fin){
     result = await collectSData(carId,debut,fin);
     if(result == null)
@@ -177,5 +191,5 @@ async function calcScore(carId,debut,fin){
 }
 module.exports = {
     calcScore,
-    getScores
+    getAllScores
 }
