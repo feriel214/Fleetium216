@@ -1,14 +1,13 @@
   async function RoadSpeed(dt){
-    let j =0  
     var speed = {
           speed_1 : 0,
           speed_2 : 0,
-          speed_3 : 0
+          speed_3 : 0,
+          speed_0 : 0
       };
       for (i = 0; i < dt.entries.length ; i++)
             {
                 if(parseInt(dt.entries[i].gps_speed._) > 0 && parseInt(dt.entries[i].gps_speed._) <= 90){
-                    j++;
                     speed.speed_1 = speed.speed_1 + 5;
                 }else
                 if(parseInt(dt.entries[i].gps_speed._) > 90 && parseInt(dt.entries[i].gps_speed._) <= 120)
