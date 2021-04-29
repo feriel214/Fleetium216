@@ -44,6 +44,8 @@ export default {
       ordersData: ordersData,
 
       maxHeight: '328px',
+      topTen:[],
+      topdriver:{},
       overviewData: [
         {
           class: 'border-bottom py-4',
@@ -370,6 +372,18 @@ export default {
         defaultDate: '00:00',
         time_24hr: true,
       },
+      resScore:{
+    "Score": 2,
+    "SCornering": 2,
+    "SFreinage": 1,
+    "SRoadSpeed": 10,
+    "SAcceleration": 1,
+    "roadspeed_1": 100,
+    "roadspeed_2": 0,
+    "roadspeed_3": 0,
+    "millage": 86,
+    "idling": 147
+     },
       options: [],
       validations: {
         score: {
@@ -383,11 +397,22 @@ export default {
   },
   async mounted() {
     Object.keys(this.userCars.data).forEach((e) => this.options.push(`${e}`))
+    this.getTopTenDriver();
+    await  this.gettopDriver();
   },
   methods: {
+    async gettopDriver(){
+      axios.get('http://localhost:3000/ranks/top-driver')
+      .then((res)=>{
+        console.log('************************** Top one driver : ',res.data);
+        this.topdriver=res.data;
+      }).catch(function(error){
+        console.log(error)
+      })
+    },
     async getFinalScore() {
       let data = {
-        carId: this.score.car,
+        carId: "1",
         debut: this.score.start,
         fin: this.score.end,
       }
@@ -400,6 +425,18 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    },
+    async getTopTenDriver(){
+        console.log('just enter get top driver ')
+     
+      axios.get('http://localhost:3000/ranks/top-ten')
+      .then((res)=>{
+          console.log('resssssssssssss top ',res)
+        console.log('************************** Top Ten res :',res.data);
+         this.topTen=res.data;
+      }).catch(function(error){
+        console.log(error)
+      })
     },
     InsertEndTime(Params) {
       console.log(' this.score.end', this.score.end)
@@ -595,31 +632,32 @@ export default {
               <b-table-simple class="table table-hover table-nowrap mb-0">
                 <b-thead class="thead-white">
                   <b-tr>
-                    <b-th>Car Name </b-th>
-                    <b-th>Driver </b-th>
-                    <b-th>Score</b-th>
-                    <b-th>Price</b-th>
-                    <b-th>Status</b-th>
+                    <b-th>Car</b-th>
+                    <b-th>Start Date </b-th>
+                    <b-th>End Date</b-th>
+                    <b-th>Acceleration</b-th>
+                    <b-th>Deceleration</b-th>
+                    <b-th>Cornering</b-th>
+                    <b-th>Final Score</b-th>
+                    <b-th>Actions</b-th>
                   </b-tr>
                 </b-thead>
                 <b-tbody>
-                  <b-tr v-for="order in ordersData" :key="order.name">
-                    <b-td>{{ order.id }}</b-td>
-                    <b-td>{{ order.product }}</b-td>
-                    <b-td>{{ order.name }}</b-td>
-                    <b-td>{{ order.price }}</b-td>
+                  <b-tr v-for="driverscore in topTen" :key="driverscore.PartitionKey">
+                    <b-td>{{driverscore.PartitionKey}}</b-td>
+                    <b-td>{{ driverscore.debut}}</b-td>
+                    <b-td>{{driverscore.fin}}</b-td>
+                    <b-td>{{ driverscore.Acceleration}}</b-td>
+                    <b-td>{{ driverscore.Freinage}}</b-td>
+                    <b-td>{{ driverscore.Cornering}}</b-td>
+                    <b-td>{{ driverscore.score}}</b-td>
                     <b-td>
-                      <span
-                        class="badge"
-                        :class="{
-                          'badge-soft-warning': `${order.status}` === 'Pending',
-                          'badge-soft-success':
-                            `${order.status}` === 'Delivered',
-                          'badge-soft-danger': `${order.status}` === 'Declined',
-                        }"
-                        >{{ order.status }}</span
-                      >
+                        <button type="button" class="btnTlmtk btn-primary-Tlmtk"> 
+                            Show more 
+                        </button>
+                  
                     </b-td>
+                   
                   </b-tr>
                 </b-tbody>
               </b-table-simple>

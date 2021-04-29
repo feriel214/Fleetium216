@@ -30,16 +30,31 @@ try {
             
         }
         while(continuationToken!=null);
-        
+        let scoreDriver={};
         for (i = results.entries.length -1 ; i >= 0 ; i--){
           if(parseInt(results.entries[i].score._) > max){
             max = parseInt(results.entries[i].score._);
-            driver = results.entries[i];
+            scoreDriver={
+              PartitionKey:results.entries[i].PartitionKey._,
+              RowKey:results.entries[i].RowKey._,
+              Acceleration:results.entries[i].Acceleration._,
+              Cornering:results.entries[i].Cornering._,
+              Freinage:results.entries[i].Freinage._,
+              Idling:results.entries[i].Idling._,
+              SAcceleration:results.entries[i].SAcceleration._,
+              SCornering:results.entries[i].SCornering._,
+              SFreinage:results.entries[i].SFreinage._,
+              debut:results.entries[i].debut._,
+              fin:results.entries[i].fin._,
+              score:results.entries[i].score._,
+            }
+           
           }
               
         }
-        return driver;
+        return scoreDriver;
     }
+  
     async function powerSaver(){
       let min = 999999999999999;
       var continuationToken = null;
