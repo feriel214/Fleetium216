@@ -138,7 +138,7 @@ try {
     }
 
 /////////////////////////////////////////////////////////////
-////////// insert fional score to FinalScore table /////////  
+////////// insert final score to FinalScore table /////////  
  async function insertFinalScore(carId,debut,fin,Cornering,SCornering,Freinage,SFreinage,Acceleration,SAcceleration,Idling,Score,roadspeed_1,roadspeed_2,roadspeed_3,millage){
       var entGen = azure.TableUtilities.entityGenerator;
       var task = {
