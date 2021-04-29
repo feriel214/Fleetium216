@@ -139,7 +139,7 @@ try {
 
 /////////////////////////////////////////////////////////////
 ////////// insert fional score to FinalScore table /////////  
- async function insertFinalScore(carId,debut,fin,Cornering,SCornering,Freinage,SFreinage,Acceleration,SAcceleration,Idling,Score){
+ async function insertFinalScore(carId,debut,fin,Cornering,SCornering,Freinage,SFreinage,Acceleration,SAcceleration,Idling,Score,roadspeed_1,roadspeed_2,roadspeed_3){
       var entGen = azure.TableUtilities.entityGenerator;
       var task = {
       PartitionKey: entGen.String(carId),
@@ -153,6 +153,9 @@ try {
       Acceleration : entGen.String(Acceleration),
       SAcceleration : entGen.String(SAcceleration),
       Idling : entGen.String(Idling),
+      roadspeed_1 : entGen.String(roadspeed_1),
+      roadspeed_2 : entGen.String(roadspeed_2),
+      roadspeed_3 : entGen.String(roadspeed_3),
       score : entGen.String(JSON.stringify(Score)),
     };
     return new Promise((resolve,reject)=>{
@@ -185,7 +188,7 @@ async function calcScore(carId,debut,fin){
         SRoadSpeed = Point.RoadSpeed((result.roadspeed_3)/100);
         SAcceleration = Point.Acceleration(result.Acceleration);
         Score = Math.round((SCornering + (SFreinage * 2) + SRoadSpeed + (SAcceleration * 2)) / 7);
-        insertFinalScore(carId,debut,fin,result.nbrCornering,SCornering,result.nbrFreinage,SFreinage,result.nbrAcceleration,SAcceleration,result.Idling,Score);
+        insertFinalScore(carId,debut,fin,result.nbrCornering,SCornering,result.nbrFreinage,SFreinage,result.nbrAcceleration,SAcceleration,result.Idling,Score,roadspeed_1,roadspeed_2,roadspeed_3);
         return {Score, SCornering ,SFreinage , SRoadSpeed , SAcceleration , roadspeed_1, roadspeed_2 ,roadspeed_3 , millage , idling};
     } 
 }
