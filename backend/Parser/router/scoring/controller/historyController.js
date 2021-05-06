@@ -2,7 +2,7 @@ const historyModel = require('../model/historyModel');
 
 module.exports = {
     getHistory : async function(req,res){
-        if(req.session.user != null){
+        //if(req.session.user != null){
             try {
                 result = await historyModel.getHistory(req.body.carId);
                 if(result.entries.length != 0){
@@ -15,9 +15,9 @@ module.exports = {
                res.status(500).send('something went wrong');
             }
 
-        }else{
+        //}else{
             res.status(401).send('Unauthorized');
-        }
+       // }
             
     }
 }
