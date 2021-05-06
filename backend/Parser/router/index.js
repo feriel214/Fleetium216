@@ -6,6 +6,7 @@ var session = require('express-session');
 require('dotenv').config();
 app.use(express.json());
 app.use(cors());
+
 app.use(session({
   secret: process.env.secret,
   resave: false,
@@ -18,8 +19,19 @@ let GeoController = require('./geofence/controller/GeoController');
 let ScoreController = require('./scoring/controller/scoreController');
 let HistoryController = require('./scoring/controller/historyController');
 let RanksController  = require('./scoring/controller/ranksController');
+let RegisterController = require('./authentication/controller/registerController');
+let LoginController = require('./authentication/controller/loginController');
+let LogoutController = require('./authentication/controller/logoutController');
 
-
+app.post('/logout',function(req,res){
+  LogoutController.logout(req,res);
+})
+app.post('/login',function(req,res){
+  LoginController.login(req,res);
+})
+app.post('/register', function(req, res){
+  RegisterController.register(req,res)
+})
 
 app.get('/ranks/top-driver',function(req,res){
   RanksController.topDriver(req,res)

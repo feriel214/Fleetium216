@@ -188,7 +188,6 @@ async function calcScore(carId,debut,fin){
         return null;
     }else
     {
-        console.log(result.roadspeed_1)
         roadspeed_1 = Math.round(result.roadspeed_1 / result.length);
         roadspeed_2 = Math.round(result.roadspeed_2 / result.length);
         roadspeed_3 = Math.round(result.roadspeed_3 / result.length);
