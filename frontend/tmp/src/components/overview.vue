@@ -15,12 +15,16 @@ export default {
 			type: Array,
 			default: () => [],
 		},
+		classObject: {
+			class: String
+		}
+	
 	},
 }
 </script>
 <template>
 			<div class="row">
-			<div v-for="stat of items" :key="stat.title" class="col-md-6 col-xl-3">
+			<div v-for="stat of items" :key="stat.title" class="col-md-6 col-xl-4">
 				<Stat
 					:title="stat.title"
 					:value="stat.value"

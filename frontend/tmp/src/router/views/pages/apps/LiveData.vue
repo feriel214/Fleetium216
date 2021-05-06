@@ -825,6 +825,7 @@ export default {
         },
       },
       tableData: [],
+      classObject:[ {class:'col-md-6 col-xl-3'}],
       title: 'Advanced Tables',
       items: [],
       widgetData: [],
@@ -861,7 +862,21 @@ export default {
         this.tableData.push(e)
       }
     })
-    console.clear()
+
+       this.statData.push(
+                {
+                  title: 'Car Name',
+                  value: 'tessssssssst',
+                  icon: 'truck',
+                  color: '#DC143C',
+                },
+                {
+                  title: 'Code Driver ',
+                  value: 'info.code_driver',
+                  icon: 'user',
+                  color: '#66CDAA',
+                }
+              )
   },
 
   methods: {
@@ -1167,7 +1182,7 @@ export default {
           </div>
         </div>
         <div v-show="showCarInfo">
-          <Overview :items="statData" />
+          <Overview :items="statData" :classObject="classObject"  />
         </div>
       </div>
     </div>
