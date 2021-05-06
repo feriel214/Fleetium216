@@ -529,7 +529,7 @@ export default {
           console.log('@@@@@@@@@@@ powerSaver @@@@@@@@@@@',res.data)
           this.statChart.push({
             mainTitle: 'Power Saver',
-            value: res.data.Idling._,
+            value: res.data["driver1"].PartitionKey._+' | '+res.data["driver1"].Idling._,
             chartColor: '#5369f8',
             image: require('@assets/images/download.png'),
           })
@@ -546,7 +546,7 @@ export default {
            console.log('@@@@@@@@@@@ natureFriend @@@@@@@@@@@',res.data)
            this.statChart.push({
             mainTitle: 'Nature Friend ',
-            value: res.data.Idling._,
+            value:res.data["driver1"].PartitionKey._+' | '+ res.data["driver1"].Idling._,
             chartColor: '#f77e53',
             image: require('@assets/images/friend-nature.png'),
           })
@@ -1010,14 +1010,14 @@ export default {
                 @filtered="onFiltered"
               >
                 <template #cell(score)="row">
-                
-                <span style="color: blue">   {{ row.item.score }} /10 
+                 {{ row.item.score }} /10 
+                <span style="color: blue">  
                   <i v-if="row.item.score > 5"    class="uil uil-smile-beam"></i>    
                 </span>
-                <span style="color: green" >   {{ row.item.score }} /10 
+                <span style="color: green" >
                   <i  v-if="row.item.score == 5"  class="uil uil-meh-alt" ></i>
                 </span>
-                <span style="color: red">   {{ row.item.score }} /10 
+                <span style="color: red">   
                   <i v-if="row.item.score< 5"     class="uil uil-sad-squint"></i>
                 </span>
                 </template>
