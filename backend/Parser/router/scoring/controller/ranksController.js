@@ -62,7 +62,7 @@ topTrip : async function(req ,res){
     }
 },
 natureFriend : async function(req ,res){
-    if(req.session.user != null){
+    //if(req.session.user != null){
         try {
             result = await ranksModel.natureFriend();
             if(result != 0){
@@ -75,9 +75,9 @@ natureFriend : async function(req ,res){
             console.error(error.message);
             res.status(500).send('something went wrong');
         }
-    }else{
-        res.status(401).send('Unautherized')
-    }
+    //}else{
+      //  res.status(401).send('Unautherized')
+    //}
     
 }
 }
