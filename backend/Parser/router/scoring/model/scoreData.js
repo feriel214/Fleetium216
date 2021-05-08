@@ -75,7 +75,7 @@ function RowKey(){
    var entGen = azure.TableUtilities.entityGenerator;
    var task = {
    PartitionKey: entGen.String(carId),
-   RowKey: entGen.String(RowKey()),
+   RowKey: entGen.String(JSON.stringify(Date.now())),
    ignition_on : entGen.String(on),
    ignition_off : entGen.String(off),
    Vehicle_speed : entGen.String(JSON.stringify(events.speed)),

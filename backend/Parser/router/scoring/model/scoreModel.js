@@ -77,6 +77,7 @@ try {
 ///////////////////////////////////////////////////
 ///////// callect data between two dates /////////
   async function collectSData(carId,debut,fin){
+      let check = 0;
       let data = {
           roadspeed_1 : 0,
           roadspeed_2 : 0,
@@ -95,6 +96,7 @@ try {
           length : 0,
           engineRT : 0
       }
+      
       res = await ScoreData(carId);
       if(res.entries.length == 0){
           return null;
@@ -102,6 +104,7 @@ try {
       for(i = 0; i < res.entries.length ; i++){
           date = res.entries[i].Timestamp._.toISOString().slice(0, 10);
           if (date >= debut && date <= fin){
+                       check++;
                        data.roadspeed_1 = data.roadspeed_1 +parseFloat(((parseFloat(res.entries[i].speed_1._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2));
                        data.roadspeed_2 = data.roadspeed_2 + parseFloat(((parseFloat(res.entries[i].speed_2._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2));
                        data.roadspeed_3 = data.roadspeed_3 + parseFloat(((parseFloat(res.entries[i].speed_3._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2));
@@ -115,40 +118,29 @@ try {
                        data.Cornering = data.Cornering + Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Cornering._));
                        data.nbrCornering = data.nbrCornering + parseInt(res.entries[i].Cornering._);
                        data.millage = data.millage + parseInt(res.entries[i].millage._);
+                       data.engineRT = data.engineRT + ((parseInt(res.entries[i].ignition_off._) - parseInt(res.entries[i].ignition_on._))/ 60000);
                        data.Idling = data.Idling + parseInt(res.entries[i].Idling._);
-                       data.engineRT = data.engineRT + ((parseInt(res.entries[i].ignition_off._) - parseInt(res.entries[i].ignition_on._)) / 60000);
                        data.length = data.length + 1;
                   
           }
       }
-          return data;
+        if(check != 0){
+            return data;
+        }else{
+            return null;
+        }
+          
       
       }
   }
   
-/////////////////////////////////////////////////////
-///////////////////RowKey function//////////////////
-    function RowKey(){
-      today = new Date();
-      Hour = (today.getHours() < 10 ? '0' : '') + today.getHours();
-      Sec = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
-      Min = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
-      Year = today.getFullYear()
-      Month = ((today.getMonth()+1) < 10 ? '0' : '') + (today.getMonth()+1);
-      Day = (today.getDate() < 10 ? '0' : '') + today.getDate();
-      date = Year+""+Month+""+Day;
-      time = Hour + "" + Min + ""+ Sec;
-      dateTime = date+time;
-      return dateTime;
-    }
-
 /////////////////////////////////////////////////////////////
 ////////// insert final score to FinalScore table /////////  
  async function insertFinalScore(carId,debut,fin,Cornering,SCornering,Freinage,SFreinage,Acceleration,SAcceleration,Idling,Score,roadspeed_1,roadspeed_2,roadspeed_3,roadtime_1,roadtime_2,roadtime_3,engineRT,millage){
       var entGen = azure.TableUtilities.entityGenerator;
       var task = {
       PartitionKey: entGen.String(carId),
-      RowKey: entGen.String(RowKey()), 
+      RowKey: entGen.String(JSON.stringify(Date.now())), 
       debut : entGen.String(debut),
       fin : entGen.String(fin),
       Cornering : entGen.String(Cornering),
