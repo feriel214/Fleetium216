@@ -12,7 +12,7 @@ const connectionString = "DefaultEndpointsProtocol=https;AccountName=pfe2021;Acc
 var tableService = azure.createTableService(connectionString);
 var entGen = azure.TableUtilities.entityGenerator;
 
-const ClassRedis = require('./router/model/redis')
+const ClassRedis = require('./router/geofence/model/redis');
 ClassRedis.INIT();
 
 //Object that contain all device data
