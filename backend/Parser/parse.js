@@ -1,4 +1,5 @@
 //read file
+require('dotenv').config();
 const fs = require("fs");
 const readline = require("readline");
 const Codec = require("./router/codec/Codec.js");
@@ -8,7 +9,7 @@ const redis = require("redis");
 require("dotenv").config();
 var azure = require("azure-storage");
 const { any } = require("async");
-const connectionString = "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
+const connectionString = process.env.connectionString;
 var tableService = azure.createTableService(connectionString);
 var entGen = azure.TableUtilities.entityGenerator;
 
