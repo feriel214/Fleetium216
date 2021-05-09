@@ -1,20 +1,18 @@
 /////////////////////////////////////////////////
 //////////////// Azure connection ///////////////
-try {
-    var azure = require("azure-storage");
-    var connectionString =  process.env.connectionString;
-    var tableSvc = azure.createTableService(connectionString);
-  } catch (error) {
-    console.log("can not connect to azure table storage");
-  }
-/////////////////////////////////////////////////
-//////////////// Query ////////////////////////
+require('dotenv').config();
+const db = require('../../Database/NoSQLDatabase/db.js');
+
+
+
+//////////////////////////////////////////////////////////////////
+//////////////// This query select all the scorees //////////////
   async function Query(continuationToken){
     
     return new Promise((resolve ,reject)=>{
-        query = new azure.TableQuery()
+        query = new db.azure.TableQuery()
         .select(['*'])
-        tableSvc.queryEntities('scorefinal', query, continuationToken, (error, results)=> {
+        db.tableSvc.queryEntities('scorefinal', query, continuationToken, (error, results)=> {
             if(!error){
                 resolve(results)           
             }else{
@@ -44,6 +42,7 @@ try {
         }
         return driver;
     }
+
 ///////////////////////////////////////////////////
 //////////////// Top power saver query call ///////
   async function topPower(){
@@ -155,8 +154,33 @@ try {
 
 }
 
+/////////////////////////////////////////////////
+//////////////// Top 10 query call /////////////
+async function topTen(){
+  var continuationToken = null;
+  var driver1 = await topDriver();
+    do{
+        var results =  await Query(continuationToken);
+        continuationToken = results.continuationToken;
+        
+    }
+    while(continuationToken!=null);
+  driver2 = getMax(driver1,results);
+  driver3 = getMax(driver2,results);
+  driver4 = getMax(driver3,results);
+  driver5 = getMax(driver4,results);
+  driver6 = getMax(driver5,results);
+  driver7 = getMax(driver6,results);
+  driver8 = getMax(driver7,results);
+  driver9 = getMax(driver8,results);
+  driver10 = getMax(driver9,results);
+  return {driver1,driver2,driver3,driver4,driver5,driver6,driver7,driver8,driver9,driver10}
 
-  /////////////////////////////////////////////////
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////// This  3 functions are used to get the max values according to the variable cMAX ///////
 
   function getMax(cMax,results){
     //console.log(parseInt(cMax.score._))
@@ -194,29 +218,7 @@ try {
   }
 
 
-/////////////////////////////////////////////////
-//////////////// Top 10 query call /////////////
-  async function topTen(){
-    var continuationToken = null;
-    var driver1 = await topDriver();
-      do{
-          var results =  await Query(continuationToken);
-          continuationToken = results.continuationToken;
-          
-      }
-      while(continuationToken!=null);
-    driver2 = getMax(driver1,results);
-    driver3 = getMax(driver2,results);
-    driver4 = getMax(driver3,results);
-    driver5 = getMax(driver4,results);
-    driver6 = getMax(driver5,results);
-    driver7 = getMax(driver6,results);
-    driver8 = getMax(driver7,results);
-    driver9 = getMax(driver8,results);
-    driver10 = getMax(driver9,results);
-    return {driver1,driver2,driver3,driver4,driver5,driver6,driver7,driver8,driver9,driver10}
 
-  }
 
 module.exports = {
   topDriver,

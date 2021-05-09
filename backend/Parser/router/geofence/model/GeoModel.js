@@ -1,18 +1,14 @@
-const pool = require("../../SQLDatabase/db.js");
-const redis = require("redis");
-const { query } = require("../../SQLDatabase/db.js");
+const pool = require("../../Database/SQLDatabase/db.js");
+const db = require('../../Database/NoSQLDatabase/db.js')
+
 require("dotenv").config();
-const redis_client = redis.createClient({
-  host: "redis-15701.c9.us-east-1-4.ec2.cloud.redislabs.com",
-  port: 15701,
-  password: "G2u3mLtpJ7lqmyMZRzrX1YWlZ9DO7EIg",
-});
+
 pool.connect();
 
 async function createGeofenceRedis(UniqueId,geojson) {
   
   return new Promise((resolve, reject) => {
-        redis_client.hset(`${UniqueId}`,`${geojson.type}`,geojson.coordinates,(err, val) => {
+        db.redis_client.hset(`${UniqueId}`,`${geojson.type}`,geojson.coordinates,(err, val) => {
           if (err) {
             reject(err)
             return
@@ -47,7 +43,7 @@ async function createGeofencePg(UniqueId,name,description,time_start,time_end,ra
 }
 async function G_uuid(UniqueId) {
   return new Promise((resolve, reject) => {
-    redis_client.get(UniqueId, (err, val) => {
+    db.redis_client.get(UniqueId, (err, val) => {
       if (err) {
         reject(err)
         return
@@ -88,7 +84,7 @@ async function getGeofence(req,res){
     return new Promise(()=>{
       var id =req.params.id;  
      // var key=req.params.type;
-      redis_client.hgetall(`${id}`,(err, val) => {
+      db.redis_client.hgetall(`${id}`,(err, val) => {
           if (err) {
             console.log(err)
           }
@@ -104,7 +100,7 @@ async function getGeofence(req,res){
 async function updateFenceRedis(UniqueId,geojson){
   return new Promise((resolve, reject) => {
          geojson.coordinates = JSON.stringify(geojson[0].coordinates);
-        redis_client.hset(`${UniqueId}`,`${geojson[0].type}`,geojson.coordinates,(err, val) => {
+        db.redis_client.hset(`${UniqueId}`,`${geojson[0].type}`,geojson.coordinates,(err, val) => {
           if (err) {
             reject(err)
             return

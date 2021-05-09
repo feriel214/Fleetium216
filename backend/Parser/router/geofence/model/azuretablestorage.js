@@ -1,7 +1,5 @@
-var azure = require("azure-storage");
-const connectionString = "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
-var tableService = azure.createTableService(connectionString);
-var entGen = azure.TableUtilities.entityGenerator;
+require('dotenv').config();
+const db = require('../../Database/NoSQLDatabase/db.js');
 module.exports = {
   StartScore : async(id_car,ignition_on,ignition_off)=>{
       var data = {};
@@ -13,7 +11,7 @@ module.exports = {
       //proccess 
      // data.milleage=(await this.Milleage(ignition_off)-(await this.Milleage(ignition_on)));
     
-    this.InsertTripDataScoreAzure(id_car,ignition_on,data);
+    InsertTripDataScoreAzure(id_car,ignition_on,data);
 
   },
 
@@ -25,7 +23,7 @@ module.exports = {
       ignition_off:ignition_off,
       //milleage:(await Milleage(trps[i][1]))-(await Milleage(trps[i][0]))
     }
-    tableService.insertOrReplaceEntity(
+    db.tableSvc.insertOrReplaceEntity(
       "scoredata",
       trip,
       async function (error, result, response) {
@@ -41,8 +39,8 @@ module.exports = {
   },
    Milleage : async(RowKey) =>{
     return new Promise((resolve, reject)=> {
-     let  query = new azure.TableQuery().select(['milleage']).where('RowKey eq?', RowKey);
-       tableSvc.queryEntities('eventsdata', query,null,(error, results)=>{
+     let  query = new db.azure.TableQuery().select(['milleage']).where('RowKey eq?', RowKey);
+       db.tableSvc.queryEntities('eventsdata', query,null,(error, results)=>{
              if(!error){
                 resolve(results.entries[0].milleage._)
                 return  

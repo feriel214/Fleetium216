@@ -1,22 +1,14 @@
 const Point = require('./PointsModel');
+const db = require('../../Database/NoSQLDatabase/db.js')
 
-/////////////////////////////////////////////////
-//////////////// Azure connection ///////////////
-try {
-    var azure = require("azure-storage");
-    var connectionString = "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
-    var tableSvc = azure.createTableService(connectionString);
-  } catch (error) {
-    console.log("can not connect to azure table storage");
-  }
 
 /////////////////////////////////////////////////
 ////////// retrieve all scores query ///////////
   async function scoresQuery(continuationToken){
     return new Promise((resolve ,reject)=>{
-        query = new azure.TableQuery()
+        query = new db.azure.TableQuery()
         .select(['*'])
-        tableSvc.queryEntities('scorefinal', query, continuationToken, (error, results)=> {
+        db.tableSvc.queryEntities('scorefinal', query, continuationToken, (error, results)=> {
             if(!error){
                 resolve(results)           
             }else{
@@ -49,10 +41,10 @@ try {
 ////////// retrieve score with ID query  /////////
   async function calcQuery(carId,continuationToken){
       return new Promise((resolve ,reject)=>{
-          query = new azure.TableQuery()
+          query = new db.azure.TableQuery()
           .select(['*'])
           .where('PartitionKey eq ?',carId);
-          tableSvc.queryEntities('scoredata', query, continuationToken, (error, results)=> {
+          db.tableSvc.queryEntities('scoredata', query, continuationToken, (error, results)=> {
               if(!error){
                   resolve(results);           
               }else{
@@ -77,6 +69,7 @@ try {
 ///////////////////////////////////////////////////
 ///////// callect data between two dates /////////
   async function collectSData(carId,debut,fin){
+      let check = 0;
       let data = {
           roadspeed_1 : 0,
           roadspeed_2 : 0,
@@ -95,6 +88,7 @@ try {
           length : 0,
           engineRT : 0
       }
+      
       res = await ScoreData(carId);
       if(res.entries.length == 0){
           return null;
@@ -102,6 +96,7 @@ try {
       for(i = 0; i < res.entries.length ; i++){
           date = res.entries[i].Timestamp._.toISOString().slice(0, 10);
           if (date >= debut && date <= fin){
+                       check++;
                        data.roadspeed_1 = data.roadspeed_1 +parseFloat(((parseFloat(res.entries[i].speed_1._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2));
                        data.roadspeed_2 = data.roadspeed_2 + parseFloat(((parseFloat(res.entries[i].speed_2._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2));
                        data.roadspeed_3 = data.roadspeed_3 + parseFloat(((parseFloat(res.entries[i].speed_3._)/(parseFloat(res.entries[i].speed_1._)+parseFloat(res.entries[i].speed_2._)+parseFloat(res.entries[i].speed_3._)))*100).toFixed(2));
@@ -115,40 +110,29 @@ try {
                        data.Cornering = data.Cornering + Math.round(parseFloat(res.entries[i].millage._) / parseFloat(res.entries[i].Cornering._));
                        data.nbrCornering = data.nbrCornering + parseInt(res.entries[i].Cornering._);
                        data.millage = data.millage + parseInt(res.entries[i].millage._);
+                       data.engineRT = data.engineRT + ((parseInt(res.entries[i].ignition_off._) - parseInt(res.entries[i].ignition_on._))/ 60000);
                        data.Idling = data.Idling + parseInt(res.entries[i].Idling._);
-                       data.engineRT = data.engineRT + ((parseInt(res.entries[i].ignition_off._) - parseInt(res.entries[i].ignition_on._)) / 60000);
                        data.length = data.length + 1;
                   
           }
       }
-          return data;
+        if(check != 0){
+            return data;
+        }else{
+            return null;
+        }
+          
       
       }
   }
   
-/////////////////////////////////////////////////////
-///////////////////RowKey function//////////////////
-    function RowKey(){
-      today = new Date();
-      Hour = (today.getHours() < 10 ? '0' : '') + today.getHours();
-      Sec = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
-      Min = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
-      Year = today.getFullYear()
-      Month = ((today.getMonth()+1) < 10 ? '0' : '') + (today.getMonth()+1);
-      Day = (today.getDate() < 10 ? '0' : '') + today.getDate();
-      date = Year+""+Month+""+Day;
-      time = Hour + "" + Min + ""+ Sec;
-      dateTime = date+time;
-      return dateTime;
-    }
-
 /////////////////////////////////////////////////////////////
 ////////// insert final score to FinalScore table /////////  
  async function insertFinalScore(carId,debut,fin,Cornering,SCornering,Freinage,SFreinage,Acceleration,SAcceleration,Idling,Score,roadspeed_1,roadspeed_2,roadspeed_3,roadtime_1,roadtime_2,roadtime_3,engineRT,millage){
-      var entGen = azure.TableUtilities.entityGenerator;
+      var entGen = db.azure.TableUtilities.entityGenerator;
       var task = {
       PartitionKey: entGen.String(carId),
-      RowKey: entGen.String(RowKey()), 
+      RowKey: entGen.String(JSON.stringify(Date.now())), 
       debut : entGen.String(debut),
       fin : entGen.String(fin),
       Cornering : entGen.String(Cornering),
@@ -169,7 +153,7 @@ try {
       score : entGen.String(JSON.stringify(Score)),
     };
     return new Promise((resolve,reject)=>{
-       tableSvc.insertEntity('scorefinal',task, function (error, result, response) {
+       db.tableSvc.insertEntity('scorefinal',task, function (error, result, response) {
            if(!error){
              resolve(true)
            }else{
@@ -188,7 +172,6 @@ async function calcScore(carId,debut,fin){
         return null;
     }else
     {
-        console.log(result.roadspeed_1)
         roadspeed_1 = Math.round(result.roadspeed_1 / result.length);
         roadspeed_2 = Math.round(result.roadspeed_2 / result.length);
         roadspeed_3 = Math.round(result.roadspeed_3 / result.length);

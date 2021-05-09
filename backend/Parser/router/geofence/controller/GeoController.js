@@ -1,5 +1,5 @@
 const geoModel =require('../model/GeoModel');
-const pool = require("../../SQLDatabase/db.js");
+const pool = require("../../Database/SQLDatabase/db.js");
 var uuid = require("uuid");
 const { query } = require('express');
 const { json } = require('body-parser');

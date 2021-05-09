@@ -3,12 +3,12 @@ const RoadSpeed = require('./RoadSpeedModel');
 const Idling = require('./IdlingModel');
 const Millage = require('./millageModel');
 const RoadTime = require('./roadTime');
-
+require('dotenv').config()
 /////////////////////////////////////////////////
 //////////////// Azure connection ///////////////
 try {
   var azure = require("azure-storage");
-  var connectionString = "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
+  var connectionString = process.env.connectionString;
   var tableSvc = azure.createTableService(connectionString);
 } catch (error) {
   console.log("can not connect to azure table storage");
@@ -46,22 +46,6 @@ async function dataQuery(carId,continuationToken,on,off){
       return results;
   }
 
-/////////////////////////////////////////////////////
-///////////////////RowKey function//////////////////
-function RowKey(){
-  today = new Date();
-  Hour = (today.getHours() < 10 ? '0' : '') + today.getHours();
-  Sec = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
-  Min = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
-  Year = today.getFullYear()
-  Month = ((today.getMonth()+1) < 10 ? '0' : '') + (today.getMonth()+1);
-  Day = (today.getDate() < 10 ? '0' : '') + today.getDate();
-  date = Year+""+Month+""+Day;
-  time = Hour + "" + Min + ""+ Sec;
-  dateTime = date+time;
-  return dateTime;
-}
-
 
 ///////////////////////////////////////////////////
 ////////////////Inserting score data//////////////
@@ -75,7 +59,7 @@ function RowKey(){
    var entGen = azure.TableUtilities.entityGenerator;
    var task = {
    PartitionKey: entGen.String(carId),
-   RowKey: entGen.String(RowKey()),
+   RowKey: entGen.String(JSON.stringify(Date.now())),
    ignition_on : entGen.String(on),
    ignition_off : entGen.String(off),
    Vehicle_speed : entGen.String(JSON.stringify(events.speed)),
