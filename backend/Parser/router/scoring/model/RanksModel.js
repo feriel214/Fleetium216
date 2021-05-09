@@ -1,20 +1,18 @@
 /////////////////////////////////////////////////
 //////////////// Azure connection ///////////////
-try {
-    var azure = require("azure-storage");
-    var connectionString =  process.env.connectionString;
-    var tableSvc = azure.createTableService(connectionString);
-  } catch (error) {
-    console.log("can not connect to azure table storage");
-  }
+require('dotenv').config();
+const db = require('../../NoSQLDatabase/db.js');
+
+
+
 //////////////////////////////////////////////////////////////////
 //////////////// This query select all the scorees //////////////
   async function Query(continuationToken){
     
     return new Promise((resolve ,reject)=>{
-        query = new azure.TableQuery()
+        query = new db.azure.TableQuery()
         .select(['*'])
-        tableSvc.queryEntities('scorefinal', query, continuationToken, (error, results)=> {
+        db.tableSvc.queryEntities('scorefinal', query, continuationToken, (error, results)=> {
             if(!error){
                 resolve(results)           
             }else{

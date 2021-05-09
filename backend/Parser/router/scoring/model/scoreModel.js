@@ -1,22 +1,14 @@
 const Point = require('./PointsModel');
+const db = require('../../NoSQLDatabase/db.js')
 
-/////////////////////////////////////////////////
-//////////////// Azure connection ///////////////
-try {
-    var azure = require("azure-storage");
-    var connectionString = "DefaultEndpointsProtocol=https;AccountName=pfe2021;AccountKey=4MudxJfKGSTpZBFzu8AozK9x47mGpvsFOdF2iPnobcJTRlOd7X7jwSFFvppr4atXQoQL07upQHbBzZhd37xBNg==;EndpointSuffix=core.windows.net";
-    var tableSvc = azure.createTableService(connectionString);
-  } catch (error) {
-    console.log("can not connect to azure table storage");
-  }
 
 /////////////////////////////////////////////////
 ////////// retrieve all scores query ///////////
   async function scoresQuery(continuationToken){
     return new Promise((resolve ,reject)=>{
-        query = new azure.TableQuery()
+        query = new db.azure.TableQuery()
         .select(['*'])
-        tableSvc.queryEntities('scorefinal', query, continuationToken, (error, results)=> {
+        db.tableSvc.queryEntities('scorefinal', query, continuationToken, (error, results)=> {
             if(!error){
                 resolve(results)           
             }else{
@@ -49,10 +41,10 @@ try {
 ////////// retrieve score with ID query  /////////
   async function calcQuery(carId,continuationToken){
       return new Promise((resolve ,reject)=>{
-          query = new azure.TableQuery()
+          query = new db.azure.TableQuery()
           .select(['*'])
           .where('PartitionKey eq ?',carId);
-          tableSvc.queryEntities('scoredata', query, continuationToken, (error, results)=> {
+          db.tableSvc.queryEntities('scoredata', query, continuationToken, (error, results)=> {
               if(!error){
                   resolve(results);           
               }else{
@@ -137,7 +129,7 @@ try {
 /////////////////////////////////////////////////////////////
 ////////// insert final score to FinalScore table /////////  
  async function insertFinalScore(carId,debut,fin,Cornering,SCornering,Freinage,SFreinage,Acceleration,SAcceleration,Idling,Score,roadspeed_1,roadspeed_2,roadspeed_3,roadtime_1,roadtime_2,roadtime_3,engineRT,millage){
-      var entGen = azure.TableUtilities.entityGenerator;
+      var entGen = db.azure.TableUtilities.entityGenerator;
       var task = {
       PartitionKey: entGen.String(carId),
       RowKey: entGen.String(JSON.stringify(Date.now())), 
@@ -161,7 +153,7 @@ try {
       score : entGen.String(JSON.stringify(Score)),
     };
     return new Promise((resolve,reject)=>{
-       tableSvc.insertEntity('scorefinal',task, function (error, result, response) {
+       db.tableSvc.insertEntity('scorefinal',task, function (error, result, response) {
            if(!error){
              resolve(true)
            }else{
