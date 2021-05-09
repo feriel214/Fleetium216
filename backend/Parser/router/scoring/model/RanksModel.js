@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////
 //////////////// Azure connection ///////////////
 require('dotenv').config();
-const db = require('../../NoSQLDatabase/db.js');
+const db = require('../../Database/NoSQLDatabase/db.js');
 
 
 

@@ -1,4 +1,4 @@
-const pool = require('../../SQLDatabase/db.js');
+const pool = require('../../Database/SQLDatabase/db.js');
 const bcrypt = require('bcrypt');
 async function login(email,password){
     const query = await pool.query("SELECT * FROM customer WHERE email = $1",[email])

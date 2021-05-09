@@ -1,4 +1,4 @@
-const pool = require('../../SQLDatabase/db.js');
+const pool = require('../../Database/SQLDatabase/db.js');
 async function checkEmail(email){
     const result =await pool.query("SELECT * FROM customer WHERE email = $1",[email]);
     return result;

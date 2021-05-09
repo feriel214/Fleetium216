@@ -1,6 +1,5 @@
 var express = require('express')
 const cors = require('cors');
-const pool = require("./SQLDatabase/db.js");
 var app = express();
 var session = require('express-session');
 require('dotenv').config();
