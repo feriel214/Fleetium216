@@ -2,7 +2,7 @@
 const fs = require("fs");
 const readline = require("readline");
 const Codec = require("./router/codec/Codec.js");
-const client=require('./router/SQLDatabase/db')
+const client = require('./router/Database/SQLDatabase/db.js')
 const { checkServerIdentity } = require("tls");
 const redis = require("redis");
 require("dotenv").config();
