@@ -1,7 +1,7 @@
 export const state = {
   layoutType: 'vertical',
-  layoutWidth: 'default',
-  leftSidebarTheme: 'default',
+  layoutWidth: 'condensed',
+  leftSidebarTheme: 'condensed',
   leftSidebarType: 'fixed',
 }
 

@@ -7,6 +7,7 @@ import 'leaflet.markercluster'
 import 'leaflet-rotatedmarker'
 import axios from 'axios'
 import Overview from '@components/overview'
+import { todayTasks } from './data-tasklist'
 //import markerIconPng from "leaflet/dist/images/marker-icon.png"
 
 export default {
@@ -14,6 +15,14 @@ export default {
   components: { Layout, PageHeader, L, Overview },
   data() {
     return {
+      tabContent: `Vakal text here dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.`,
+      content: ` Donec pede justo, fringilla vel, aliquet nec, vulputate
+                  eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae,
+                  justo. Nullam dictum felis eu pede mollis pretium. Integer
+                  tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean
+                  vulputate eleifend tellus. Aenean leo ligula, porttitor eu,
+                  consequat vitae, eleifend ac, enim.`,
+      selectedTask: todayTasks[0],
       center: [36.8062423, 10.1869993],
       map: [],
       L: [],
@@ -21,6 +30,7 @@ export default {
       options: [],
       useCustomIcons: true,
       eyeIcon: '"uil uil-meh-closed-eye',
+      task: {},
       userCars: {
         data: {
           21038: {
@@ -761,7 +771,7 @@ export default {
             gps_longitude: 10.186966666666667,
             gps_heading: 85.2,
             adresse: 'Rue El Bahja, Ariana Ville, Ariana',
-            mainpower: '1',
+            mainpower: '1 ',
             gps_altitude: '7',
             gps_latitude: 36.87245,
             name: '20908',
@@ -825,7 +835,7 @@ export default {
         },
       },
       tableData: [],
-      classObject:[ {class:'col-md-6 col-xl-3'}],
+      classObject: [{ class: 'col-md-6 col-xl-3' }],
       title: 'Advanced Tables',
       items: [],
       widgetData: [],
@@ -842,7 +852,9 @@ export default {
         { key: 'ignition', sortable: true },
         { key: 'motion', sortable: true },
       ],
+      showdetails: false,
       statData: [],
+      todayTasks: [...todayTasks],
     }
   },
   computed: {
@@ -855,28 +867,31 @@ export default {
   },
   async mounted() {
     // Set the initial number of items
+    this.getLiveCars()
     this.totalRows = this.items.length
     await this.setupLeafletMap()
     await Object.values(this.userCars.data).forEach((e) => {
       if (e.name.length > 0) {
+        e.assignee_avatar = require('../../../../assets/images/car2.png')
         this.tableData.push(e)
       }
     })
 
-       this.statData.push(
-                {
-                  title: 'Car Name',
-                  value: 'tessssssssst',
-                  icon: 'truck',
-                  color: '#DC143C',
-                },
-                {
-                  title: 'Code Driver ',
-                  value: 'info.code_driver',
-                  icon: 'user',
-                  color: '#66CDAA',
-                }
-              )
+    this.statData.push(
+      {
+        title: 'Car Name',
+        value: 'tessssssssst',
+        icon: 'truck',
+        color: '#DC143C',
+      },
+      {
+        title: 'Code Driver ',
+        value: 'info.code_driver',
+        icon: 'user',
+        color: '#66CDAA',
+      }
+    )
+    
   },
 
   methods: {
@@ -1033,23 +1048,76 @@ export default {
       console.log('value', value, 'index', index, 'item', item)
     },
     getLiveCars() {
-      axios
-        .get(
-          'https://pro.sayarte.ch/intigo/livedata/?accesskey=intigo_90fd3a73dd5d4831a46cf2d7a378f8d674d0ec686be7ac9c16b4857ec318181eb706c6f143375245&fbclid=IwAR1X4FvIsYL4ABQy0p9-a5yXSpw-WeRY3fCZISsLmTRz-eBsrF1kEQrYOHw'
-        )
-        .then((res) => {
-          console.log('res.data', res.data)
-        })
+      axios.get(
+        'https://pro.sayarte.ch/intigo/livedata/?accesskey=intigo_90fd3a73dd5d4831a46cf2d7a378f8d674d0ec686be7ac9c16b4857ec318181eb706c6f143375245',
+        { withCredentials: true }
+      )
+    },
+   async  MoreDetails(task) {
+      this.showdetails = true
+      console.log('Task', task)
+     let info = {
+        adresse: task.adresse,
+        assignee_avatar: '/img/car2.8224a149.png',
+        code_driver: task.code_driver,
+        position: String(task.gps_latitude + task.gps_latitude),
+        gps_speed: task.gps_speed,
+        ignition: task.ignition,
+        mainpower: task.mainpower,
+        mdmid: task.mdmid,
+        motion: task.motion,
+        gps_altitude:task.gps_altitude,
+        name: task.name,
+        gps_longitude:task.gps_longitude,
+        gps_latitude:task.gps_latitude,
+        rtc: task.rtc,
+        status_scooter: task.status_scooter,
+      };
+       this.task=info;
+     
+    },
+    TimeToDate(unixTimestamp) {
+      var date = new Date(parseFloat(unixTimestamp))
+
+      return (
+        (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) +
+        '/' +
+        (date.getMonth() + 1 < 10
+          ? '0' + (date.getMonth() + 1)
+          : date.getMonth() + 1) +
+        '/' +
+        date.getFullYear() +
+        ' ' +
+        (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) +
+        ':' +
+        (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) +
+        ':' +
+        (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
+      )
     },
   },
 }
 </script>
-
-<style>
+ <style scoped>
 @import url('https://unpkg.com/leaflet@1.5.1/dist/leaflet.css');
 #livedata {
-  height: 400px;
+  height: 600px;
   z-index: 10 !important;
+}
+.picCars {
+  background-image: url('../../../../assets/images/kia.png');
+  width: 50px;
+  height: 50px;
+  background-position: center;
+  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
+  border: 1px solid #eee;
+  border-radius: 50%;
+}
+.left-side-menu-condensed .content-page {
+  margin-left: 70px !important;
+  background-color: white;
 }
 .left-side-menu-condensed .left-side-menu {
   z-index: 500 !important;
@@ -1062,128 +1130,211 @@ export default {
 .page-title {
   padding: 0px 0;
 }
+.list-group-item {
+  border: none;
+}
+
+.sec {
+  position: relative;
+  right: -13px;
+  top: -22px;
+}
+
+.counter.counter-lg {
+  top: -24px !important;
+}
+.tabs-car-details {
+  width: 300px;
+  height: 600px;
+  z-index: 600;
+  position: absolute;
+  top: 0;
+  left: 470px;
+  background-color: white;
+}
+.nav-pills {
+    background-color: #6c757d;
+    padding: 6px 2px;
+}
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: #6c757d;
+}
+.media {
+    
+    background-color: #6c757d;
+    height:100px;
+}
+.avatar-lg {
+    margin-top: 15px;
+    margin-left: 15px;
+    width: 4.5rem;
+    height: 4.5rem;
+}
+.mt-2, .my-2 {
+    margin-top: 30px !important;
+    color: #f8f9fa !important;
+}
+
+
 </style>
 
 <template>
   <Layout>
     <PageHeader />
     <div class="row">
-      <div class="col-3">
-        <div calss="card">
-          <div class="card-body">
-            <div class="row mb-md-2">
-              <div class="col-sm-12 col-md-6">
-                <div id="tickets-table_length" class="dataTables_length">
-                  <label class="d-inline-flex align-items-center">
-                    Show&nbsp;
-                    <b-form-select
-                      v-model="perPage"
-                      size="sm"
-                      :options="pageOptions"
-                    ></b-form-select
-                    >&nbsp;entries
-                  </label>
-                </div>
-              </div>
-              <!-- Search -->
-              <div class="col-sm-12 col-md-6">
-                <div
-                  id="tickets-table_filter"
-                  class="dataTables_filter text-md-right"
+      <div class="col-4">
+        <div class="tabs-car-details" v-show="showdetails">
+          <div>
+            <div class="media">
+    
+               <div class="picCars avatar-lg rounded-circle mr-2"> </div>
+                            <span
+                              v-if="task.ignition==0"
+                              style="
+                                position: relative;
+                                background: rgb(237, 28, 37);
+                                border-radius: 50%;
+                                width: 15px;
+                                height: 15px;
+                                left: -80px;
+                                top: 19px;
+                                border: 1px solid rgb(238, 238, 238);
+                                display: block;
+                              "
+                            ></span>
+                            <span
+                              v-if="task.ignition==1"
+                              style="
+                                position: relative;
+                                background-color: #31a24c;
+                                border-radius: 50%;
+                                width: 15px;
+                                height: 15px;
+                                 left: -80px;
+                                top: 19px;
+                                border: 1px solid rgb(238, 238, 238);
+                                display: block;
+                              "
+                            ></span>
+              <div class="media-body">
+                <h5 class="mt-2 mb-0">{{task.name}}</h5>
+                <h6 class="text-muted font-weight-normal mt-1 mb-4"
+                  style="color:#f8f9fa!important;"
+                  >{{task.adresse}}</h6
                 >
-                  <label class="d-inline-flex align-items-center">
-                    Search:
-                    <b-form-input
-                      v-model="filter"
-                      type="search"
-                      placeholder="Search..."
-                      class="form-control form-control-sm ml-2"
-                    ></b-form-input>
-                  </label>
-                </div>
               </div>
-              <!-- End search -->
-            </div>
-            <!-- Table -->
-            <div class="table-responsive mb-0">
-              <b-table
-                striped
-                hover
-                :items="tableData"
-                :fields="fields"
-                responsive="sm"
-                :per-page="perPage"
-                :current-page="currentPage"
-                :sort-by.sync="sortBy"
-                :sort-desc.sync="sortDesc"
-                :filter="filter"
-                :filter-included-fields="filterOn"
-                @filtered="onFiltered"
-              >
-                <template v-if="useCustomIcons">
-                  <b-icon icon="uil0 uil-meh-closed-eye"></b-icon>
-                </template>
-                <!--     <template v-slot:cell(selected)="row">
-                <b-form-group>
-                  <input type="checkbox" v-model="row.item.selected" 
-                   @input="onPreviewClick($event, row.index, row.item)"
-                  />
-                </b-form-group>
-              </template> -->
-                <template #cell(ignition)="row">
-                  <img
-                    v-if="row.item.ignition == 0"
-                    src="../../../../assets/images/engine-off.png"
-                    style="width: 25px; height: 25px"
-                  />
-                  <img
-                    v-else
-                    src="../../../../assets/images/engine.png"
-                    style="width: 25px; height: 25px"
-                  />
-                </template>
-                <template #cell(motion)="row">
-                  <img
-                    v-if="row.item.motion == 0"
-                    src="../../../../assets/images/car-stop.png"
-                    style="width: 25px; height: 25px"
-                  />
-                  <img
-                    v-else
-                    src="../../../../assets/images/car-move.png"
-                    style="width: 25px; height: 25px"
-                  />
-                </template>
-              </b-table>
-            </div>
-            <div class="row">
-              <div class="col">
-                <div
-                  class="dataTables_paginate paging_simple_numbers float-right"
-                >
-                  <ul class="pagination pagination-rounded mb-0">
-                    <!-- pagination -->
-                    <b-pagination
-                      v-model="currentPage"
-                      :total-rows="rows"
-                      :per-page="perPage"
-                    ></b-pagination>
-                  </ul>
-                </div>
-              </div>
+              <span style="color:red"><feather type="x" class="icon-dual"></feather></span>
+            
             </div>
           </div>
+          <div >
+            <b-tabs pills justified class="navtab-bg" >
+              <b-tab title="Details"  style="margin-left:20px" active>
+                <span v-if="task.code_driver!=false"><b><img src="../../../../assets/images/driver-icon.png" style="height:50px;width;50px">Code Driver :  </b> {{task.code_driver}}</span><br>
+                <span><img src="../../../../assets/images/car-pos.png" style="height:50px;width;50px"> <b>Position : </b>{{  String(task.gps_latitude).substr(0, 10) + '°\n' + String(task.gps_longitude).substr(0, 10) +'°'}} </span><br>
+                <span><img src="../../../../assets/images/speed.png" style="height:50px;width;50px"><b>Speed :  </b>{{task. gps_speed}} km/h . </span><br>
+                <span><img src="../../../../assets/images/mpow.png" style="height:50px;width;50px"><b>Mainpower : </b> {{task.mainpower}} </span><br>
+                <span><b>Mdmid : </b> {{task.mdmid}} </span><br>
+                <span><img src="../../../../assets/images/alt.png" style="height:50px;width;50px"><b>Altitude : </b> {{task.gps_altitude}}</span>
+              </b-tab>
+              <b-tab title="Score">9999999999999999999999999999999</b-tab>
+            </b-tabs>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col">
+          
+            <b-collapse id="todayTasks" visible>
+                
+              <div class="card mb-0 shadow-none">
+                <div
+                  class="card-body pt-0"
+                  style="height: 575px; overflow: auto"
+                >
+                <h5 class="mb-0">VEHICLES</h5>
+                  <div
+                    class="row justify-content-sm-between border-bottom mt-2 pt-2"
+                  >
+                    <!-- end col -->
+                    <div class="col-lg-12">
+                      <ul
+                        class="list-inline font-15 list-group notification-list"
+                      >
+                        <li
+                          style="padding: 0; margin: 0"
+                          v-for="(task, index) of tableData"
+                          :key="index"
+                          v-on:click="MoreDetails(task)"
+                          role="presentation"
+                          class="notify-item border-bottom"
+                        >
+                          <p href="javascript:void(0);" class="b-dropdown-text">
+                          </p
+                          ><div style="width: 50px; position: absolute">
+                            <div class="picCars"> </div>
+                            <span
+                              v-if="task.ignition == 0"
+                              style="
+                                position: relative;
+                                background: rgb(237, 28, 37);
+                                border-radius: 50%;
+                                width: 15px;
+                                height: 15px;
+                                left: -2px;
+                                top: -50px;
+                                border: 1px solid rgb(238, 238, 238);
+                                display: block;
+                              "
+                            ></span>
+                            <span
+                              v-if="task.ignition == 1"
+                              style="
+                                position: relative;
+                                background-color: #31a24c;
+                                border-radius: 50%;
+                                width: 15px;
+                                height: 15px;
+                                left: -2px;
+                                top: -50px;
+                                border: 1px solid rgb(238, 238, 238);
+                                display: block;
+                              "
+                            ></span>
+                          </div>
+                          <p class="notify-details" style="margin-left: 57px">
+                            <b style="font-weight: 800">{{ task.name }}</b>
+                          </p>
+                          <p
+                            class="text-muted mb-0 user-msg"
+                            style="margin-left: 57px"
+                          >
+                            <small
+                              >{{ TimeToDate(task.rtc) }} -
+                              {{ task.adresse }}</small
+                            >
+                          </p>
+                        </li>
+                      </ul>
+
+                      <!-- end .d-flex-->
+                    </div>
+                    <!-- end col -->
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card -->
+              </div>
+              <!-- end .collapse-->
+
+              <!-- upcoming tasks -->
+            </b-collapse>
+          </div>
+          <!-- end row -->
         </div>
       </div>
-      <div class="col-9">
-        <div class="card">
-          <div class="card-body">
-            <div id="livedata"></div>
-          </div>
-        </div>
-        <div v-show="showCarInfo">
-          <Overview :items="statData" :classObject="classObject"  />
-        </div>
+      <div class="col-8">
+        <div id="livedata"></div>
       </div>
     </div>
   </Layout>
