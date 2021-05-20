@@ -36,6 +36,39 @@ const db = require('../../Database/NoSQLDatabase/db.js')
           }
           return driver  
     }
+////////////////////////////////////////////////////////////
+////////// retrieve last calcumated scores query ///////////
+    async function lastScoreQuery(carId,continuationToken){
+        return new Promise((resolve ,reject)=>{
+            query = new db.azure.TableQuery()
+            .select(['*'])
+            .where('PartitionKey eq ?',carId);
+            db.tableSvc.queryEntities('scorefinal', query, continuationToken, (error, results)=> {
+                if(!error){
+                    resolve(results);           
+                }else{
+                    reject(error);
+                }
+              });
+        
+        });
+    }
+//////////////////////////////////////////////////////////
+///////////// last score query call /////////////////////
+    async function lastScore(carId){
+        var continuationToken = null;
+        do{
+            var results =  await lastScoreQuery(carId,continuationToken);
+            continuationToken = results.continuationToken;  
+        }
+        while(continuationToken!=null);
+        return results;
+    }
+
+    async function getLastScore(carId){
+       result = await lastScore(carId);
+       return result.entries[(result.entries.length)-1];
+    }
 
 ///////////////////////////////////////////////////
 ////////// retrieve score with ID query  /////////
@@ -54,6 +87,8 @@ const db = require('../../Database/NoSQLDatabase/db.js')
       
       });
   }
+
+ 
 ///////////////////////////////////////////////////
 ////////// retrieve score query call /////////////
   async function ScoreData(carId){
@@ -192,5 +227,6 @@ async function calcScore(carId,debut,fin){
 }
 module.exports = {
     calcScore,
-    getAllScores
+    getAllScores,
+    getLastScore
 }

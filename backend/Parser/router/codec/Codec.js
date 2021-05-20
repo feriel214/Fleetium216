@@ -1,5 +1,5 @@
-const ClassRedis=require('../geofence/model/redis')
-const classAzure =require('../geofence/model/azuretablestorage')
+const ClassRedis=require('../geofence/model/redis');
+const classAzure =require('../geofence/model/azuretablestorage');
 module.exports = {
 	STT_STATUS : [],
   LBS: async (l, obj) => {

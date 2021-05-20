@@ -13,7 +13,7 @@ const db = require('../../Database/NoSQLDatabase/db.js');
         .where('PartitionKey eq ? ',carId);
         db.tableSvc.queryEntities('scorefinal', query, continuationToken, (error, results)=> {
             if(!error){
-                resolve(results)           
+                resolve(results);           
             }else{
                 reject(error);
             }

@@ -29,5 +29,18 @@ module.exports = {
             res.status(500).send('something went wrong')
         }
 
+    },
+    getLastScore : async function(req,res){
+        try {
+            result = await ScoreModel.getLastScore(req.body.carId);
+            if(result != null){
+                res.status(200).json(result);
+            }else{
+                res.status(404).json({error : true});
+            }
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).send('something went wrong')
+        }
     } 
 }

@@ -7,6 +7,7 @@ try {
   }
 
   const redis = require("redis");
+  console.log(process.env.port)
   const redis_client = redis.createClient({
     host: process.env.host,
     port: process.env.port,

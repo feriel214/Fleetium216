@@ -22,6 +22,7 @@ async function RoadSpeed(dt){
             }  
             
         }
+        console.log("speed 1",speed.speed_1);
         
         speed.speed_1 = Math.round(speed.speed_1 / 60);
         speed.speed_2 = Math.round(speed.speed_2 / 60);
