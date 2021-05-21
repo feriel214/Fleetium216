@@ -15,16 +15,9 @@ export default {
   components: { Layout, PageHeader, L, Overview },
   data() {
     return {
-      tabContent: `Vakal text here dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.`,
-      content: ` Donec pede justo, fringilla vel, aliquet nec, vulputate
-                  eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae,
-                  justo. Nullam dictum felis eu pede mollis pretium. Integer
-                  tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean
-                  vulputate eleifend tellus. Aenean leo ligula, porttitor eu,
-                  consequat vitae, eleifend ac, enim.`,
-      selectedTask: todayTasks[0],
       center: [36.8062423, 10.1869993],
       map: [],
+      index: 0,
       L: [],
       showCarInfo: false,
       options: [],
@@ -834,6 +827,7 @@ export default {
           },
         },
       },
+      overviewData: [],
       tableData: [],
       classObject: [{ class: 'col-md-6 col-xl-3' }],
       title: 'Advanced Tables',
@@ -855,6 +849,58 @@ export default {
       showdetails: false,
       statData: [],
       todayTasks: [...todayTasks],
+      strokedCircularGuage: {
+        chartOptions: {
+          plotOptions: {
+            radialBar: {
+              startAngle: -135,
+              endAngle: 135,
+              dataLabels: {
+                name: {
+                  fontSize: '16px',
+                  color: undefined,
+                  offsetY: 120,
+                },
+                value: {
+                  offsetY: 76,
+                  fontSize: '22px',
+                  color: undefined,
+                  formatter(val) {
+                    return val + '%'
+                  },
+                },
+              },
+            },
+          },
+          fill: {
+            gradient: {
+              enabled: true,
+              shade: 'dark',
+              shadeIntensity: 0.15,
+              inverseColors: false,
+              opacityFrom: 1,
+              opacityTo: 1,
+              stops: [0, 50, 65, 91],
+            },
+          },
+          stroke: {
+            dashArray: 4,
+          },
+          colors: ['#f46a6a'],
+          labels: ['Median Ratio'],
+          responsive: [
+            {
+              breakpoint: 380,
+              options: {
+                chart: {
+                  height: 280,
+                },
+              },
+            },
+          ],
+        },
+        series: [67],
+      },
     }
   },
   computed: {
@@ -891,7 +937,6 @@ export default {
         color: '#66CDAA',
       }
     )
-    
   },
 
   methods: {
@@ -1053,10 +1098,11 @@ export default {
         { withCredentials: true }
       )
     },
-   async  MoreDetails(task) {
+    async MoreDetails(task) {
+      this.index++
       this.showdetails = true
       console.log('Task', task)
-     let info = {
+      let info = {
         adresse: task.adresse,
         assignee_avatar: '/img/car2.8224a149.png',
         code_driver: task.code_driver,
@@ -1066,15 +1112,57 @@ export default {
         mainpower: task.mainpower,
         mdmid: task.mdmid,
         motion: task.motion,
-        gps_altitude:task.gps_altitude,
+        gps_altitude: task.gps_altitude,
         name: task.name,
-        gps_longitude:task.gps_longitude,
-        gps_latitude:task.gps_latitude,
+        gps_longitude: task.gps_longitude,
+        gps_latitude: task.gps_latitude,
         rtc: task.rtc,
         status_scooter: task.status_scooter,
-      };
-       this.task=info;
-     
+      }
+      this.overviewData.push(
+        {
+          class: 'py-3 border-bottom',
+          icon: require('../../../../assets/images/driver-icon.png'),
+          value:
+            task.code_driver == false ? 'Not available ' : task.code_driver,
+          title: 'Code Driver',
+        },
+        {
+          class: 'py-3 border-bottom',
+          icon: require('../../../../assets/images/car-pos.png'),
+          value:
+            String(task.gps_latitude).substr(0, 6) +
+            '°\n' +
+            String(task.gps_longitude).substr(0, 6) +
+            '°',
+          title: 'Position',
+        },
+        {
+          class: 'py-3 border-bottom',
+          icon: require('../../../../assets/images/speed1.png'),
+          value: task.gps_speed + 'km/h',
+          title: 'Speed',
+        },
+        {
+          class: 'py-3 border-bottom',
+          icon: require('../../../../assets/images/mpow.png'),
+          value: task.mainpower,
+          title: 'Mainpower',
+        },
+        {
+          class: 'py-3 border-bottom',
+          icon: require('../../../../assets/images/alt.png'),
+          value: task.gps_altitude + ' meter',
+          title: 'Altitude',
+        },
+        {
+          class: 'py-3 border-bottom',
+          icon: require('../../../../assets/images/mdmid.png'),
+          value: task.mdmid,
+          title: 'Mdmid ',
+        }
+      )
+      this.task = info
     },
     TimeToDate(unixTimestamp) {
       var date = new Date(parseFloat(unixTimestamp))
@@ -1095,11 +1183,34 @@ export default {
         (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
       )
     },
+    CloseDetails() {
+      this.showdetails = false
+    },
+    async getLastSore(idcar) {
+      axios.get('').then((res) => {
+        this.strokedCircularGuage.series = 0
+      })
+    },
+    refreshDetails() {
+      if (this.index != 0) {
+        this.task = {}
+      }
+    },
   },
 }
 </script>
  <style scoped>
 @import url('https://unpkg.com/leaflet@1.5.1/dist/leaflet.css');
+.header-title {
+  margin-left: 20px;
+  font-size: 1.04rem;
+  font-weight: 700;
+  margin-top: 15px;
+}
+.icon-dual .feather {
+  color: #f8f9fa;
+  fill: rgba(108, 117, 125, 0.12);
+}
 #livedata {
   height: 600px;
   z-index: 10 !important;
@@ -1153,29 +1264,43 @@ export default {
   background-color: white;
 }
 .nav-pills {
-    background-color: #6c757d;
-    padding: 6px 2px;
+  background-color: #6c757d;
+  padding: 6px 2px;
 }
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: #6c757d;
 }
 .media {
-    
-    background-color: #6c757d;
-    height:100px;
+  background-color: #6c757d;
+  height: 100px;
 }
 .avatar-lg {
-    margin-top: 15px;
-    margin-left: 15px;
-    width: 4.5rem;
-    height: 4.5rem;
+  margin-top: 15px;
+  margin-left: 15px;
+  width: 4.5rem;
+  height: 4.5rem;
 }
-.mt-2, .my-2 {
-    margin-top: 30px !important;
-    color: #f8f9fa !important;
+.mt-2,
+.my-2 {
+  margin-top: 30px !important;
+  color: #f8f9fa !important;
+}
+.color-icon {
+  color: #f6f6f7 !important;
+}
+.details-car[data-v-15a967ba] {
+  background-color: white !important;
+   height:66px;
+   margin-left: -20px;
 }
 
+.Ign-on{
+    color: #31a24c!important;
+}
+.Ign-off{
+    color: #ed1c25!important;
+}
 
 </style>
 
@@ -1187,72 +1312,164 @@ export default {
         <div class="tabs-car-details" v-show="showdetails">
           <div>
             <div class="media">
-    
-               <div class="picCars avatar-lg rounded-circle mr-2"> </div>
-                            <span
-                              v-if="task.ignition==0"
-                              style="
-                                position: relative;
-                                background: rgb(237, 28, 37);
-                                border-radius: 50%;
-                                width: 15px;
-                                height: 15px;
-                                left: -80px;
-                                top: 19px;
-                                border: 1px solid rgb(238, 238, 238);
-                                display: block;
-                              "
-                            ></span>
-                            <span
-                              v-if="task.ignition==1"
-                              style="
-                                position: relative;
-                                background-color: #31a24c;
-                                border-radius: 50%;
-                                width: 15px;
-                                height: 15px;
-                                 left: -80px;
-                                top: 19px;
-                                border: 1px solid rgb(238, 238, 238);
-                                display: block;
-                              "
-                            ></span>
+              <div class="picCars avatar-lg rounded-circle mr-2"> </div>
+              <span
+                v-if="task.ignition == 0"
+                style="
+                  position: relative;
+                  background: rgb(237, 28, 37);
+                  border-radius: 50%;
+                  width: 15px;
+                  height: 15px;
+                  left: -80px;
+                  top: 19px;
+                  border: 1px solid rgb(238, 238, 238);
+                  display: block;
+                "
+              ></span>
+              <span
+                v-if="task.ignition == 1"
+                style="
+                  position: relative;
+                  background-color: #31a24c;
+                  border-radius: 50%;
+                  width: 15px;
+                  height: 15px;
+                  left: -80px;
+                  top: 19px;
+                  border: 1px solid rgb(238, 238, 238);
+                  display: block;
+                "
+              ></span>
               <div class="media-body">
-                <h5 class="mt-2 mb-0">{{task.name}}</h5>
-                <h6 class="text-muted font-weight-normal mt-1 mb-4"
-                  style="color:#f8f9fa!important;"
-                  >{{task.adresse}}</h6
+                <h5 class="mt-2 mb-0">{{ task.name }}</h5>
+                <h6
+                  class="text-muted font-weight-normal mt-1 mb-4"
+                  style="color: #f8f9fa !important"
+                  >{{ task.adresse }}</h6
                 >
               </div>
-              <span style="color:red"><feather type="x" class="icon-dual"></feather></span>
-            
+              <span style="color: red"
+                ><feather
+                  type="x"
+                  class="color-icon"
+                  @click="CloseDetails()"
+                ></feather
+              ></span>
             </div>
           </div>
-          <div >
-            <b-tabs pills justified class="navtab-bg" >
-              <b-tab title="Details"  style="margin-left:20px" active>
-                <span v-if="task.code_driver!=false"><b><img src="../../../../assets/images/driver-icon.png" style="height:50px;width;50px">Code Driver :  </b> {{task.code_driver}}</span><br>
-                <span><img src="../../../../assets/images/car-pos.png" style="height:50px;width;50px"> <b>Position : </b>{{  String(task.gps_latitude).substr(0, 10) + '°\n' + String(task.gps_longitude).substr(0, 10) +'°'}} </span><br>
-                <span><img src="../../../../assets/images/speed.png" style="height:50px;width;50px"><b>Speed :  </b>{{task. gps_speed}} km/h . </span><br>
-                <span><img src="../../../../assets/images/mpow.png" style="height:50px;width;50px"><b>Mainpower : </b> {{task.mainpower}} </span><br>
-                <span><b>Mdmid : </b> {{task.mdmid}} </span><br>
-                <span><img src="../../../../assets/images/alt.png" style="height:50px;width;50px"><b>Altitude : </b> {{task.gps_altitude}}</span>
+          <div>
+            <b-tabs pills justified class="navtab-bg">
+              <b-tab title="Details" style="margin-left: 20px" active>
+                <div class="card">
+                  <div class="card-body pt-2">
+                    <!-- Mdmid -->
+                    <div class="media px-3 pt-3 details-car">
+                      <div class="media-body">
+                        <h4 class="mt-0 mb-1 font-size-22">Mdmid</h4>
+                        <span class="text-muted">{{ task.mdmid }}</span>
+                      </div>
+                       <i class="uil uil-lock-alt" style="font-size:24px;"></i> 
+                      
+                    </div>
+                    <!-- Code Driver -->
+                    <div class="media px-3 py-3 border-bottom details-car">
+                      <div class="media-body">
+                        <h4 class="mt-0 mb-1 font-size-22"
+                          >Code Driver</h4
+                        >
+                        <span class="text-muted">{{ task.code_drive }}</span>
+                      </div>
+                       <i class="uil uil-user" style="font-size:24px;"></i>
+                     
+                    </div>
+
+                    <!--Position-->
+                    <div class="media px-3 py-3 border-bottom details-car">
+                      <div class="media-body">
+                        <h4 class="mt-0 mb-1 font-size-22">
+                        Position
+                        </h4>
+                        <span class="text-muted">
+                            {{
+                            String(task.gps_latitude).substr(0, 6) +
+                            '°\n' +
+                            String(task.gps_longitude).substr(0, 6) +
+                            '°'
+                          }}</span>
+                          </div>
+                            <a :href="'https://www.google.com/maps/@'+task.gps_latitude+','+task.gps_longitude+'z'">
+
+                               <i class="uil uil-location-arrow"  style="font-size:24px;margin-left: 8px;
+                            margin-top: 3px;"></i>
+                            </a>
+                           
+                 
+                      
+                    
+                     
+                    </div>
+
+                    <!-- speed -->
+                    <div class="media px-3 py-3 border-bottom details-car">
+                      <div class="media-body">
+                        <h4 class="mt-0 mb-1 font-size-22"> Speed</h4>
+                        <span class="text-muted">
+                          {{
+                          task.gps_speed + 'km/h'
+                        }}
+                        </span>
+                      </div>
+                       <i class="uil uil-clock-eight" style="font-size:24px;"></i>
+                     
+                    </div>
+
+                    <!-- Mainpower -->
+                    <div class="media px-3 pt-3 details-car">
+                      <div class="media-body">
+                        <h4 class="mt-0 mb-1 font-size-22"> Mainpower </h4>
+                        <span  v-if="task.mainpower == 0" class="text-muted">Main power has been lost  </span>
+                        <span  v-else  class="text-muted">Main power applied  </span>
+                      </div>
+                        <i v-if="task.mainpower == 1" class="uil uil-key-skeleton-alt Ign-on" style="font-size:24px;"></i>
+                        <i v-else class="uil uil-key-skeleton-alt Ign-off" style="font-size:24px;"></i>           
+                    </div>
+                    <!-- Altitude -->
+                    <div class="media px-3 pt-3 details-car">
+                      <div class="media-body">
+                        <h4 class="mt-0 mb-1 font-size-22"> Altitude</h4>
+                        <span class="text-muted">{{ 
+                          task.gps_altitude
+                        }}</span>
+                      </div>
+                       <i class="uil uil-mountains" style="font-size:24px;"></i>
+                   
+                    </div>
+                  </div>
+                </div>
               </b-tab>
-              <b-tab title="Score">9999999999999999999999999999999</b-tab>
+              <b-tab title="Score">
+                <h4 class="header-title mt-0 mb-3">Your Score Result </h4>
+                <apexchart
+                  class="apex-charts"
+                  height="350"
+                  type="radialBar"
+                  :series="strokedCircularGuage.series"
+                  :options="strokedCircularGuage.chartOptions"
+                ></apexchart>
+              </b-tab>
             </b-tabs>
           </div>
         </div>
         <div class="row mt-4">
           <div class="col">
-          
             <b-collapse id="todayTasks" visible>
-                
               <div class="card mb-0 shadow-none">
                 <div
                   class="card-body pt-0"
                   style="height: 575px; overflow: auto"
                 >
-                <h5 class="mb-0">VEHICLES</h5>
+                  <h5 class="mb-0">VEHICLES</h5>
                   <div
                     class="row justify-content-sm-between border-bottom mt-2 pt-2"
                   >

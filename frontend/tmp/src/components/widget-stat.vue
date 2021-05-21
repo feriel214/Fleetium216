@@ -25,31 +25,43 @@ export default {
 </script>
 
 <template>
-  <div class="card">
-    <div class="card-body p-0">
-      <div class="media p-3">
+  <div class="card m-0">
+    <div class="card-body m-0 p-0">
+      <div class="media p-1">
         <div class="media-body">
-          <span
-            class="text-muted text-uppercase font-size-12 font-weight-bold"
-            >{{ title }}</span
-          >
-          <h6 class="mb-0">{{ value }}</h6>
+                  <img   :src="icon" style="height:15px;width;15px">
+                  <span
+                    class="text-muted text-uppercase font-size-12 font-weight-bold"
+                    ><b>{{ title }}</b></span
+                  >
+                <p  v-if="title=='Mainpower'" class="mb-0">
+                  <feather v-if="value == 1" type="key" class="icon-dual Ign-on" ></feather>
+                  <feather v-else type="key" class="icon-dual Ign-off" ></feather>
+                </p>
+              <span>
+          </span> <br>
+        {{value}}
+        
         </div>
-        <div class="align-self-center">
+        <!--<div class="align-self-center">
           <span>
-            <feather
-              :type="`${icon}`"
-              :style="`color:${color}`"
-            ></feather>
-          </span>
-        </div>
+            <img :src="icon" style="height:40px;width;40px">
+          
+          </span> 
+        </div>-->
       </div>
     </div>
   </div>
 </template>
-<style scoped>
+<style >
 .p-3 {
     padding: 1rem !important;
     height: 130px;
+}
+.Ign-on>.feather{
+    color: #31a24c!important;
+}
+.Ign-off>.feather{
+    color: #ed1c25!important;
 }
 </style>
