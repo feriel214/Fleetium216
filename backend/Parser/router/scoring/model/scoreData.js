@@ -85,8 +85,9 @@ async function dataQuery(carId,continuationToken,on,off){
       });
  });
  }
-res = scoreData("1","1584518355000","1584540410000");
+//res = scoreData("1","1584518355000","1584540410000");
 //res = scoreData("1","1584540412000","1584540429000");
+res = scoreData("1","1584512459000","1584518355000");
 if (res){
   console.log(true);
 }else{

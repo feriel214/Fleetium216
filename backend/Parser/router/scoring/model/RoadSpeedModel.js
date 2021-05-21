@@ -6,7 +6,7 @@ async function RoadSpeed(dt){
       };
         for (i = 0; i < dt.entries.length ; i++)
         {
-            if(dt.entries[i].gps_speed._ != null){
+            if(dt.entries[i].gps_speed._ != undefined){
 
                 if(parseInt(dt.entries[i].gps_speed._) >= 0 && parseInt(dt.entries[i].gps_speed._) <= 90){
                     speed.speed_1 = speed.speed_1 + 5;
