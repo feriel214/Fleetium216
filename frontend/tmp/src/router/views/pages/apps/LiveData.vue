@@ -8,7 +8,7 @@ import 'leaflet-rotatedmarker'
 import axios from 'axios'
 import Overview from '@components/overview'
 import { todayTasks } from './data-tasklist'
-//import markerIconPng from "leaflet/dist/images/marker-icon.png"
+//import markerIconPng from "leaflet/dist/images/marker-icon.png" 
 
 export default {
   name: 'LiveData',
@@ -833,19 +833,8 @@ export default {
       title: 'Advanced Tables',
       items: [],
       widgetData: [],
-      totalRows: 1,
-      currentPage: 1,
-      perPage: 5,
-      pageOptions: [5, 10, 12, 15, 25, 50, 100],
-      filter: null,
+      filter: '',
       filterOn: [],
-      sortBy: 'name',
-      sortDesc: false,
-      fields: [
-        { key: 'name', sortable: true },
-        { key: 'ignition', sortable: true },
-        { key: 'motion', sortable: true },
-      ],
       showdetails: false,
       statData: [],
       todayTasks: [...todayTasks],
@@ -901,15 +890,26 @@ export default {
         },
         series: [67],
       },
+      selected:{},
+      filterOptions:['carson','carsoff','mainpoweron','mainpoweroff']
+    
     }
   },
   computed: {
-    /**
-     * Total no. of records
-     */
-    rows() {
-      return this.tableData.length
+    filterdItems() {
+      return this.tableData.filter((data) => {
+        return (
+          data.adresse.toLocaleLowerCase().includes(this.filter) ||
+          data.name.toLocaleLowerCase().includes(this.filter)
+        )
+      })
     },
+    carsfilter(){
+        return  this.tableData.filter((value) => {
+        return  value.ignition==1 
+      })
+    }
+
   },
   async mounted() {
     // Set the initial number of items
@@ -922,7 +922,7 @@ export default {
         this.tableData.push(e)
       }
     })
-
+ await this.carsfilter();
     this.statData.push(
       {
         title: 'Car Name',
@@ -937,9 +937,14 @@ export default {
         color: '#66CDAA',
       }
     )
+   
   },
-
   methods: {
+      refreshFilter(e){
+      console.log('###############################')
+      console.log('event',e)
+        console.log(this.selected)
+    },
     async setupLeafletMap() {
       this.map = L.map('livedata').setView(this.center, 13) //places the map in San Francisco.
       L.tileLayer(
@@ -1075,19 +1080,14 @@ export default {
         this.map.addLayer(markers)
       })
 
-      markers.on('clusterclick', function (a) {
+      markers.on('clusterclick', function(a) {
         alert('clusterclick Clicked')
         a.layer.zoomToBounds({ padding: [20, 20] })
         console.log('cluster ' + a.layer.getAllChildMarkers().length)
       })
-      markers.on('click', function (a) {
+      markers.on('click', function(a) {
         alert('Marker Clicked')
       })
-    },
-    onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length
-      this.currentPage = 1
     },
     onPreviewClick(value, index, item) {
       console.log('value', value, 'index', index, 'item', item)
@@ -1199,7 +1199,7 @@ export default {
   },
 }
 </script>
- <style scoped>
+<style scoped>
 @import url('https://unpkg.com/leaflet@1.5.1/dist/leaflet.css');
 .header-title {
   margin-left: 20px;
@@ -1291,24 +1291,30 @@ export default {
 }
 .details-car[data-v-15a967ba] {
   background-color: white !important;
-   height:66px;
-   margin-left: -20px;
+  height: 66px;
+  margin-left: -20px;
 }
 
-.Ign-on{
-    color: #31a24c!important;
+.Ign-on {
+  color: #31a24c !important;
 }
-.Ign-off{
-    color: #ed1c25!important;
+.Ign-off {
+  color: #ed1c25 !important;
 }
-
+.custom-control {
+    margin-left: 10px;
+ 
+}
+.custom-control-label::after{
+    background-color:#6c757d!important;
+}
 </style>
 
 <template>
   <Layout>
     <PageHeader />
-    <div class="row">
-      <div class="col-4">
+    <div class="row" style="background-color: white;">
+      <div class="col-4" style="background-color: white;">
         <div class="tabs-car-details" v-show="showdetails">
           <div>
             <div class="media">
@@ -1369,45 +1375,48 @@ export default {
                         <h4 class="mt-0 mb-1 font-size-22">Mdmid</h4>
                         <span class="text-muted">{{ task.mdmid }}</span>
                       </div>
-                       <i class="uil uil-lock-alt" style="font-size:24px;"></i> 
-                      
+                      <i class="uil uil-lock-alt" style="font-size: 24px"></i>
                     </div>
                     <!-- Code Driver -->
                     <div class="media px-3 py-3 border-bottom details-car">
                       <div class="media-body">
-                        <h4 class="mt-0 mb-1 font-size-22"
-                          >Code Driver</h4
-                        >
-                        <span class="text-muted">{{ task.code_drive }}</span>
+                        <h4 class="mt-0 mb-1 font-size-22">Code Driver</h4>
+                        <span class="text-muted">{{ task.code_driver }}</span>
                       </div>
-                       <i class="uil uil-user" style="font-size:24px;"></i>
-                     
+                      <i class="uil uil-user" style="font-size: 24px"></i>
                     </div>
 
                     <!--Position-->
                     <div class="media px-3 py-3 border-bottom details-car">
                       <div class="media-body">
-                        <h4 class="mt-0 mb-1 font-size-22">
-                        Position
-                        </h4>
+                        <h4 class="mt-0 mb-1 font-size-22"> Position </h4>
                         <span class="text-muted">
-                            {{
+                          {{
                             String(task.gps_latitude).substr(0, 6) +
-                            '°\n' +
-                            String(task.gps_longitude).substr(0, 6) +
-                            '°'
-                          }}</span>
-                          </div>
-                            <a :href="'https://www.google.com/maps/@'+task.gps_latitude+','+task.gps_longitude+'z'">
-
-                               <i class="uil uil-location-arrow"  style="font-size:24px;margin-left: 8px;
-                            margin-top: 3px;"></i>
-                            </a>
-                           
-                 
-                      
-                    
-                     
+                              '°\n' +
+                              String(task.gps_longitude).substr(0, 6) +
+                              '°'
+                          }}</span
+                        >
+                      </div>
+                      <a
+                        :href="
+                          'https://www.google.com/maps/@' +
+                            task.gps_latitude +
+                            ',' +
+                            task.gps_longitude +
+                            'z'
+                        "
+                      >
+                        <i
+                          class="uil uil-location-arrow"
+                          style="
+                            font-size: 24px;
+                            margin-left: 8px;
+                            margin-top: 3px;
+                          "
+                        ></i>
+                      </a>
                     </div>
 
                     <!-- speed -->
@@ -1415,35 +1424,44 @@ export default {
                       <div class="media-body">
                         <h4 class="mt-0 mb-1 font-size-22"> Speed</h4>
                         <span class="text-muted">
-                          {{
-                          task.gps_speed + 'km/h'
-                        }}
+                          {{ task.gps_speed + 'km/h' }}
                         </span>
                       </div>
-                       <i class="uil uil-clock-eight" style="font-size:24px;"></i>
-                     
+                      <i
+                        class="uil uil-clock-eight"
+                        style="font-size: 24px"
+                      ></i>
                     </div>
 
                     <!-- Mainpower -->
                     <div class="media px-3 pt-3 details-car">
                       <div class="media-body">
                         <h4 class="mt-0 mb-1 font-size-22"> Mainpower </h4>
-                        <span  v-if="task.mainpower == 0" class="text-muted">Main power has been lost  </span>
-                        <span  v-else  class="text-muted">Main power applied  </span>
+                        <span v-if="task.mainpower == 0" class="text-muted"
+                          >Main power has been lost
+                        </span>
+                        <span v-else class="text-muted"
+                          >Main power applied
+                        </span>
                       </div>
-                        <i v-if="task.mainpower == 1" class="uil uil-key-skeleton-alt Ign-on" style="font-size:24px;"></i>
-                        <i v-else class="uil uil-key-skeleton-alt Ign-off" style="font-size:24px;"></i>           
+                      <i
+                        v-if="task.mainpower == 1"
+                        class="uil uil-key-skeleton-alt Ign-on"
+                        style="font-size: 24px"
+                      ></i>
+                      <i
+                        v-else
+                        class="uil uil-key-skeleton-alt Ign-off"
+                        style="font-size: 24px"
+                      ></i>
                     </div>
                     <!-- Altitude -->
                     <div class="media px-3 pt-3 details-car">
                       <div class="media-body">
                         <h4 class="mt-0 mb-1 font-size-22"> Altitude</h4>
-                        <span class="text-muted">{{ 
-                          task.gps_altitude
-                        }}</span>
+                        <span class="text-muted">{{ task.gps_altitude }}</span>
                       </div>
-                       <i class="uil uil-mountains" style="font-size:24px;"></i>
-                   
+                      <i class="uil uil-mountains" style="font-size: 24px"></i>
                     </div>
                   </div>
                 </div>
@@ -1464,23 +1482,69 @@ export default {
         <div class="row mt-4">
           <div class="col">
             <b-collapse id="todayTasks" visible>
-              <div class="card mb-0 shadow-none">
+              <div class="card mb-0 shadow-none"  >
                 <div
                   class="card-body pt-0"
                   style="height: 575px; overflow: auto"
                 >
                   <h5 class="mb-0">VEHICLES</h5>
+                  <div class="row mb-md-2">  
+                    <div class="col-sm-12 col-md-6">
+                     
+                    </div>             
+                    <div class="col-sm-12 col-md-12">
+                      <div
+                        id="tickets-table_filter"
+                        class="dataTables_filter text-md-right"
+                      >
+                        <label class="d-inline-flex align-items-center">
+                          Search:
+                          <b-form-input
+                            v-model="filter"
+                            type="search"
+                            placeholder="Search..."
+                            class="form-control form-control-sm ml-2"
+                          ></b-form-input>
+                          <div>
+                            
+                          </div>
+                                     <!--start here -->
+                     
+                      <b-nav-item-dropdown
+                        id="globe-tooltip"
+                        right
+                        variant="black"
+                        class="dropdown d-none d-lg-block"
+                      >
+                        <template v-slot:button-content>
+                        <feather type="filter" style="color: #6c757d;"></feather>
+                        </template>  
+                         <b-form-checkbox  @change="refreshFilter($event)" value="carson">carson</b-form-checkbox>
+                         <b-form-checkbox  @change="refreshFilter(event)"  value="cars off">cars off</b-form-checkbox>
+                         <b-form-checkbox  @change="refreshFilter(event)"  >main power on</b-form-checkbox>
+                         <b-form-checkbox  @change="refreshFilter(event)" >main power off</b-form-checkbox>
+                   
+                      </b-nav-item-dropdown>
+                   
+                       <!--ends here -->
+                        </label>
+            
+                      </div>
+                    </div>
+                    
+                
+                  </div>
                   <div
                     class="row justify-content-sm-between border-bottom mt-2 pt-2"
                   >
                     <!-- end col -->
-                    <div class="col-lg-12">
+                    <div class="col-lg-12" style="margin-top:-60px;">
                       <ul
                         class="list-inline font-15 list-group notification-list"
                       >
                         <li
                           style="padding: 0; margin: 0"
-                          v-for="(task, index) of tableData"
+                          v-for="(task, index) of filterdItems"
                           :key="index"
                           v-on:click="MoreDetails(task)"
                           role="presentation"

@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       revenueAreaChart: revenueAreaChart,
-
+      topTenPowerSaver:[],
       targetsBarChart: {
         chartOptions: {
           colors: ['#5369f8', '#43d39e', '#f77e53', '#ffbe0b'],
@@ -63,11 +63,16 @@ export default {
           },
           xaxis: {
             categories: [
-              'Acceleration',
-              'Cornering',
-              'Freinage',
-              'Idling',
-              'Millage',
+              'Driver 1',
+              'Driver 2',
+              'Driver 3',
+              'Driver 4',
+              'Driver 5',
+              'Driver 6',
+              'Driver 7',
+              'Driver 8',
+              'Driver 9',
+              'Driver 10'
             ],
             axisBorder: {
               show: false,
@@ -92,9 +97,9 @@ export default {
         ],
       },
 
-      ordersData: ordersData,
-      power_saver:{},
-      nature_friend:{},
+      ordersData: [],
+      power_saver: {},
+      nature_friend: {},
       maxHeight: '328px',
       topTen: [],
       statData: [],
@@ -166,6 +171,7 @@ export default {
         },
       ],
       statChart: [],
+      data:[],
       chatMessages: [
         {
           id: 1,
@@ -196,24 +202,108 @@ export default {
           time: '10:02',
         },
       ],
-      dateTimePicker: {
-        enableTime: false,
-        dateFormat: 'Y-m-d H:i',
-      },
-      datetime: null,
-      dateConfig: {
-        mode: 'range',
-      },
-      score: {
-        start: null,
-        end: null,
-        car: null,
-      },
+
       classObject: [{ class: 'col-md-6 col-xl-4' }],
-      salesDonutChart: {
-        labels: [],
-        series: [],
+      salesDonutChart :{
+  chartOptions: {
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '70%',
+        },
+        expandOnClick: false,
       },
+    },
+     basicBarChart: {
+  series: [
+    {
+      data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
+    },
+  ],
+  chartOptions: {
+    chart: {
+      toolbar: {
+        show: false,
+      },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+
+    colors: ['#5369f8'],
+    xaxis: {
+      // tslint:disable-next-line: max-line-length
+      categories: [
+        'South Korea',
+        'Canada',
+        'United Kingdom',
+        'Netherlands',
+        'Italy',
+        'France',
+        'Japan',
+        'United States',
+        'China',
+        'Germany',
+      ],
+      axisBorder: {
+        color: '#d6ddea',
+      },
+      axisTicks: {
+        color: '#d6ddea',
+      },
+    },
+    states: {
+      hover: {
+        filter: 'none',
+      },
+    },
+    grid: {
+      borderColor: '#f1f3fa',
+    },
+    tooltip: {
+      theme: 'dark',
+      x: { show: false },
+    },
+  },
+}
+
+    ,
+    colors: ['#5369f8', '#43d39e', '#f77e53', '#ffbe0b'],
+    legend: {
+      show: true,
+      position: 'right',
+      horizontalAlign: 'left',
+      itemMargin: {
+        horizontal: 6,
+        vertical: 3,
+      },
+    },
+    labels: ['Driver 1', 'Driver 2', 'Driver 3', 'Driver 4', 'Driver 5','Driver 6', 'Driver 7', 'Driver 8', 'Driver 9', 'Driver 10' ],
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          legend: {
+            position: 'bottom',
+          },
+        },
+      },
+    ],
+    tooltip: {
+      y: {
+        formatter: (value) => {
+          return value + 'Minutes'
+        },
+      },
+    },
+  },
+  series: [],
+},
       salesDonutChart1: {
         labels: [],
         series: [20, 30, 40],
@@ -221,181 +311,6 @@ export default {
       simplePieChart: {
         labels: [],
         series: [],
-      },
-
-      userCars: {
-        data: {
-          21038: {
-            gps_longitude: 10.187016666666667,
-            gps_heading: 254.6,
-            adresse: 'Rue El Bahja, Ariana Ville, Ariana',
-            mainpower: '1',
-            gps_altitude: '12',
-            gps_latitude: 36.87251666666667,
-            name: '21038',
-            gps_speed: 0,
-            rtc: 1589369876000,
-            ignition: 0,
-            motion: 0,
-            mdmid: '013799001768045',
-            code_driver: false,
-            status_scooter: false,
-          },
-          20910: {
-            name: '20910',
-            gps_longitude: 10.140433333333334,
-            gps_heading: 301.9,
-            gps_speed: 0,
-            rtc: 1603289917000,
-            adresse:
-              'Rue Ibn El Khatib, Cit\u00e9 Ibn Khaldoun, El Omrane Sup\u00e9rieur, Tunis',
-            mainpower: '1',
-            gps_altitude: '65',
-            gps_latitude: 36.828833333333336,
-            ignition: 1,
-            motion: 1,
-            mdmid: '013799001702804',
-            code_driver: false,
-            status_scooter: false,
-          },
-          20914: {
-            gps_longitude: 10.186883333333334,
-            gps_heading: 0,
-            adresse: 'Rue El Bahja, Ariana Ville, Ariana',
-            mainpower: '0',
-            gps_altitude: '6',
-            gps_latitude: 36.87243333333333,
-            name: '20914',
-            gps_speed: 0,
-            rtc: 1598026053000,
-            ignition: 0,
-            motion: 0,
-            mdmid: '013799001767922',
-            code_driver: '285',
-            status_scooter: false,
-          },
-          20902: {
-            name: '20902',
-            gps_longitude: 10.146433333333333,
-            gps_heading: 188.5,
-            gps_speed: 0,
-            rtc: 1615347133000,
-            adresse: 'Zaghouan, Zaghouan',
-            mainpower: '0',
-            gps_altitude: '162',
-            gps_latitude: 36.4045,
-            ignition: 0,
-            motion: 0,
-            mdmid: '013799001702770',
-            code_driver: false,
-            status_scooter: false,
-          },
-          20945: {
-            name: '20945',
-            gps_longitude: 10.059366666666667,
-            gps_heading: 41.8,
-            gps_speed: 33.891600000000004,
-            rtc: 1604504627000,
-            adresse: 'RN 5 \u0637\u0648, El Hrairia, Tunis',
-            mainpower: '0',
-            gps_altitude: '104',
-            gps_latitude: 36.77718333333333,
-            ignition: 0,
-            motion: 1,
-            mdmid: '013799001675174',
-            code_driver: false,
-            status_scooter: false,
-          },
-          21041: {
-            name: '21041',
-            gps_longitude: 10.186916666666667,
-            gps_heading: 175.8,
-            gps_speed: 0,
-            rtc: 1592843991000,
-            adresse: 'Rue El Bahja, Ariana Ville, Ariana',
-            mainpower: '0',
-            gps_altitude: '36',
-            gps_latitude: 36.8725,
-            ignition: 0,
-            motion: 1,
-            mdmid: '013799001702648',
-            code_driver: false,
-            status_scooter: false,
-          },
-          20911: {
-            gps_longitude: 10.131683333333333,
-            gps_heading: 0,
-            adresse: 'Cit\u00e9 Ettahrir, El Omrane Sup\u00e9rieur, Tunis',
-            mainpower: '1',
-            gps_altitude: '61',
-            gps_latitude: 36.829633333333334,
-            name: '20911',
-            gps_speed: 0,
-            rtc: 1601636259000,
-            ignition: 0,
-            motion: 0,
-            mdmid: '013799001674144',
-            code_driver: '283',
-            status_scooter: false,
-          },
-          21034: {
-            gps_longitude: 10.186983333333334,
-            gps_heading: 95.3,
-            adresse: '',
-            mainpower: '1',
-            gps_altitude: '18',
-            gps_latitude: 36.872483333333335,
-            name: '21034',
-            gps_speed: 5.556,
-            rtc: 1598542481041,
-            ignition: 1,
-            motion: 1,
-            mdmid: '013799001674037',
-            code_driver: '303',
-            status_scooter: false,
-          },
-          21047: {
-            name: '21047',
-            gps_longitude: 0,
-            gps_heading: 0,
-            gps_speed: 0,
-            rtc: 1601377388000,
-            adresse: '',
-            mainpower: '1',
-            gps_altitude: '9',
-            gps_latitude: 0,
-            ignition: 0,
-            motion: 0,
-            mdmid: '013799001705369',
-            code_driver: false,
-            status_scooter: false,
-          },
-          21046: {
-            name: '21046',
-            gps_longitude: 10.1839,
-            gps_heading: 101.3,
-            gps_speed: 0,
-            rtc: 1585984992000,
-            adresse: 'Raoued, Ariana',
-            mainpower: '1',
-            gps_altitude: '73',
-            gps_latitude: 36.900533333333335,
-            ignition: 0,
-            motion: 0,
-            mdmid: '013799001674136',
-            code_driver: false,
-            status_scooter: false,
-          },
-        },
-      },
-      format24: null,
-      finalscore:false,
-      preload: {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: 'H:i',
-        defaultDate: '00:00',
-        time_24hr: true,
       },
       lastindex: 0,
       index: null,
@@ -409,6 +324,7 @@ export default {
         },
       },
       tableData: [],
+      overviewData: [],
       title: 'List Cars In Fence',
       items: [
         {
@@ -430,7 +346,7 @@ export default {
       pageOptions: [5, 10, 25, 50, 100],
       filter: null,
       filterOn: [],
-      finalscoreres:null,
+
       sortBy: 'age',
       sortDesc: false,
       fields: [
@@ -474,11 +390,12 @@ export default {
   async mounted() {
     // Set the initial number of items
     this.totalRows = this.items.length
-    Object.keys(this.userCars.data).forEach((e) => this.options.push(`${e}`))
-    await this.getTopTenDriver()
-    await this.gettopDriver()
-    await this.powerSaver();
-    await this.natureFriend();
+    // Object.keys(this.userCars.data).forEach((e) => this.options.push(`${e}`))
+       await this.natureFriend()
+   await this.getTopTenDriver()
+    await this.powerSaver()
+
+    await this.getTopTrip();
   },
   computed: {
     /**
@@ -493,152 +410,152 @@ export default {
         return field.editable === true
       })
     },
- 
   },
   methods: {
-   async getFinalScore() {
-     
-      let data = {
-        carId: "1",//this.score.car
-        debut: this.score.start.substr(0,10),
-        fin: this.score.end.substr(0,10),
-      }
-      console.log('data ', data)
+    async getTopTrip(){
+     axios.get('http://localhost:3000/ranks/top-trip').then(res=>{
+       console.log('//////////////////////Top trip : ',res.data)
+     })
+    },
+    async powerSaver() {
       axios
-        .post('http://localhost:3000/score', data)
-        .then((res) => {
-          console.log('getFinalScores res : ', res)
-           this.finalscore=true;
-          this.finalscoreres=res.data.Score;
-        },err=>{
-            this.refershForm();
-            this.finalscoreres=null;
-            this.$toast.warning(`car Not found or wrong date please check ! `);
-            this.finalscore=false;
-        })
-        .catch(function (error) {
-         
-          console.log(error)
-        })
-    },
-    async powerSaver(){
-        axios
         .get('http://localhost:3000/ranks/power-saver')
-        .then((res) => {
-          this.power_saver=res.data;
-          console.log('@@@@@@@@@@@ powerSaver @@@@@@@@@@@',res.data)
-          this.statChart.push({
-            mainTitle: 'Power Saver',
-            value: res.data["driver1"].PartitionKey._+' | '+res.data["driver1"].Idling._,
-            chartColor: '#5369f8',
-            image: require('@assets/images/download.png'),
-          })
+        .then(async(res) => {
+          this.power_saver = res.data
+          console.log('@@@@@@@@@@@ powerSaver @@@@@@@@@@@', res.data)
+        
+          var i=1;
+          while(i<=10){
+          
+            this.ordersData.push({
+              "carname":res.data[`driver${i}`].PartitionKey._,
+              "startdate":res.data[`driver${i}`].debut._,
+              "enddate":res.data[`driver${i}`].fin._,
+              "egt":res.data[`driver${i}`].engineRT._,
+              "score":res.data[`driver${i}`].score._,
+            })
+            i++
+          }
+       this.overviewData.push({
+            class: 'border-bottom py-4',
+            icon: 'battery-charging',
+            value: res.data['driver1'].PartitionKey._,
+            title: 'Top Power Saver',
+          }) 
+         // this.revenueAreaChart.series[0].data=
+        
+         
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log(error)
         })
     },
-    async natureFriend (){
-       axios
+    async natureFriend() {
+      axios
         .get('http://localhost:3000/ranks/nature-friend')
         .then((res) => {
-          this.nature_friend=res.data;
-           console.log('@@@@@@@@@@@ natureFriend @@@@@@@@@@@',res.data)
-           this.statChart.push({
-            mainTitle: 'Nature Friend ',
-            value:res.data["driver1"].PartitionKey._+' | '+ res.data["driver1"].Idling._,
-            chartColor: '#f77e53',
-            image: require('@assets/images/friend-nature.png'),
+          this.overviewData.push({
+            class: 'border-bottom py-4',
+            icon: 'cloud-lightning',
+            value: res.data['driver1'].PartitionKey._,
+            title: 'Top Nature Friend',
           })
+          console.log('@@@@@@@@@@@ natureFriend @@@@@@@@@@@', res.data)
+        var i=0;
+         while(i<10){
+          this.targetsBarChart.series[0].data[i]=res.data[`driver${i+1}`]["Idling"]._ 
+          this.salesDonutChart.series.push(
+           res.data[`driver${i+1}`]["Idling"]._ 
+           
+      )
+         i++;
+         }
+         
+
+
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log(error)
         })
     },
-    async gettopDriver() {
-      axios
-        .get('http://localhost:3000/ranks/top-driver')
-        .then((res) => {
-          console.log('************************** Top one driver :',res.data)
-          this.topdriver =res.data;
-            this.statChart.push({
-            mainTitle: 'Top Driver ',
-            value:`${res.data.score._}/10`,
-            chartColor: '#43d39e',
-            image: require('@assets/images/driver.png'),
-          })
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-    },
-   
     async getTopTenDriver() {
       axios
         .get('http://localhost:3000/ranks/top-ten')
         .then((res) => {
-         console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&',res.data)
+          console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&& Top Ten Drivers ', res.data)
           this.topTen = res.data
+           this.overviewData.push({
+            class: 'border-bottom py-4',
+            icon: 'trending-up',
+            value: res.data["driver1"].score._,
+            title: 'Top Driver',
+          })
           for (var i in res.data) {
-           this.tableData.push({
+            this.tableData.push({
               car: res.data[`${i}`].PartitionKey._,
               start_date: res.data[`${i}`].debut._,
               end_date: res.data[`${i}`].fin._,
-              idling:res.data[`${i}`].Idling._,
+              idling: res.data[`${i}`].Idling._,
               acceleration: res.data[`${i}`].Acceleration._,
               freinage: res.data[`${i}`].Freinage._,
               cornering: res.data[`${i}`].Cornering._,
               engine_runtime: res.data[`${i}`].engineRT._,
-              milleage:res.data[`${i}`].Millage._,
-              roadspped1:res.data[`${i}`].roadspeed_1._,
-              roadspped2:res.data[`${i}`].roadspeed_2._,
-              roadspped3:res.data[`${i}`].roadspeed_3._,
-              roadTime1:res.data[`${i}`].roadtime_1._,
-              roadTime2:res.data[`${i}`].roadtime_2._,
-              roadTime3:res.data[`${i}`].roadtime_3._,
+              milleage: res.data[`${i}`].Millage._,
+              roadspped1: res.data[`${i}`].roadspeed_1._,
+              roadspped2: res.data[`${i}`].roadspeed_2._,
+              roadspped3: res.data[`${i}`].roadspeed_3._,
+              roadTime1: res.data[`${i}`].roadtime_1._,
+              roadTime2: res.data[`${i}`].roadtime_2._,
+              roadTime3: res.data[`${i}`].roadtime_3._,
               score: res.data[`${i}`].score._,
-              
             })
           }
           this.totalRows = this.tableData.length
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log(error)
         })
     },
-    async showStatistics(driverscore,index) {
-      console.log('########## driverscore #########', driverscore,index)
+ 
+  
+    async showStatistics(driverscore, index) {
+      console.log('########## driverscore #########', driverscore, index)
       this.index1 = index
       this.lastindex++
       this.showdetails = true
 
       if (this.lastindex > 1) {
-        this.refreshCharts();
+        this.refreshCharts()
       }
 
       this.simplePieChart.labels.push('0-90 km/h', '90-120 km/h', '>120 km/h')
-      this.salesDonutChart.labels.push('2 AM : 4 PM', '4 PM : 8 PM', '8 PM : 2 AM')
+      this.salesDonutChart.labels.push(
+        '2 AM : 4 PM',
+        '4 PM : 8 PM',
+        '8 PM : 2 AM'
+      )
 
       //RoadSpeed data
       this.simplePieChart.series.push(
         driverscore.roadspped1,
         driverscore.roadspped2,
         driverscore.roadspped3
-      );
+      )
       //RoadTime
-      this.salesDonutChart.series.push(
+     /*  this.salesDonutChart.series.push(
         driverscore.roadTime1,
         driverscore.roadTime2,
         driverscore.roadTime3
-      );
+      ) */
       //Other Information
-      await this.targetsBarChart.series[0].data.push(
+   /*   
+    await this.targetsBarChart.series[0].data.push(
         driverscore.acceleration,
         driverscore.cornering,
-        driverscore. freinage,
+        driverscore.freinage,
         driverscore.idling,
         driverscore.milleage
-      );
+      )
       this.overviewData.push(
         {
           class: 'border-bottom py-4',
@@ -682,58 +599,31 @@ export default {
           title: 'Score',
           color: '#5369f8',
         }
-      );
-      document.body.scrollTop = 600
+      )
+     
+      */
+     
+     document.body.scrollTop = 600
       document.documentElement.scrollTop = 600
     },
-    InsertEndTime(Params) {
-      console.log(' this.score.end', this.score.end)
-      this.score.end = Params['__ob__'].value[0].getTime()
-    },
-    InsertStartTime(Params) {
-      console.log(' this.score.start', this.score.start)
-      this.score.start = Params['__ob__'].value[0].getTime()
-    },
+
     ValidationsStatus(validation) {
       console.log('validation : ', validation)
       return typeof validation != 'undefined' ? validation.$error : false
     },
-    refershForm() {
-      this.score.start = '00:00'
-      this.score.end = '00:00'
-      this.score.car = 'IN'
-    },
-    Cancel() {
-      this.finalscore=false;
-      this.$swal
-        .fire({
-          title: 'Are you sure to undo ?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, cancel it!',
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            this.$swal.fire('Canceled!', 'Action has been canceled.', 'success')
-            this.refershForm()
-          }
-        })
-    },
+
     refreshCharts() {
       this.simplePieChart.labels = []
       this.simplePieChart.series = []
-      this.targetsBarChart.series.data = []
-      this.targetsBarChart.chartOptions.labels = []
-      this.salesDonutChart.series = []
+     /*  this.targetsBarChart.series.data = []
+      this.targetsBarChart.chartOptions.labels = [] */
+     // this.salesDonutChart.series = []
       this.overviewData = []
     },
     HideStatistics(param) {
       this.showdetails = !param
       this.index1 = null
-      this.refreshCharts();
+      this.refreshCharts()
       document.body.scrollTop = 0
       document.documentElement.scrollTop = 0
     },
@@ -816,7 +706,20 @@ export default {
         <h4 class="mb-1 mt-0">Dashboard</h4>
       </div>
     </div>
-   
+    	<div class="row">
+			<div
+				v-for="stat of statChart"
+				:key="stat.mainTitle"
+				class="col-md-6 col-xl-3"
+			>
+				<StatChart
+					:main-title="stat.mainTitle"
+					:value="stat.value"
+					:sub-value="stat.subValue"
+					:chart-color="stat.chartColor"
+				/>
+			</div>
+		</div>
     <div class="row">
       <div
         v-for="stat of statChart"
@@ -832,88 +735,9 @@ export default {
         />
       </div>
     </div>
-    <div class="row">
-      <div class="col-xl-5">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title mt-0 pb-2 header-title">Calculate Score </h5>
-              <form v-on:submit.prevent="getFinalScore()">
-            <div class="row">
-              <div class="card-body">
-                <div class="form-group mb-3">
-                  <flat-pickr
-                    v-model="score.start"
-                    :config="dateTimePicker"
-                    @on-change="InsertStartTime"
-                    class="form-control"
-                    placeholder="Date and Time"
-                  ></flat-pickr>
-                </div>
-                <div class="form-group mb-3">
-                  <flat-pickr
-                    v-model="score.end"
-                    :config="dateTimePicker"
-                    @on-change="InsertEndTime"
-                    class="form-control"
-                    placeholder="Date and Time"
-                  ></flat-pickr>
-                </div>
 
-                <div class="form-group mb-3">
-                  <b-form-select
-                    size="lg"
-                    class="mb-2"
-                    v-model="score.car"
-                    :options="options"
-                  ></b-form-select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="card-body">
-                <button type="submit" class="btnTlmtk btn-primary-Tlmtk" > 
-                  Calculate Score</button
-                >
-              </div>
-              <div class="card-body">
-                <button
-                  class="btnTlmtk btn-danger-Tlmtk"
-                  type="button"
-                  @click="Cancel()"
-                  >Cancel</button
-                >
-              </div>
-            </div>
-          </form>
-          </div>
-        
-        </div>
-      </div>
-      <div class="col-xl-7">
-        <div class="card">
-          <div class="card-body" style="height:375px">
-            <h1  v-if="finalscore"  style="color:red">Score  :  {{finalscoreres}}</h1>
-             <h5  v-if="!finalscore" class="card-title mt-0 pb-2 header-title">Fill Up the Form and Let's see the score ! </h5>
-            <div v-if="finalscore">
-              <img  v-if="finalscoreres>5"    src="@assets/images/smile.png"   style="width:250px;height:250px;margin-left:200px;"  class="avatar rounded mr-3" alt="shreyu" />
-              <img  v-if="finalscoreres == 5" src="@assets/images/unnamed.png" style="width:250px;height:250px;margin-left:220px;"  class="avatar rounded mr-3" alt="shreyu" />
-              <img  v-if="finalscoreres<5 && finalscoreres >0"  src="@assets/images/sad.png"     style="width:250px;height:250px;margin-left:150px;"  class="avatar rounded mr-3" alt="shreyu" />
-            </div>
-            <div v-else>
-                <img src="@assets/images/trophy.png" 
-                class="avatar rounded mr-3" 
-                alt="shreyu"
-                style="width:300px;height:280px;margin-left:100px;"/>
-             
-             
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row" v-show="showdetails">
-      <div class="col-xl-6">
+<!--  <div class="row" v-show="showdetails">
+      <div class="col-xl-4">
         <div class="card">
           <div class="card-body" style="height: 400px">
             <h4>Road Speed</h4>
@@ -924,6 +748,21 @@ export default {
           </div>
         </div>
       </div>
+      <div class="col-xl-5">
+        <div class="card" style="height: 400px">
+          <div class="card-body">
+            <h5>Road Time</h5>
+          
+            <SalesDonutChart
+              :series="salesDonutChart.series"
+              :labels="salesDonutChart.labels"
+            ></SalesDonutChart>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" v-show="showdetails">
       <div class="col-xl-6">
         <div class="card">
           <div class="card-body" style="height: 400px">
@@ -937,25 +776,112 @@ export default {
           </div>
         </div>
       </div>
-    </div>
-    <div class="row" v-show="showdetails">
       <div class="col-xl-6">
-        <div class="card" style="height: 400px">
-          <div class="card-body">
-            <h5>Road Time</h5>
-            <!-- Road Time  -->
-            <SalesDonutChart
-              :series="salesDonutChart.series"
-              :labels="salesDonutChart.labels"
-            ></SalesDonutChart>
-            <!-- Road Time  -->
-          </div>
-        </div>
+        <Overview :items="overviewData" />
       </div>
-      <div class="col-xl-6">
-        <Overview :items="overviewData" style="height: 400px" />
-      </div>
+    </div> -->
+
+    <div class="row">
+     <div class="col-xl-3">
+				<Overview :items="overviewData" />
+			</div>
+      	<div class="col-xl-3">
+				<div class="card">
+					<div class="card-body pb-0">
+						<h5 class="card-title header-title">Top 10 Nature Friend</h5>
+						<!-- Target Radialbar chart -->
+						<div class="mt-3">
+							<apexchart
+								type="bar"
+								height="282"
+								:series="targetsBarChart.series"
+								:options="targetsBarChart.chartOptions"
+							></apexchart>
+						</div>
+						<!-- end target chart -->
+					</div>
+				</div>
+			</div> 
+  <!--     <div class="col-xl-6">
+				
+						<apexchart
+							height="380"
+							type="bar"
+							class="apex-charts"
+							:series="basicBarChart.series"
+							:options="basicBarChart.chartOptions"
+						></apexchart>
+					
+			</div> -->
     </div>
+
+		<div class="row">
+			<div class="col-xl-5">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title mt-0 pb-2 header-title">Top 10 Nature Friend</h5>
+						<!-- Sales donut chart -->
+						<apexchart
+							type="donut"
+							height="304"
+							:series="salesDonutChart.series"
+							:options="salesDonutChart.chartOptions"
+						></apexchart>
+						<!-- end sales chart -->
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-7">
+				<div class="card">
+					<div class="card-body">
+						<a
+							href="javascript: void(0);"
+							class="btn btn-primary btn-sm float-right"
+						>
+							<i class="uil uil-export ml-1"></i> Export
+						</a>
+						<h5 class="card-title mt-0 mb-0 header-title">Top Ten Power Saver</h5>
+						<div class="table-responsive mt-4 mb-0">
+							<b-table-simple class="table table-hover table-nowrap mb-0">
+								<b-thead class="thead-white">
+									<b-tr>
+										<b-th>Car Name</b-th>
+										<b-th>Start Date</b-th>
+										<b-th>End Date</b-th>
+										<b-th>Engine Run Time</b-th>
+										<b-th>Score</b-th>
+									</b-tr>
+								</b-thead>
+								<b-tbody>
+									<b-tr v-for="(order,index) in ordersData" :key="index">
+										<b-td>{{ order.carname }}</b-td>
+										<b-td>{{ order.startdate }}</b-td>
+										<b-td>{{ order.enddate }}</b-td>
+										<b-td>{{ order.egt }}</b-td>
+										<b-td>
+											<span
+												class="badge"
+												:class="{
+													'badge-soft-warning': `${order.score}` < 5,
+													'badge-soft-success':
+														`${order.score}` > 5,
+													'badge-soft-danger': `${order.score}` == 5 
+                         
+												}"
+												
+                        
+												>{{ order.score }}</span
+											>
+										</b-td>
+									</b-tr>
+								</b-tbody>
+							</b-table-simple>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
     <div class="row">
       <div class="col-12">
         <div class="card">
@@ -1010,23 +936,23 @@ export default {
                 @filtered="onFiltered"
               >
                 <template #cell(score)="row">
-                 {{ row.item.score }} /10 
-                <span style="color: blue">  
-                  <i v-if="row.item.score > 5"    class="uil uil-smile-beam"></i>    
-                </span>
-                <span style="color: green" >
-                  <i  v-if="row.item.score == 5"  class="uil uil-meh-alt" ></i>
-                </span>
-                <span style="color: red">   
-                  <i v-if="row.item.score< 5"     class="uil uil-sad-squint"></i>
-                </span>
+                  {{ row.item.score }} /10
+                  <span style="color: blue">
+                    <i v-if="row.item.score > 5" class="uil uil-smile-beam"></i>
+                  </span>
+                  <span style="color: green">
+                    <i v-if="row.item.score == 5" class="uil uil-meh-alt"></i>
+                  </span>
+                  <span style="color: red">
+                    <i v-if="row.item.score < 5" class="uil uil-sad-squint"></i>
+                  </span>
                 </template>
                 <template #cell(actions)="row">
                   <button
                     v-if="index1 != row.index"
                     type="button"
                     class="btn btn-show"
-                    @click="showStatistics(row.item,row.index)"
+                    @click="showStatistics(row.item, row.index)"
                   >
                     Show statistics
                   </button>
@@ -1063,4 +989,3 @@ export default {
     </div>
   </Layout>
 </template>
-

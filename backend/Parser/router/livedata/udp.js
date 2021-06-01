@@ -7,8 +7,8 @@ server.on('error', (err) => {
 });
 
 server.on('message', (msg, rinfo) => {
-  console.log(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
-  function(msg,rinfo)
+  console.log(`server got: ${msg} \\n from ${rinfo.address}:${rinfo.port} \\n`);
+ // function(msg,rinfo)
 });
 
 server.on('listening', () => {
@@ -16,4 +16,4 @@ server.on('listening', () => {
   console.log(`server listening ${address.address}:${address.port}`);
 });
 
-server.bind(8081);
+server.bind(5000);

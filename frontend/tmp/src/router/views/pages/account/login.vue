@@ -46,12 +46,12 @@ export default {
 			})
 				.then((token) => {
 					if(token.sign_in.length == 0){
-						this.tryingToLogIn = false
+						this.tryingToLogIn = true
 						this.authError = "Error login"
 						this.isAuthError = true
 						return;
 					}
-					this.tryingToLogIn = false
+					this.tryingToLogIn = true
 					this.isAuthError = false
 					// Redirect to the originally requested page, or to the home page
 					this.$router.push(

@@ -2,10 +2,31 @@ var express = require('express')
 const cors = require('cors');
 var app = express();
 var session = require('express-session');
+//upload Image testing 
+var multer  = require('multer')
+
+
+
+var storage = multer.diskStorage({
+
+  destination: function (req, file, cb) {
+    console.log('**************************entredDestination ')
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    let originalname = file.originalname;
+
+    let ext = originalname.split('.').pop();
+    let filename = originalname.split('.').slice(0, -1).join('.');
+
+    cb(null, filename + '-' + Date.now()+'.'+ext)
+  }
+})
+ 
+var upload = multer({ storage: storage })
 require('dotenv').config();
 app.use(express.json());
 app.use(cors());
-
 app.use(session({
   secret: process.env.secret,
   resave: false,
@@ -21,6 +42,14 @@ let RanksController  = require('./scoring/controller/ranksController');
 let RegisterController = require('./authentication/controller/registerController');
 let LoginController = require('./authentication/controller/loginController');
 let LogoutController = require('./authentication/controller/logoutController');
+
+
+app.post('/upload',upload.single('photo'),  (req, res) => {
+  console.log(req);
+
+  res.send({"status": "success"})
+})
+
 
 app.post('/logout',function(req,res){
   LogoutController.logout(req,res);
