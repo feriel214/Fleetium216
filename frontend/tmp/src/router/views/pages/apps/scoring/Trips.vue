@@ -9,7 +9,6 @@ export default {
   components: { Layout, PageHeader, Overview, Stat },
   data() {
     return {
-    
       statData: [],
       multipleRadialBars: {},
       patternedDonutChart: {},
@@ -485,12 +484,14 @@ export default {
         { title: 'Score', value: 0, icon: 'pause-circle', color: 'success' }
       )
     },
-   
   },
 }
 </script>
 
 <style>
+.left-side-menu-dark .left-side-menu {
+    z-index: 200!important; 
+}
 .btn-primary-Tlmtk {
   color: #fff;
   background-color: #007bff;

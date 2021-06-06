@@ -118,7 +118,7 @@ app.get('/fences/:id', function (req, res) {
  })
 
  //update geofence 
- app.put('/fences/edit/:id',function(req,res){
+ app.put('/fences/edit/:id/:param',function(req,res){
   GeoController.updateFence(req,res)
  })
  //update geofence only pg admin 

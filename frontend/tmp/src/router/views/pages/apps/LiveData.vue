@@ -1207,6 +1207,9 @@ export default {
   font-weight: 700;
   margin-top: 15px;
 }
+.left-side-menu-dark .left-side-menu {
+    z-index: 200!important; 
+}
 .icon-dual .feather {
   color: #f8f9fa;
   fill: rgba(108, 117, 125, 0.12);

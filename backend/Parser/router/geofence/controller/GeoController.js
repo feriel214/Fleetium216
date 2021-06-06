@@ -107,7 +107,7 @@ module.exports = {
   },
   updateFence : async function (req,res){
     try{
-
+      var editparam=req.params.param;
       var UniqueId=req.params.id;//ID redis 
       var geojson=req.body.geojson;
       var name = req.body.name;
@@ -117,15 +117,26 @@ module.exports = {
       var rang = req.body.rang;
       var cars = req.body.cars; 
       var type_fence=req.body.type_fence;
-       if(await geoModel.updateFenceRedis(UniqueId,geojson)){
-           if(await geoModel.updateFencePg(UniqueId,name,description,time_start,time_end,rang,cars,type_fence)){
-            res.status(200).json({message:'okk update well'});
-           }else {
-             res(500,json({message:'pg error'}))
-           }
-       }else {
-         res(500,json({message:'error redis '}))
+       if(editparam=='ff'){
+        if(await geoModel.updateFenceRedis(UniqueId,geojson)){
+          if(await geoModel.updateFencePg(UniqueId,name,description,time_start,time_end,rang,cars,type_fence)){
+           res.status(200).json({message:'okk update well'});
+          }else {
+            res(500,json({message:'pg error'}))
+          }
+      }else {
+        res(500,json({message:'error redis '}))
+      }
        }
+       if(editparam=='f'){
+        if(await geoModel.updateFencePg(UniqueId,name,description,time_start,time_end,rang,cars,type_fence)){
+          res.status(200).json({message:'okk update well'});
+         }else {
+           res(500,json({message:'pg error'}))
+         }
+       }
+
+      
      }catch(error){
         console.error(error.message);
         res.status(500).json({error:true});

@@ -772,70 +772,6 @@ export default {
           console.log(error)
         })
     },
-    //To Optimise
-    /*   EditForm(item) {    
-      console.log('item : ', item)
-      console.log('posts : ', this.posts)
-      let id = this.idredis
-      //update fence and form
-      console.log('this.newgeo',this.newgeo)
-      if (!Object.entries(this.newgeo).length === 0) {
-        let data = {
-          geojson: [this.newgeo],
-          name: item.name,
-          description: item.description,
-          time_start: item.startTime,
-          time_end: item.endTime,
-          rang: item.range,
-          cars: item.cars,
-          type_fence : item.type_fence
-        }
-        console.log(id, 'edit data ', data)
-        this.geocoderInit("add")
-        axios
-          .put(`http://localhost:3000/fences/edit/${id}`,data)
-          .then((res) => {
-            console.log('res : ', res)
-            this.showForm = false
-            this.$toast.success(`Geofence Updated Successfully ! `)
-            this.getGeo()
-            this.DrawControl('ADD')
-            this.clearMap(1000);
-         
-          })
-          .catch(function(error) {
-            console.log(error)
-          })
-      }
-      //update only form
-      else {
-        let data = {
-          name: item.name,
-          description: item.description,
-          time_start: item.startTime,
-          time_end: item.endTime,
-          rang: item.range,
-          cars: item.cars,
-          type_fence : item.type_fence
-        }
-        console.log(id, 'edit data only form  ', data)
-        axios
-          .put(`http://localhost:3000/fences/cars/edit/${id}`,data)
-          .then((res) => {
-            console.log(res.data)
-            this.showForm = false
-            this.$toast.success(`Geofence Updated Successfully ! `)
-            this.clearMap(1000);
-            this.getGeo()
-            this.DrawControl(' this.clearMap();')    
-          })
-          .catch(function(error) {
-            console.log(error)
-          })
-           
-      }
-       this.geocoderInit("add")
-    }, */
     EditForm(item) {
       console.log('item : ', item)
       console.log('posts : ', this.posts)
@@ -877,10 +813,11 @@ export default {
           this.$toast.success(`Geofence Updated Successfully ! `)
           this.getGeo()
           this.DrawControl('ADD')
+           this.refershForm()
           this.clearMap(1000)
-          this.refreshMap()
+         // this.refreshMap()
           this.geocoderInit('add')
-          this.refershForm()
+         
         })
         .catch(function (error) {
           console.log(error)
@@ -968,6 +905,9 @@ export default {
 </script>
 
 <style scoped>
+.left-side-menu-dark .left-side-menu {
+    z-index: 200!important; 
+}
 .Btn-Action-green {
   font-size: 20px;
   color: #43d39e;

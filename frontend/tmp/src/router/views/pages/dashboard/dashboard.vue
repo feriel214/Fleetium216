@@ -508,6 +508,9 @@ export default {
 #livedata {
   height: 505px;
 }
+.left-side-menu-dark .left-side-menu {
+    z-index: 200!important; 
+}
 </style>
 <template>
   <Layout>
