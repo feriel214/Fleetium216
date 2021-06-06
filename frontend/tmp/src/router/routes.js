@@ -136,7 +136,7 @@ const dashboardRoutes = [
 const geofenceAppsRoutes = [
   {
     path: '/apps/geofence',
-    name: 'Map',
+    name: 'Geofence',
     header: 'Apps',
     icon: 'map',
     component: () => lazyLoadView(import('@views/pages/apps/ViewLeaflet')),
@@ -160,21 +160,13 @@ const scoringAppsRoutes = [
     props: (route) => ({ user: store.state.auth.currentUser || {} }),
     children: [
       {
-        name: 'Trips',
+        name: 'Score',
         path: 'Trips',
         icon: 'cursor',
         meta: { authRequired: true },
         component: () =>
           lazyLoadView(import('@views/pages/apps/scoring/Trips')),
-      },
-      {
-        name: 'Summary',
-        path: 'summary',
-        icon: 'bar-chart',
-        meta: { authRequired: true },
-        component: () =>
-          lazyLoadView(import('@views/pages/apps/scoring/Summary')),
-      },
+      }
     ],
   }
 ];

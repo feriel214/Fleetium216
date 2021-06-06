@@ -127,7 +127,8 @@ const db = require('../../Database/NoSQLDatabase/db.js');
       driver8 = getPower(driver7,results);
       driver9 = getPower(driver8,results);
       driver10 = getPower(driver9,results);
-      return {driver1,driver2,driver3,driver4,driver5,driver6,driver7,driver8,driver9,driver10}
+      return {driver1,driver2,driver3,driver4,driver5,driver6,driver7,driver8,driver9,driver10};
+      
   }
 
 ///////////////////////////////////////////////////
@@ -174,7 +175,14 @@ async function topTen(){
   driver8 = getMax(driver7,results);
   driver9 = getMax(driver8,results);
   driver10 = getMax(driver9,results);
-  return {driver1,driver2,driver3,driver4,driver5,driver6,driver7,driver8,driver9,driver10}
+  let data={driver1,driver2,driver3,driver4,driver5,driver6,driver7,driver8,driver9,driver10}
+  let i=0;
+      let score=[];
+      while(i<10){
+        score[i]=parseInt(data[`driver${i+1}`].score._);
+        i++;
+      }
+      return score;
 
 }
 
