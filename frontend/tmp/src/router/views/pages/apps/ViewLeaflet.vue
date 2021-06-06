@@ -904,9 +904,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style >
 .left-side-menu-dark .left-side-menu {
-    z-index: 200!important; 
+    position: fixed !important;
+    z-index: 300!important; 
+    width: 90px!important;
 }
 .Btn-Action-green {
   font-size: 20px;

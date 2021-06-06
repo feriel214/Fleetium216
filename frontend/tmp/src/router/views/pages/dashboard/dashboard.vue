@@ -510,6 +510,8 @@ export default {
 }
 .left-side-menu-dark .left-side-menu {
     z-index: 200!important; 
+    position: fixed !important;
+    width: 90px!important;
 }
 </style>
 <template>

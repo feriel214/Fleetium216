@@ -491,7 +491,10 @@ export default {
 <style>
 .left-side-menu-dark .left-side-menu {
     z-index: 200!important; 
+    position: fixed !important;
+    width: 90px!important;
 }
+
 .btn-primary-Tlmtk {
   color: #fff;
   background-color: #007bff;

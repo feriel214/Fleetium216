@@ -1209,6 +1209,8 @@ export default {
 }
 .left-side-menu-dark .left-side-menu {
     z-index: 200!important; 
+    width: 90px!important;
+    position: fixed !important;
 }
 .icon-dual .feather {
   color: #f8f9fa;

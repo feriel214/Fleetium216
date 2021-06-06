@@ -91,19 +91,19 @@ export default {
 	<div class="left-side-menu">
 		<div class="media user-profile mt-2 mb-2">
 			<img
-				src="@assets/images/users/avatar-7.jpg"
-				class="avatar-sm rounded-circle mr-2"
+				src="@assets/images/users/AvatarMaker.png"
+				class="avatar-sm rounded-circle mr-3"
 				alt="Shreyu"
 			/>
 			<img
-				src="@assets/images/users/avatar-7.jpg"
-				class="avatar-xs rounded-circle mr-2"
+				src="@assets/images/users/AvatarMaker.png"
+				class="avatar-xs rounded-circle mr-3"
 				alt="Shreyu"
 			/>
 
 			<div class="media-body">
 				<h6 class="pro-user-name mt-0 mb-0">{{ user.name }}</h6>
-				<span class="pro-user-desc">Administrator</span>
+				<span class="pro-user-desc">Feriel Zarrouki</span>
 			</div>
 			<b-dropdown variant="black" class="align-self-center" toggle-class="p-0">
 				<template v-slot:button-content>
