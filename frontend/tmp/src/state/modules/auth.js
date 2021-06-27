@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import router from '@router'
 export const state = {
   currentUser: getSavedState('auth.currentUser'),
 }
@@ -29,18 +29,22 @@ export const actions = {
 
   // Logs in the current user.
   logIn({ commit, dispatch, getters }, { email, password } = {}) {
-	  commit('SET_CURRENT_USER', true)
-    if (getters.loggedIn) return dispatch('validate')
-	axios.defaults.withCredentials = true;
-    return axios.post('http://127.0.0.1:3000/sign_in', { email, password })
-      .then((response) => {
-        const user = response.data
-        commit('SET_CURRENT_USER', user)
-		if(user.length === 0){
-			return true;
-		}
-        return user
-      })
+    if (email === 'admin' && password === 'password') {
+      commit('SET_CURRENT_USER', true)
+      router.push({ name: 'Dashboard' })
+      if (getters.loggedIn) return dispatch('validate')
+      axios.defaults.withCredentials = true
+      return axios
+        .post('http://127.0.0.1:3000/sign_in', { email, password })
+        .then((response) => {
+          const user = response.data
+          commit('SET_CURRENT_USER', user)
+          if (user.length === 0) {
+            return true
+          }
+          return user
+        })
+    }
   },
 
   // Logs out the current user.
@@ -75,7 +79,7 @@ export const actions = {
   validate({ commit, state }) {
     if (!state.currentUser) return Promise.resolve(null)
 
-    return true;/*axios
+    return true /*axios
       .post('http://127.0.0.1:3000/session/verif')
       .then((response) => {
 			if(response.data.session === false){

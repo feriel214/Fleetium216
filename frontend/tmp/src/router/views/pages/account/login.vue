@@ -40,6 +40,7 @@ export default {
 			this.tryingToLogIn = true
 			// Reset the authError if it existed.
 			this.authError = null
+			
 			return this.logIn({
 				email: this.username,
 				password: this.password,
@@ -97,7 +98,7 @@ export default {
 
 										<b-form
 											class="authentication-form"
-											@submit.prevent="tryToLogIn"
+											@submit="tryToLogIn"
 										>
 											<div class="form-group">
 												<div class="input-group input-group-merge">
