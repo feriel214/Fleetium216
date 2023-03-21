@@ -3,8 +3,7 @@
 <p align="center">
   <img src="https://github.com/feriel214/Fleetium216/blob/assets/1.PNG" alt="Sublime's custom image"/>
 </p>
-https://user-images.githubusercontent.com/53992554/226763351-16ca34bd-dbed-41cc-a8f8-ff1d7e0c0b0c.mp4
-
+<video src="https://user-images.githubusercontent.com/53992554/226763351-16ca34bd-dbed-41cc-a8f8-ff1d7e0c0b0c.mp4"></video>
 # Description 
 This project is a real-time vehicle tracking system dedicated to fleet management, but can also be used by individual users. The system offers real-time tracking, monitoring vehicle's performance, and diagnostics using the Ulbotech T381 device. It allows fleet managers to track their vehicles in real-time, set up geofences to receive alerts when a vehicle enters or exits a specific area, and receive notifications for various events such as over-speeding, harsh braking, and engine faults.
 
