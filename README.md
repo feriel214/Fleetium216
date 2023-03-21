@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://github.com/feriel214/Fleetium216/blob/assets/1.PNG" alt="Sublime's custom image"/>
 </p>
-
+https://user-images.githubusercontent.com/53992554/226763351-16ca34bd-dbed-41cc-a8f8-ff1d7e0c0b0c.mp4
 # Description 
 This project is a real-time vehicle tracking system dedicated to fleet management, but can also be used by individual users. The system offers real-time tracking, monitoring vehicle's performance, and diagnostics using the Ulbotech T381 device. It allows fleet managers to track their vehicles in real-time, set up geofences to receive alerts when a vehicle enters or exits a specific area, and receive notifications for various events such as over-speeding, harsh braking, and engine faults.
 
@@ -54,6 +54,24 @@ If you want to discover more details about the project, the links below contains
  3. **Dashboard**      : https://drive.google.com/file/d/17xbMHwWVpbGcTUrnKjTeKj5i3Rzmlzhz/view?usp=share_link
  4. **Authentication** : https://drive.google.com/file/d/17xbMHwWVpbGcTUrnKjTeKj5i3Rzmlzhz/view?usp=share_link
  5. **Scoring**        : https://drive.google.com/file/d/17xbMHwWVpbGcTUrnKjTeKj5i3Rzmlzhz/view?usp=share_link
+
+**Live Data**
+https://user-images.githubusercontent.com/53992554/226763351-16ca34bd-dbed-41cc-a8f8-ff1d7e0c0b0c.mp4
+
+**Geofence**
+https://user-images.githubusercontent.com/53992554/226765197-ef377537-c3e0-4e4b-a465-a015e78f8fac.mp4
+
+**Authentication**
+https://user-images.githubusercontent.com/53992554/226763490-434bda1c-5167-47a1-a1c5-99da055da1a2.mp4
+
+**Scoring**
+https://user-images.githubusercontent.com/53992554/226763633-fb367df2-18b4-4f30-9288-997171db0496.mp4
+
+**Dashboard**
+https://user-images.githubusercontent.com/53992554/226764068-848e4e3b-f03a-40e2-9c84-4e11bf7c5498.mp4
+
+
+
 
 # ✨ Let’s Connect and Build Something Amazing Together
 - Reach me out on LinkedIn: https://www.linkedin.com/in/feriel-zarrouki-1ba917186/
